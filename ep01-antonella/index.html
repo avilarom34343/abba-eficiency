@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Si yo automatizara este negocio · Ep. 01</title>
+<style>
+@font-face{font-family:I;font-weight:300;src:url(Inter-300.ttf)}
+@font-face{font-family:I;font-weight:500;src:url(Inter-500.ttf)}
+@font-face{font-family:I;font-weight:600;src:url(Inter-600.ttf)}
+:root{--bg:#04060B;--navy:#0A1630;--blue:#6EA8FF;--blue2:#2F5BD3;--gold:#D9B47A;--ink:#F4F6FA;--mute:#8A94A8;--line:#ffffff14;
+  --e:cubic-bezier(.22,1,.36,1);--io:cubic-bezier(.65,0,.35,1)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+body{font-family:I,sans-serif;color:var(--ink);font-weight:500;-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+  background:radial-gradient(120% 70% at 50% 45%,#0B1A3A 0%,#060B18 55%,#03050A 100%)}
+
+/* ---------- time helpers: every time is absolute seconds via --d / --o ---------- */
+.in{animation:tin .7s var(--e) var(--d) both,tout .45s ease var(--o,99s) forwards}
+@keyframes tin{from{opacity:0;transform:translateY(24px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes tout{to{opacity:0;transform:translateY(-16px);filter:blur(8px)}}
+.pop{animation:pop .6s var(--e) var(--d) both,tout .4s ease var(--o,99s) forwards}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.grow{transform-origin:50% 100%;animation:grow .7s var(--e) var(--d) both}
+@keyframes grow{from{opacity:0;transform:scaleY(.2) scaleX(.6)}to{opacity:1;transform:none}}
+.win{animation:fin .4s ease var(--a) both,fout .4s ease var(--b) forwards}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+@keyframes fout{to{opacity:0}}
+.type{display:inline-block;animation:type .7s steps(22) var(--d) both}
+@keyframes type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.draw{stroke-dasharray:1;animation:draw .9s var(--io) var(--d) both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.flow{stroke-dasharray:.05 .95;animation:flow 1.4s linear infinite,fin .4s ease var(--d) both}
+@keyframes flow{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.tap{position:absolute;width:90px;height:90px;margin:-45px;border-radius:50%;border:3px solid #fff;animation:tap .6s var(--e) var(--d) both;opacity:0}
+@keyframes tap{0%{opacity:0;transform:scale(.3)}30%{opacity:.9}100%{opacity:0;transform:scale(1.6)}}
+.ping{position:absolute;width:26px;height:26px;margin:-13px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 #d9b47a88;animation:fin .3s var(--d) both,ping 1.4s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 #d9b47a99}100%{box-shadow:0 0 0 34px #d9b47a00}}
+
+/* ---------- titles ---------- */
+.t{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:66px;font-weight:600;letter-spacing:-1.8px;line-height:1.1;padding:0 90px;z-index:20}
+.eyebrow{font-size:22px;font-weight:500;letter-spacing:6px;text-transform:uppercase;color:var(--mute)}
+.mute{color:var(--mute)}
+
+/* ---------- 3D world ---------- */
+#viewport{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 40%;animation:vp 45s linear both}
+#world{position:absolute;left:540px;top:1060px;width:0;height:0;transform-style:preserve-3d;animation:cam 45s linear both}
+.box,.box *{position:absolute;transform-style:preserve-3d}
+.box i{display:block;border:1px solid #6ea8ff12}
+.box .tp{inset:0}
+.box .s{left:0;width:100%;transform-origin:top;transform:rotateX(90deg)}
+.box .n{left:0;width:100%;transform-origin:bottom;transform:rotateX(-90deg)}
+.box .w{top:0;height:100%;transform-origin:right;transform:rotateY(90deg)}
+.box .e{top:0;height:100%;transform-origin:left;transform:rotateY(-90deg)}
+.box .tp{background:#141c2e}.box .s{background:#0f1626}.box .e{background:#0c1220}.box .w{background:#111a2b}.box .n{background:#0a0f1b}
+.cafe .tp{background:linear-gradient(135deg,#3b2c1a,#21170c);border-color:#d9b47a66;box-shadow:0 0 60px #d9b47a55}
+.cafe .s,.cafe .w,.cafe .e,.cafe .n{background:repeating-linear-gradient(90deg,#1a130b 0 10px,#e9b86e 10px 20px,#1a130b 20px 30px);border-color:#d9b47a55}
+.cafe-glow{position:absolute;left:-200px;top:-200px;width:400px;height:400px;border-radius:50%;background:radial-gradient(#d9b47a40,transparent 65%)}
+.street{position:absolute;font-size:17px;letter-spacing:5px;color:#4d5a78;white-space:nowrap;font-weight:600}
+.lines{position:absolute;left:-1100px;top:-1100px;width:2200px;height:2200px;overflow:visible}
+.lines path{fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 6px #6ea8ffaa)}
+.lines path.flow{stroke:#fff;stroke-width:6}
+/* billboards: stand up and always face camera (inverse of the camera rotation) */
+#bbs{position:absolute;inset:0;animation:bbsv 45s linear both}
+.bb{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
+.mod{position:absolute;bottom:0;left:0;translate:-50% 0;display:flex;flex-direction:column;align-items:center}
+.mod .stem{width:2px;height:70px;background:linear-gradient(#6ea8ff,#6ea8ff00)}
+.chip3{padding:20px 30px;border-radius:22px;background:#0d1730e6;border:1.5px solid #6ea8ff55;box-shadow:0 20px 60px #000a,0 0 30px #6ea8ff22;display:flex;align-items:center;gap:16px;
+  font-size:30px;font-weight:600;letter-spacing:3px;white-space:nowrap}
+.chip3 svg{width:34px;height:34px;stroke:var(--blue);fill:none;stroke-width:2}
+.chat3{width:500px;padding:24px;border-radius:26px;background:#0d1730f0;border:1.5px solid #6ea8ff55;box-shadow:0 20px 60px #000a;display:flex;flex-direction:column;gap:14px}
+.bubble{max-width:86%;padding:16px 20px;border-radius:20px;font-size:27px;line-height:1.35;font-weight:500}
+.u{align-self:flex-end;background:#2F5BD3;border-bottom-right-radius:6px}
+.a{align-self:flex-start;background:#ffffff14;border-bottom-left-radius:6px}
+.dots{display:flex;gap:7px;padding:18px 22px;border-radius:20px;background:#ffffff14;align-self:flex-start}
+.dots i{width:10px;height:10px;border-radius:50%;background:#fff;animation:dot .45s ease-in-out infinite alternate}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{to{opacity:.3;transform:translateY(-6px)}}
+.pin{width:70px;height:96px}
+.place{margin-bottom:18px;padding:22px 28px;border-radius:24px;background:#0d1426f2;border:1.5px solid #ffffff22;box-shadow:0 24px 60px #000b;text-align:left;white-space:nowrap}
+.place b{display:block;font-size:30px;font-weight:600}
+.place span{font-size:21px;color:var(--mute)}
+
+/* ---------- 2D overlay scenes ---------- */
+.scene{position:absolute;inset:0;z-index:10}
+.persp{position:absolute;inset:0;perspective:1600px}
+.panel{position:absolute;border-radius:44px;background:linear-gradient(180deg,#0f1a33,#0a1224);border:1.5px solid #ffffff1c;box-shadow:0 60px 160px #000c,inset 0 1px 0 #ffffff14;overflow:hidden}
+.row{display:flex;align-items:center;gap:22px;font-size:27px;color:#cfd6e4;font-weight:500}
+.row svg,.act svg,.side svg{width:34px;height:34px;flex:none;stroke:var(--mute);fill:none;stroke-width:1.8}
+.acts{display:flex;justify-content:space-between}
+.act{display:flex;flex-direction:column;align-items:center;gap:14px;font-size:20px;color:var(--mute);position:relative}
+.act span{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;border:1.5px solid #ffffff26;background:#ffffff08}
+.act svg{stroke:var(--blue)}
+.act.ghost span{border-style:dashed;border-color:#d9b47a88;background:none}.act.ghost svg{stroke:#d9b47a}
+.scan{position:absolute;left:0;right:0;height:3px;background:var(--blue);box-shadow:0 0 30px 8px #6ea8ff66;animation:scan 1.6s var(--io) var(--d) both}
+@keyframes scan{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.tag{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;border:1px solid #ffffff22;font-size:18px;letter-spacing:2px;color:var(--mute);text-transform:uppercase}
+.node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:20px;font-size:24px;color:var(--mute);letter-spacing:2px;text-transform:uppercase;transform:translate(-50%,-50%)}
+.node span{width:120px;height:120px;border-radius:50%;border:2px solid #ffffff30;display:grid;place-items:center;background:#0b1428;box-shadow:0 0 50px #6ea8ff22}
+.node svg{width:46px;height:46px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.node.sm span{width:84px;height:84px}.node.sm svg{width:34px;height:34px}.node.sm{font-size:18px;gap:14px}
+
+/* phone */
+.phone{position:absolute;left:190px;top:380px;width:700px;height:1400px;border-radius:84px;background:#070b16;border:12px solid #1b2236;box-shadow:0 80px 160px #000d,0 0 0 2px #2c3550;overflow:hidden}
+.phone .isl{position:absolute;top:16px;left:50%;width:170px;height:44px;margin-left:-85px;border-radius:24px;background:#000;z-index:5}
+.scr{position:absolute;inset:0;padding:120px 40px 40px;display:flex;flex-direction:column;gap:26px;zoom:1.18;animation:fin .3s ease var(--a) both,fout .25s ease var(--b) forwards}
+.field{padding:22px 26px;border-radius:20px;background:#ffffff0f;font-size:25px;color:#dfe5f0;display:flex;align-items:center;gap:16px}
+.field svg{width:28px;height:28px;stroke:var(--mute);fill:none;stroke-width:2;flex:none}
+.res{padding:24px;border-radius:22px;background:#ffffff0c;border:1px solid #ffffff14;font-size:22px;color:var(--mute)}
+.res b{display:block;color:var(--ink);font-size:28px;font-weight:600;margin-bottom:6px}
+.btn{padding:22px;border-radius:20px;text-align:center;font-size:24px;font-weight:600;background:#ffffff12}
+.btn.pri{background:var(--blue2)}
+.menu div{display:flex;justify-content:space-between;padding:22px 4px;border-bottom:1px solid #ffffff12;font-size:26px}
+.menu span{color:var(--mute);font-size:20px}
+.sys{position:absolute;right:30px;width:420px;padding:24px 28px;border-radius:24px;background:#0e1830f7;border:1.5px solid #6ea8ff55;box-shadow:0 30px 80px #000c;font-size:26px;color:#cfd6e4;z-index:6}
+.sys b{display:block;font-size:17px;letter-spacing:3px;color:var(--blue);margin-bottom:8px;text-transform:uppercase;font-weight:600}
+.fly{animation:fly .7s var(--e) var(--d) both}
+@keyframes fly{from{opacity:0;transform:translate(-260px,60px) scale(.6)}to{opacity:1;transform:none}}
+
+/* dashboard */
+.dash{left:70px;top:430px;width:940px;height:1180px;padding:44px;display:flex;flex-direction:column;gap:26px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tile{padding:26px;border-radius:26px;background:#ffffff08;border:1px solid #ffffff12;display:flex;flex-direction:column;gap:14px}
+.tile small{font-size:19px;letter-spacing:2.5px;text-transform:uppercase;color:var(--mute)}
+.tile svg{width:100%;height:90px;overflow:visible}
+.tile path{fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round}
+.auto{display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-radius:20px;background:#ffffff08;font-size:24px}
+.tog{width:70px;height:40px;border-radius:99px;background:#ffffff1a;position:relative;animation:togbg .3s ease var(--d) both}
+.tog:after{content:'';position:absolute;left:5px;top:5px;width:30px;height:30px;border-radius:50%;background:#fff;animation:tog .3s var(--e) var(--d) both}
+@keyframes togbg{to{background:var(--blue2)}}
+@keyframes tog{to{transform:translateX(30px)}}
+
+.grain{position:absolute;inset:-100px;z-index:50;pointer-events:none;opacity:.07;mix-blend-mode:overlay;animation:grain .5s steps(5) infinite}
+@keyframes grain{20%{transform:translate(-30px,20px)}40%{transform:translate(25px,-35px)}60%{transform:translate(-15px,-20px)}80%{transform:translate(35px,30px)}}
+.vig{position:absolute;inset:0;z-index:49;pointer-events:none;background:radial-gradient(90% 60% at 50% 50%,transparent 55%,#000a 100%)}
+.logo{font-size:150px;font-weight:600;letter-spacing:22px;padding-left:22px;background:linear-gradient(180deg,#fff,#c9d3e6);-webkit-background-clip:text;background-clip:text;color:transparent;animation:logo 1.4s var(--e) var(--d) both}
+@keyframes logo{from{opacity:0;letter-spacing:60px;filter:blur(14px)}to{opacity:1;letter-spacing:22px;filter:none}}
+.goldline{height:1.5px;width:0;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:gl 1.2s var(--e) var(--d) both}
+@keyframes gl{to{width:420px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 18.5V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H8z"/></symbol>
+    <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16 14.2a4.5 4.5 0 0 1 5 4.8"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.3a11 11 0 0 0 6.2 6.2l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/><path d="M9.5 13.5v-2h5M13 9.5l1.5 2-1.5 2"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4M9 14.5l2 2 4-4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 10v10h16V10M3 10l2-6h14l2 6zM9.5 20v-5h5v5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  </defs>
+</svg>
+<div id="stage">
+
+  <!-- ================= 3D WORLD (scenes 1, 4, 7) ================= -->
+  <div id="viewport"><div id="world">
+    <div class="cafe-glow"></div>
+    <svg class="lines" viewBox="-1100 -1100 2200 2200" id="links"></svg>
+    <!-- city blocks, street names, modules: generated below -->
+  </div><div id="bbs">
+    <div class="bb" data-x="-52" data-y="0"><div class="mod"><div class="win" style="--a:2.3s;--b:4.7s;display:flex;flex-direction:column;align-items:center">
+      <div class="place pop" style="--d:2.7s"><b>Antonella Café Bar</b><span>Café · Bar · Centro, Mérida</span></div>
+      <svg class="pin pop" style="--d:2.3s" viewBox="0 0 24 32"><path d="M12 31S2 19.5 2 11.5a10 10 0 0 1 20 0C22 19.5 12 31 12 31z" fill="#D9B47A"/><circle cx="12" cy="11.5" r="4" fill="#04060B"/></svg>
+    </div></div></div>
+  </div></div>
+
+  <!-- ================= 1 · DESCUBRIMIENTO 0–4 ================= -->
+  <div class="t eyebrow in" style="--d:.2s;--o:2.2s;top:200px">Si yo automatizara este negocio · Ep. 01</div>
+  <div class="t eyebrow in" style="--d:.5s;--o:2.2s;top:1720px">Mérida, Yucatán</div>
+  <div class="t in" style="--d:1.5s;--o:3.9s">Encontré esta cafetería.</div>
+
+  <!-- ================= 2 · AUDITORÍA 4–10 ================= -->
+  <div class="scene win" style="--a:4.3s;--b:9.7s">
+    <div class="persp"><div class="panel" id="profile" style="left:130px;top:470px;width:820px;height:900px;padding:0">
+      <div style="height:200px;background:radial-gradient(80% 120% at 30% 0%,#3a2a17,#0f1a33 70%);padding:30px 40px;display:flex;justify-content:flex-end;align-items:flex-start">
+        <span class="tag">Información pública</span>
+      </div>
+      <div style="padding:34px 44px;display:flex;flex-direction:column;gap:28px;position:relative">
+        <div><div style="font-size:50px;font-weight:600;letter-spacing:-1px">Antonella Café Bar</div><div class="mute" style="font-size:26px;margin-top:8px">Café · Bar</div></div>
+        <div class="acts">
+          <div class="act"><span><svg><use href="#i-route"/></svg></span>Cómo llegar</div>
+          <div class="act"><span><svg><use href="#i-phone"/></svg></span>Llamar</div>
+          <div class="act"><span><svg><use href="#i-ig"/></svg></span>Instagram</div>
+          <div class="act ghost"><span><svg><use href="#i-chat"/></svg></span>WhatsApp<div class="ping" style="--d:7.9s;left:80px;top:8px"></div></div>
+        </div>
+        <div class="row"><svg><use href="#i-pin"/></svg>Calle 52 #448A x 45 y 47, Centro</div>
+        <div class="row"><svg><use href="#i-info"/></svg>Café y desayunos de día. Vinos y pizza artesanal de noche.</div>
+        <div class="row"><svg><use href="#i-cal"/></svg>Sin reservaciones</div>
+      </div>
+      <div class="scan" style="--d:5s"></div>
+    </div></div>
+    <!-- route -->
+    <svg style="position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible">
+      <path class="draw" pathLength="1" style="--d:6.9s" d="M150 1560 H700" stroke="#6EA8FF" stroke-width="3" fill="none"/>
+      <path class="draw" pathLength="1" style="--d:7.6s" d="M720 1560 H930" stroke="#D9B47A" stroke-width="3" stroke-dasharray=".04 .03" fill="none" opacity=".8"/>
+    </svg>
+    <div class="node sm pop" style="--d:6.8s;left:150px;top:1590px"><span><svg><use href="#i-search"/></svg></span>Búsqueda</div>
+    <div class="node sm pop" style="--d:7.05s;left:410px;top:1590px"><span><svg><use href="#i-pin"/></svg></span>Perfil</div>
+    <div class="node sm pop" style="--d:7.3s;left:670px;top:1590px"><span><svg><use href="#i-phone"/></svg></span>Contacto</div>
+    <div class="node sm pop" style="--d:7.6s;left:930px;top:1590px"><span style="border:2px dashed #d9b47a99"><svg style="stroke:#D9B47A"><use href="#i-chat"/></svg></span>WhatsApp</div>
+    <div class="ping" style="--d:7.9s;left:820px;top:1560px"></div>
+    <div class="t in" style="--d:5.6s;--o:7.9s;font-size:56px">¿Cómo convertir una búsqueda en una conversación?</div>
+    <div class="t in" style="--d:8.1s;font-size:56px">Podría existir una ruta <span style="color:var(--gold)">más directa.</span></div>
+  </div>
+
+  <!-- ================= 3 · EL PROBLEMA 10–13 ================= -->
+  <div class="scene win" style="--a:9.9s;--b:12.8s">
+    <div id="gap" style="position:absolute;inset:0;transform-origin:860px 1020px">
+      <svg style="position:absolute;inset:0;width:1080px;height:1920px">
+        <path class="draw" pathLength="1" style="--d:10.3s;animation-duration:1.1s" d="M300 1000 H560" stroke="#6EA8FF" stroke-width="3" fill="none"/>
+        <path class="draw" pathLength="1" style="--d:11s" d="M580 1000 H780" stroke="#ffffff40" stroke-width="3" stroke-dasharray=".03 .04" fill="none"/>
+      </svg>
+      <div class="node pop" style="--d:10.1s;left:220px;top:1020px"><span><svg><use href="#i-user"/></svg></span>Cliente</div>
+      <div class="node pop" style="--d:10.25s;left:860px;top:1020px"><span style="border-color:#d9b47a77"><svg style="stroke:var(--gold)"><use href="#i-store"/></svg></span>Cafetería</div>
+      <div class="ping" style="--d:11.2s;left:570px;top:1000px"></div>
+      <div class="panel pop" style="--d:10.4s;left:700px;top:720px;width:320px;height:150px;padding:24px;opacity:.8">
+        <div style="font-size:24px;font-weight:600">Antonella Café Bar</div><div class="mute" style="font-size:18px;margin-top:6px">Calle 52, Centro</div>
+        <div style="display:flex;gap:10px;margin-top:18px"><i style="width:44px;height:10px;border-radius:9px;background:#ffffff22"></i><i style="width:70px;height:10px;border-radius:9px;background:#ffffff22"></i><i style="width:40px;height:10px;border-radius:9px;background:#ffffff22"></i></div>
+      </div>
+    </div>
+    <div class="t in" style="--d:10.4s;--o:11.5s;top:620px">Había una oportunidad.</div>
+    <div class="t in" style="--d:11.7s;top:620px;font-size:60px">Así que decidí<br>construirle un sistema.</div>
+  </div>
+
+  <!-- ================= 5 · RECORRIDO 24–31 ================= -->
+  <div class="scene win" style="--a:24.1s;--b:30.9s">
+    <div class="persp"><div class="phone" id="phone">
+      <div class="isl"></div>
+      <div class="scr" style="--a:24.1s;--b:25.2s">
+        <div class="field"><svg><use href="#i-search"/></svg><span class="type" style="--d:24.3s">café centro mérida</span></div>
+        <div class="res pop" style="--d:24.8s;border-color:#6ea8ff66"><b>Antonella Café Bar</b>Café · Bar · Calle 52, Centro</div>
+        <div class="res" style="opacity:.45"><b style="width:60%;height:24px;border-radius:8px;background:#ffffff18"></b><span style="display:block;width:80%;height:16px;border-radius:8px;background:#ffffff10"></span></div>
+        <div class="tap" style="--d:25s;left:290px;top:300px"></div>
+      </div>
+      <div class="scr" style="--a:25.2s;--b:26.1s">
+        <div style="font-size:40px;font-weight:600;letter-spacing:-.5px">Antonella Café Bar</div><div class="mute" style="font-size:22px;margin-top:-10px">Café · Bar · Centro</div>
+        <div class="btn">Cómo llegar</div>
+        <div class="btn pri" style="display:flex;align-items:center;justify-content:center;gap:14px"><svg style="width:30px;height:30px;stroke:#fff;fill:none;stroke-width:2"><use href="#i-chat"/></svg>Escribir por WhatsApp</div>
+        <div class="tap" style="--d:25.75s;left:290px;top:375px"></div>
+      </div>
+      <div class="scr" style="--a:26.1s;--b:27.1s">
+        <div class="mute" style="font-size:20px;letter-spacing:3px;text-align:center">ASISTENTE · ANTONELLA</div>
+        <div class="bubble u pop" style="--d:26.2s">Hola, ¿tienen mesa hoy?</div>
+        <div class="bubble a pop" style="--d:26.6s">No manejamos reservaciones, pero puedo avisarte cuando haya mesa. ¿Te comparto el menú?</div>
+      </div>
+      <div class="scr menu" style="--a:27.1s;--b:28.1s">
+        <div style="font-size:36px;font-weight:600;margin-bottom:6px">Menú</div>
+        <div class="in" style="--d:27.2s">Café de especialidad<span>Día</span></div>
+        <div class="in" style="--d:27.3s">Desayunos<span>Día</span></div>
+        <div class="in" style="--d:27.4s">Vinos<span>Noche</span></div>
+        <div class="in" style="--d:27.5s">Pizza artesanal<span>Noche</span></div>
+      </div>
+      <div class="scr" style="--a:28.1s;--b:29.4s">
+        <div style="font-size:36px;font-weight:600">Lista de espera</div>
+        <div class="field">Personas<span style="margin-left:auto;font-weight:600">2</span></div>
+        <div class="field">Aviso por<span style="margin-left:auto;font-weight:600">WhatsApp</span></div>
+        <div style="position:relative;height:80px">
+          <div class="btn pri" style="position:absolute;inset:0;animation:fout .2s var(--io) 28.6s forwards">Unirme</div>
+          <div class="btn pop" style="--d:28.65s;position:absolute;inset:0;background:#1d3b2c;color:#9be7bf">Estás en la lista</div>
+        </div>
+        <div class="tap" style="--d:28.5s;left:258px;top:445px"></div>
+      </div>
+      <div class="scr" style="--a:29.4s;--b:31s">
+        <div class="mute" style="font-size:20px;letter-spacing:3px;text-align:center">DESPUÉS DE LA VISITA</div>
+        <div class="bubble a pop" style="--d:29.6s">¿Cómo estuvo tu visita?</div>
+        <div class="bubble a pop" style="--d:30.1s">Te esperamos de nuevo.</div>
+      </div>
+    </div></div>
+    <div class="sys fly" style="--d:28.8s;top:1260px"><b>Sistema</b>Nuevo contacto registrado</div>
+    <div class="sys fly" style="--d:29.1s;top:1420px"><b>Cafetería</b>Aviso recibido · mesa para 2</div>
+  </div>
+
+  <!-- ================= 6 · DASHBOARD 31–36 ================= -->
+  <div class="scene win" style="--a:30.9s;--b:35.9s">
+    <!-- pull back: everything is connected -->
+    <svg style="position:absolute;inset:0;width:1080px;height:1920px;overflow:visible">
+      <g stroke="#6EA8FF" stroke-width="2.5" fill="none" opacity=".9">
+        <path class="draw" pathLength="1" style="--d:34.5s" d="M540 1020 L170 640"/><path class="draw" pathLength="1" style="--d:34.55s" d="M540 1020 L910 640"/>
+        <path class="draw" pathLength="1" style="--d:34.6s" d="M540 1020 L120 1020"/><path class="draw" pathLength="1" style="--d:34.65s" d="M540 1020 L960 1020"/>
+        <path class="draw" pathLength="1" style="--d:34.7s" d="M540 1020 L170 1400"/><path class="draw" pathLength="1" style="--d:34.75s" d="M540 1020 L910 1400"/>
+      </g>
+    </svg>
+    <div class="persp"><div class="panel dash" id="dash">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:38px;font-weight:600;letter-spacing:-.5px">Antonella Café Bar</div><div class="mute" style="font-size:22px;margin-top:4px">Panel del sistema</div></div>
+        <span class="tag">Concepto · datos de ejemplo</span>
+      </div>
+      <div class="tiles">
+        <div class="tile pop" style="--d:31.3s"><small>Clientes</small><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path class="draw" pathLength="1" style="--d:31.5s" d="M0 26 C15 24 20 20 32 21 S50 12 62 14 S82 6 100 4"/></svg></div>
+        <div class="tile pop" style="--d:31.45s"><small>Lista de espera</small><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path class="draw" pathLength="1" style="--d:31.65s" d="M0 20 C10 12 22 24 34 16 S56 22 66 12 S86 18 100 10"/></svg></div>
+        <div class="tile pop" style="--d:31.6s"><small>Conversaciones</small><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path class="draw" pathLength="1" style="--d:31.8s" d="M0 24 C12 22 24 16 36 18 S58 8 70 10 S88 6 100 3"/></svg></div>
+        <div class="tile pop" style="--d:31.75s"><small>Seguimientos</small><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path class="draw" pathLength="1" style="--d:31.95s" d="M0 22 C14 22 22 14 36 15 S54 18 66 11 S84 9 100 6"/></svg></div>
+      </div>
+      <div class="mute" style="font-size:19px;letter-spacing:3px;margin-top:6px">AUTOMATIZACIONES</div>
+      <div class="auto in" style="--d:32.3s">Aviso de mesa disponible<span class="tog" style="--d:32.7s"></span></div>
+      <div class="auto in" style="--d:32.45s">Mensaje después de la visita<span class="tog" style="--d:32.9s"></span></div>
+      <div class="auto in" style="--d:32.6s">Invitación a regresar<span class="tog" style="--d:33.1s"></span></div>
+    </div></div>
+    <div class="node sm pop" style="--d:34.5s;left:170px;top:640px"><span><svg><use href="#i-pin"/></svg></span>Maps</div>
+    <div class="node sm pop" style="--d:34.55s;left:910px;top:640px"><span><svg><use href="#i-chat"/></svg></span>WhatsApp</div>
+    <div class="node sm pop" style="--d:34.6s;left:120px;top:1020px"><span><svg><use href="#i-ai"/></svg></span>IA</div>
+    <div class="node sm pop" style="--d:34.65s;left:960px;top:1020px"><span><svg><use href="#i-users"/></svg></span>Clientes</div>
+    <div class="node sm pop" style="--d:34.7s;left:170px;top:1400px"><span><svg><use href="#i-list"/></svg></span>Espera</div>
+    <div class="node sm pop" style="--d:34.75s;left:910px;top:1400px"><span><svg><use href="#i-bolt"/></svg></span>Seguimiento</div>
+  </div>
+
+  <!-- ================= 7 · RESULTADO 36–42 ================= -->
+  <div class="t in" style="--d:36.8s;--o:38.4s;top:1500px">Una cafetería.</div>
+  <div class="t in" style="--d:38.8s;--o:41.8s;top:1500px">Un sistema<br><span class="mute">trabajando detrás.</span></div>
+
+  <!-- ================= FINAL 42–45 ================= -->
+  <div class="scene win" style="--a:42s;--b:99s;background:radial-gradient(80% 50% at 50% 50%,#0b1834,#03050a 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px">
+    <div class="logo" style="--d:42.3s">ABBA</div>
+    <div class="goldline" style="--d:42.7s"></div>
+    <div class="in" style="--d:42.9s;font-size:34px;letter-spacing:8px;text-transform:uppercase;font-weight:500">Automatización + IA</div>
+    <div class="in mute" style="--d:43.4s;font-size:28px;font-weight:300">Construimos sistemas para negocios reales.</div>
+    <div class="in" style="--d:43.8s;position:absolute;bottom:110px;font-size:17px;color:#5a6580;font-weight:300;text-align:center;line-height:1.5">Concepto ilustrativo creado con información pública.<br>Sin afiliación con Antonella Café Bar.</div>
+  </div>
+
+  <div class="vig"></div>
+  <svg class="grain" width="1280" height="2120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+</div>
+<script>
+const S = 45, ease = 'cubic-bezier(.45,0,.2,1)', pct = t => (t / S * 100).toFixed(3) + '%';
+// camera keys: [t, tiltX, rotZ, scale, panX, panY] — one continuous camera for the whole world
+const cam = [
+  [0, 46, -40, .3, 520, 640], [1.3, 52, -30, .5, 220, 260], [2.6, 58, -18, 1.25, 0, 0], [3.7, 60, -14, 1.45, 0, 0],
+  [4.6, 66, -10, 5, 30, -30], [12.8, 72, -55, 3.4, 0, 0], [14.2, 58, -32, .95, 0, 0], [23.3, 57, 12, 1.15, 0, 0],
+  [24.3, 66, 18, 4, 0, 0], [35.8, 62, -8, 2.8, 0, 0], [37.2, 57, -2, 1.05, 0, 0], [42.4, 44, 24, .34, 0, 0], [45, 44, 26, .32, 0, 0]];
+const kf = (name, f) => `@keyframes ${name}{${cam.map(k => `${pct(k[0])}{transform:${f(...k)};animation-timing-function:${ease}}`).join('')}}`;
+// world visible only during scenes 1, 4 and 7
+const vis = [[0, 1], [4.4, 1], [4.75, 0], [12.7, 0], [13.1, 1], [24.1, 1], [24.4, 0], [35.7, 0], [36, 1], [42, 1], [42.4, 0]];
+document.head.insertAdjacentHTML('beforeend', `<style>
+${kf('cam', (t, x, z, s, px, py) => `rotateX(${x}deg) rotateZ(${z}deg) scale3d(${s},${s},${s}) translate(${px}px,${py}px)`)}
+@keyframes bbsv{${[[0, 1], [4.2, 1], [4.5, 0], [12.9, 0], [13.2, 1], [23.4, 1], [23.8, 0], [36.2, 0], [36.7, 1]].map(([t, o]) => `${pct(t)}{opacity:${o}}`).join('')}}
+@keyframes vp{${vis.map(([t, o]) => `${pct(t)}{opacity:${o}}`).join('')}}</style>`);
+
+// city: Mérida centro grid. Calle 52 runs N–S west of the café block, 45 north, 47 south (even streets N–S, odd E–W).
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const box = (x, y, w, d, h, cls = '') => `<div class="box ${cls}" style="left:${x}px;top:${y}px;width:${w}px;height:${d}px">
+  <i class="tp" style="transform:translateZ(${h}px)"></i><i class="s" style="top:${d}px;height:${h}px"></i><i class="n" style="top:${-h}px;height:${h}px"></i>
+  <i class="w" style="left:${-h}px;width:${h}px"></i><i class="e" style="left:${w}px;width:${h}px"></i></div>`;
+let city = '';
+for (let i = -5; i <= 5; i++) for (let j = -5; j <= 5; j++) {
+  const x = i * 200 - 80, y = j * 200 - 80;
+  if (i || j) city += box(x, y, 160, 160, 12 + rnd() * 34);
+  else city += box(-14, -80, 94, 160, 26) + box(-80, -34, 58, 68, 42, 'cafe');
+}
+const st = (txt, x, y, rot = 0) => `<div class="street" style="left:${x}px;top:${y}px;transform:translate(-50%,-50%) rotate(${rot}deg)">${txt}</div>`;
+city += st('CALLE 52', -100, -40, -90) + st('CALLE 50', 100, -40, -90) + st('CALLE 54', -300, 160, -90)
+      + st('CALLE 45', 20, -100) + st('CALLE 47', 20, 100) + st('CALLE 43', -200, -300) + st('CALLE 49', 220, 300);
+
+// system modules around the café (floor coords) — appear one by one in scene 4
+const M = [
+  ['GOOGLE MAPS', 'i-pin', -330, -250, 13.6], ['WHATSAPP', 'i-chat', 330, -250, 14.6], ['AI', 'i-ai', -40, -470, 15.6],
+  ['MENÚ DIGITAL', 'i-menu', -260, 130, 18.6], ['LISTA DE ESPERA', 'i-list', 250, 120, 19.6], ['CLIENTES', 'i-users', -150, 350, 20.6],
+  ['AUTOMATIZACIONES', 'i-bolt', 170, 360, 21.6]];
+let mods = '', paths = '';
+for (const [label, icon, x, y, t] of M) {
+  const inner = label === 'AI'
+    ? `<div class="chat3"><div class="chip3" style="padding:0;border:0;background:none;box-shadow:none"><svg><use href="#i-ai"/></svg>ASISTENTE IA</div>
+       <div class="bubble u pop" style="--d:16.1s">Hola, ¿tienen disponibilidad hoy?</div>
+       <div class="dots win" style="--a:16.6s;--b:17.2s"><i></i><i></i><i></i></div>
+       <div class="bubble a pop" style="--d:17.3s">No manejamos reservaciones, pero puedo avisarte cuando haya mesa.</div></div>`
+    : `<div class="chip3"><svg><use href="#${icon}"/></svg>${label}</div>`;
+  mods += `<div class="bb" data-x="${x}" data-y="${y}"><div class="mod grow" style="--d:${t}s">${inner}<div class="stem"></div></div></div>`;
+  const d = `M-50 0 Q${x * .5} ${y * .5 - 120} ${x} ${y}`;
+  paths += `<path class="draw" pathLength="1" style="--d:${t - .3}s" d="${d}"/><path class="flow" pathLength="1" style="--d:${t + .6}s;animation-delay:${-t}s,${t + .6}s" d="${d}"/>`;
+}
+// ring connecting all modules once the system is complete
+const ring = 'M-330 -250 L-40 -470 L330 -250 L250 120 L170 360 L-150 350 L-260 130 Z';
+paths += `<path class="draw" pathLength="1" style="--d:22.4s;animation-duration:1.4s;opacity:.55" d="${ring}"/><path class="flow" pathLength="1" style="--d:22.8s" d="${ring}"/>`;
+document.getElementById('world').insertAdjacentHTML('beforeend', city);
+document.getElementById('bbs').insertAdjacentHTML('beforeend', mods);
+// Project each billboard's floor point through the live camera matrix (same math as CSS perspective 1500px, origin 540/768).
+const world = document.getElementById('world'), bbs = [...document.querySelectorAll('.bb')];
+window.tick = () => {
+  const m = new DOMMatrix(getComputedStyle(world).transform), k = Math.hypot(m.m11, m.m12, m.m13);
+  for (const b of bbs) {
+    const q = m.transformPoint(new DOMPoint(+b.dataset.x, +b.dataset.y, 0)), f = 1500 / (1500 - q.z);
+    const x = 540 + (540 + q.x - 540) * f, y = 768 + (1060 + q.y - 768) * f;
+    b.style.transform = `translate(${x}px,${y}px) scale(${Math.min(Math.max((k * f) ** .6, .8), 1.5)})`;
+    b.style.zIndex = Math.round(y);
+  }
+};
+(function loop() { tick(); requestAnimationFrame(loop); })();
+document.getElementById('links').innerHTML = paths;
+
+// 3D drift for the flat UI scenes
+document.getElementById('profile').animate([
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(-900px) rotateX(24deg) scale(.4)', opacity: 0 }, { transform: 'translateZ(0) rotateX(6deg) rotateY(10deg)', opacity: 1, offset: .12 },
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(60px) rotateX(4deg) rotateY(-6deg) translateY(-40px)', opacity: 1, offset: .88 }, { transform: 'translateZ(-2600px) rotateX(10deg)', opacity: 0 }],
+  { duration: 5800, delay: 4300, fill: 'both' });
+document.getElementById('phone').animate([
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(-1400px) rotateY(-40deg) rotateX(20deg)' }, { transform: 'translateZ(0) rotateY(-14deg) rotateX(6deg)', offset: .1 },
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(80px) rotateY(10deg) rotateX(4deg) translateX(-60px)', offset: .9 }, { transform: 'translateZ(-1800px) rotateY(30deg)' }],
+  { duration: 7000, delay: 24100, fill: 'both' });
+document.getElementById('dash').animate([
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(-1500px) rotateX(30deg) rotateY(-30deg)' }, { transform: 'rotateX(14deg) rotateY(-16deg)', offset: .14 },
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(60px) rotateX(10deg) rotateY(-4deg)', offset: .66 }, { transform: 'translateZ(-1700px) rotateX(6deg) rotateY(0)', offset: .92 },
+  { easing: 'cubic-bezier(.3,0,.25,1)', transform: 'translateZ(-2200px)' }], { duration: 5000, delay: 30900, fill: 'both' });
+document.getElementById('gap').animate([{ easing: 'cubic-bezier(.6,0,.4,1)', transform: 'none' }, { transform: 'none', offset: .8 }, { transform: 'scale(3.2)', opacity: 0 }],
+  { duration: 2900, delay: 9900, fill: 'both' });
+</script>
+</body>
+</html>
