@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Dot 3D</title>
+<style>@font-face{font-family:M;font-weight:600;src:url(../abba-video/Montserrat-600.ttf)}@font-face{font-family:M;font-weight:900;src:url(../abba-video/Montserrat.ttf)}
+body{margin:0}.card{position:relative;width:1080px;height:1080px;background:radial-gradient(70% 70% at 50% 45%,#13245a,#081028 70%)}
+.label{position:absolute;left:0;right:0;bottom:56px;text-align:center;color:#ffffffb0;font:600 30px M;letter-spacing:6px;text-transform:uppercase}.label b{color:#fff;font-weight:900}</style>
+<script type="importmap">{"imports":{"three":"../clinic-videos/lib/three.module.js"}}</script>
+</head><body><div class="card" id="c10"><div class="label"><b>Dot</b> · 3D</div></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from '../clinic-videos/lib/RoomEnvironment.js';
+const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true }); r.setSize(1080, 1080); r.toneMapping = THREE.ACESFilmicToneMapping;
+document.getElementById('c10').prepend(r.domElement);
+const scene = new THREE.Scene(); scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), .04).texture;
+const cam = new THREE.PerspectiveCamera(30, 1, .1, 100); cam.position.set(0, .3, 12.5); cam.lookAt(0, .1, 0);
+const key = new THREE.DirectionalLight('#fff', 2); key.position.set(3, 4, 5); const rim = new THREE.DirectionalLight('#5fd4ff', 4); rim.position.set(-5, 2, -3); scene.add(key, rim);
+const body = new THREE.Mesh(new THREE.SphereGeometry(1.6, 96, 96), new THREE.MeshPhysicalMaterial({ color: '#3B6BFF', roughness: .18, clearcoat: 1, clearcoatRoughness: .05, sheen: .5, sheenColor: '#9fc0ff' }));
+body.position.y = .25; scene.add(body);
+const eyeM = new THREE.MeshStandardMaterial({ color: '#fff', emissive: '#fff', emissiveIntensity: .9 });
+for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.CapsuleGeometry(.13, .32, 8, 24), eyeM); e.position.set(s * .42, .35, 1.52); e.rotation.x = -.12; scene.add(e); }
+const sat = [['#3CF2C8', .28, [-2.4, -.4, .4]], ['#E8C27A', .2, [2.3, .9, -.2]], ['#ffffff', .12, [1.8, -1.1, 1]]];
+for (const [c, s, p] of sat) { const m = new THREE.Mesh(new THREE.SphereGeometry(s, 48, 48), new THREE.MeshPhysicalMaterial({ color: c, roughness: .2, clearcoat: 1, emissive: c, emissiveIntensity: .15 })); m.position.set(...p); scene.add(m); }
+const ring = new THREE.Mesh(new THREE.TorusGeometry(2.5, .012, 8, 200), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: .25 })); ring.rotation.set(1.35, .2, -.25); ring.position.y = .2; scene.add(ring);
+const shadow = new THREE.Mesh(new THREE.CircleGeometry(1.4, 64), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: .35 })); shadow.rotation.x = -Math.PI / 2; shadow.position.y = -1.7; shadow.scale.y = .5; scene.add(shadow);
+r.render(scene, cam); window.READY = true;
+</script></body></html>

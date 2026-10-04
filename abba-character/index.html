@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Dot · personaje ABBA</title>
+<style>
+@font-face{font-family:M;font-weight:900;src:url(../abba-video/Montserrat.ttf)}
+@font-face{font-family:M;font-weight:600;src:url(../abba-video/Montserrat-600.ttf)}
+body{margin:0;background:#050a1c;font-family:M,sans-serif}
+.card{position:relative;width:1080px;height:1080px;overflow:hidden;background:radial-gradient(70% 70% at 50% 45%,#13245a,#081028 70%)}
+.card svg{position:absolute;inset:0}
+.label{position:absolute;left:0;right:0;bottom:56px;text-align:center;color:#ffffffb0;font-size:30px;font-weight:600;letter-spacing:6px;text-transform:uppercase}
+.label b{color:#fff;font-weight:900}
+</style></head><body>
+<!-- Each card is one 1080×1080 image. Characters are drawn as SVG by the script below. -->
+<div class="card" id="c1"></div><div class="card" id="c2"></div><div class="card" id="c3"></div><div class="card" id="c4"></div><div class="card" id="c5"></div>
+<div class="card" id="c6"></div><div class="card" id="c7"></div><div class="card" id="c8"></div><div class="card" id="c9"></div>
+<script>
+const C = { blue: '#3B6BFF', deep: '#1a3aa8', mint: '#3CF2C8', gold: '#E8C27A', pink: '#FF6FA8', white: '#ffffff', dim: '#1c2b5c' };
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const defs = `<defs>
+  <radialGradient id="orb" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7fa2ff"/><stop offset=".55" stop-color="${C.blue}"/><stop offset="1" stop-color="#14288a"/></radialGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="${C.blue}" stop-opacity=".55"/><stop offset="1" stop-color="${C.blue}" stop-opacity="0"/></radialGradient>
+  <radialGradient id="mglow"><stop offset="0" stop-color="${C.mint}" stop-opacity=".5"/><stop offset="1" stop-color="${C.mint}" stop-opacity="0"/></radialGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter></defs>`;
+const svg = (id, body, label) => document.getElementById(id).innerHTML =
+  `<svg viewBox="0 0 1080 1080">${defs}${body}</svg><div class="label">${label}</div>`;
+// pill eyes, the signature of the character
+const eyes = (cx, cy, gap = 70, w = 34, h = 72, col = '#fff') => [-1, 1].map(s => `<rect x="${cx + s * gap - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${w / 2}" fill="${col}"/>`).join('');
+const orb = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r * 1.7}" fill="url(#glow)"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#orb)"/>
+  <ellipse cx="${cx - r * .35}" cy="${cy - r * .45}" rx="${r * .28}" ry="${r * .14}" fill="#fff" opacity=".35" transform="rotate(-30 ${cx - r * .35} ${cy - r * .45})"/>`;
+
+// 1 · the core orb with orbiting dots
+svg('c1', orb(540, 500, 230) + eyes(540, 490) +
+  `<ellipse cx="540" cy="500" rx="360" ry="110" fill="none" stroke="#ffffff26" stroke-width="3" transform="rotate(-14 540 500)"/>
+   <circle cx="205" cy="560" r="22" fill="${C.mint}"/><circle cx="870" cy="420" r="16" fill="${C.gold}"/><circle cx="760" cy="600" r="11" fill="#fff"/>`,
+  '<b>Dot</b> · el original');
+
+// 2 · LED dot-matrix face
+{ let b = orb(540, 500, 0); const n = 23, s = 30, x0 = 540 - (n - 1) * s / 2, y0 = 500 - (n - 1) * s / 2;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const x = x0 + i * s, y = y0 + j * s, dx = (x - 540) / 330, dy = (y - 500) / 330; if (dx * dx + dy * dy > 1) continue;
+    const eye = (Math.abs(i - 7.5) < 1.2 || Math.abs(i - 14.5) < 1.2) && j >= 7 && j <= 10;
+    const smile = j >= 14 && j <= 15 && Math.abs((i - 11) ** 2 / 30 + 13.6 - j) < .7 && i > 6 && i < 16;
+    const on = eye || smile;
+    b += `<circle cx="${x}" cy="${y}" r="${on ? 11 : 8}" fill="${on ? C.mint : C.dim}"/>`; if (on) b += `<circle cx="${x}" cy="${y}" r="24" fill="url(#mglow)"/>`;
+  } svg('c2', b, '<b>Dot</b> · matriz LED'); }
+
+// 3 · creature made of a cluster of dots
+{ let b = `<circle cx="540" cy="520" r="420" fill="url(#glow)" opacity=".6"/>`;
+  for (let k = 0; k < 420; k++) { const a = rnd() * 6.283, r = Math.sqrt(rnd()) * 270, x = 540 + Math.cos(a) * r, y = 520 + Math.sin(a) * r * .9, sz = 6 + rnd() * 20 * (1 - r / 330);
+    b += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${sz.toFixed(1)}" fill="${['#2f5cf0', '#3B6BFF', '#5b84ff', '#86a6ff', '#1f43c9'][k % 5]}"/>`; }
+  b += [-1, 1].map(s => `<circle cx="${540 + s * 85}" cy="470" r="62" fill="#fff"/><circle cx="${540 + s * 85 + 12}" cy="480" r="28" fill="#0a1440"/><circle cx="${540 + s * 85 + 22}" cy="468" r="9" fill="#fff"/>`).join('');
+  b += `<circle cx="470" cy="815" r="26" fill="${C.deep}"/><circle cx="610" cy="815" r="26" fill="${C.deep}"/>`;
+  svg('c3', b, '<b>Dot</b> · enjambre'); }
+
+// 4 · halftone-shaded sphere
+{ let b = ''; const R = 300, L = [-.5, -.6, .62];
+  for (let y = 500 - R; y <= 500 + R; y += 22) for (let x = 540 - R; x <= 540 + R; x += 22) {
+    const nx = (x - 540) / R, ny = (y - 500) / R, d = nx * nx + ny * ny; if (d > 1) continue;
+    const nz = Math.sqrt(1 - d), li = Math.max(0, nx * L[0] + ny * L[1] + nz * L[2]);
+    b += `<circle cx="${x}" cy="${y}" r="${(2 + 9.5 * (1 - li)).toFixed(1)}" fill="${C.blue}"/>`; }
+  b = `<circle cx="540" cy="500" r="${R}" fill="#e9eeff"/>` + b + eyes(540, 470, 78, 40, 84, '#0a1440') +
+    `<circle cx="420" cy="590" r="34" fill="${C.pink}" opacity=".55"/><circle cx="660" cy="590" r="34" fill="${C.pink}" opacity=".55"/>`;
+  svg('c4', b, '<b>Dot</b> · halftone'); }
+
+// 5 · constellation figure (automation network)
+{ const P = { h: [540, 330], l: [430, 560], r: [650, 560], c: [540, 540], b: [540, 690], hl: [300, 470], hr: [780, 470], fl: [450, 860], fr: [630, 860] };
+  const E = [['h', 'c'], ['c', 'l'], ['c', 'r'], ['l', 'hl'], ['r', 'hr'], ['c', 'b'], ['b', 'fl'], ['b', 'fr'], ['l', 'b'], ['r', 'b']];
+  let b = E.map(([a, c]) => `<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[c][0]}" y2="${P[c][1]}" stroke="${C.mint}" stroke-opacity=".55" stroke-width="5"/>`).join('');
+  for (const [k, [x, y]] of Object.entries(P)) b += `<circle cx="${x}" cy="${y}" r="60" fill="url(#mglow)"/><circle cx="${x}" cy="${y}" r="${k === 'h' ? 120 : k === 'c' ? 34 : 24}" fill="${k === 'c' ? C.gold : k === 'h' ? 'url(#orb)' : C.mint}"/>`;
+  b += eyes(540, 325, 40, 22, 46);
+  for (let k = 0; k < 40; k++) b += `<circle cx="${rnd() * 1080}" cy="${rnd() * 960}" r="${1 + rnd() * 3}" fill="#fff" opacity="${.2 + rnd() * .5}"/>`;
+  svg('c5', b, '<b>Dot</b> · constelación'); }
+
+// 6 · peeking over the ABBA wordmark
+svg('c6', `<clipPath id="peek"><rect width="1080" height="612"/></clipPath><g clip-path="url(#peek)">${orb(540, 520, 190)}${eyes(540, 540, 60, 30, 58)}</g>` +
+  `
+   <text x="540" y="790" text-anchor="middle" font-family="M" font-weight="900" font-size="250" letter-spacing="-6" fill="#fff">ABBA</text>
+   <circle cx="420" cy="606" r="32" fill="${C.blue}"/><circle cx="660" cy="606" r="32" fill="${C.blue}"/>`,
+  '<b>Dot</b> · logo');
+
+// 7 · little robot
+svg('c7', `<circle cx="540" cy="560" r="420" fill="url(#glow)" opacity=".5"/>
+  <line x1="540" y1="250" x2="540" y2="190" stroke="#cfd8ff" stroke-width="10"/><circle cx="540" cy="175" r="28" fill="${C.gold}"/><circle cx="540" cy="175" r="60" fill="url(#mglow)"/>
+  <rect x="330" y="250" width="420" height="340" rx="120" fill="url(#orb)"/>
+  <rect x="380" y="310" width="320" height="220" rx="80" fill="#0a1440"/>${eyes(540, 420, 62, 34, 70, C.mint)}
+  <rect x="410" y="620" width="260" height="200" rx="90" fill="${C.deep}"/>
+  <circle cx="490" cy="700" r="18" fill="${C.mint}"/><circle cx="540" cy="700" r="18" fill="${C.gold}"/><circle cx="590" cy="700" r="18" fill="#fff"/>
+  <circle cx="370" cy="700" r="36" fill="${C.blue}"/><circle cx="710" cy="700" r="36" fill="${C.blue}"/>
+  <circle cx="480" cy="860" r="34" fill="${C.deep}"/><circle cx="600" cy="860" r="34" fill="${C.deep}"/>`,
+  '<b>Dot</b> · bot');
+
+// 8 · the squad: one dot per ABBA agent
+{ const S = [[180, 'CEO', C.gold, 98], [410, 'Creativo', C.pink, 84], [650, 'Producción', C.mint, 90], [890, 'Analytics', C.blue, 80]];
+  let b = '';
+  for (const [x, name, col, r] of S) {
+    const y = 560 - r * .2;
+    b += `<circle cx="${x}" cy="${y}" r="${r * 1.25}" fill="${col}" opacity=".12"/><circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/>` + eyes(x, y - 8, r * .28, r * .16, r * .34, '#0a1440') +
+      `<text x="${x}" y="${y + r + 70}" text-anchor="middle" font-family="M" font-weight="600" font-size="30" fill="#ffffffcc">${name}</text>`;
+  }
+  b += `<path d="M150 425 l12 -34 l18 20 l18 -20 l12 34z" fill="${C.gold}"/>` + // CEO crown
+    `<circle cx="455" cy="480" r="16" fill="${C.mint}"/><circle cx="478" cy="455" r="10" fill="${C.gold}"/>` + // creative paint dots
+    `<rect x="610" y="445" width="80" height="22" rx="6" fill="#0a1440"/><rect x="610" y="445" width="80" height="8" fill="#fff" opacity=".7"/>` + // clapper
+    [0, 1, 2].map(i => `<rect x="${865 + i * 18}" y="${470 - i * 14}" width="12" height="${20 + i * 14}" rx="3" fill="#fff"/>`).join(''); // chart
+  svg('c8', b, '<b>Dots</b> · el equipo'); }
+
+// 9 · expression sheet
+{ const cells = [['Feliz', 'happy'], ['Pensando', 'think'], ['Trabajando', 'work'], ['Guiño', 'wink'], ['Sorpresa', 'wow'], ['Dormido', 'sleep']];
+  let b = '';
+  cells.forEach(([name, k], i) => {
+    const x = 210 + (i % 3) * 330, y = 330 + Math.floor(i / 3) * 360, r = 115;
+    b += orb(x, y, r);
+    const arc = (ex, up) => `<path d="M${ex - 22} ${y + (up ? 6 : -6)} Q${ex} ${y + (up ? -26 : 26)} ${ex + 22} ${y + (up ? 6 : -6)}" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"/>`;
+    if (k === 'happy') b += arc(x - 38, 1) + arc(x + 38, 1);
+    if (k === 'think') b += eyes(x + 14, y - 22, 36, 20, 42) + [0, 1, 2].map(j => `<circle cx="${x + 92 + j * 26}" cy="${y - 118 - j * 16}" r="${6 + j * 3}" fill="#fff"/>`).join('');
+    if (k === 'work') b += [-1, 1].map(s => `<rect x="${x + s * 38 - 20}" y="${y - 6}" width="40" height="12" rx="6" fill="#fff"/>`).join('') + `<circle cx="${x}" cy="${y}" r="${r + 22}" fill="none" stroke="${C.mint}" stroke-width="8" stroke-dasharray="60 40"/>`;
+    if (k === 'wink') b += `<rect x="${x - 56}" y="${y - 30}" width="20" height="44" rx="10" fill="#fff"/>` + arc(x + 38, 1);
+    if (k === 'wow') b += [-1, 1].map(s => `<circle cx="${x + s * 38}" cy="${y - 8}" r="18" fill="none" stroke="#fff" stroke-width="10"/>`).join('') + `<circle cx="${x}" cy="${y + 50}" r="12" fill="#0a1440"/>`;
+    if (k === 'sleep') b += [-1, 1].map(s => `<rect x="${x + s * 38 - 20}" y="${y + 2}" width="40" height="10" rx="5" fill="#ffffffaa"/>`).join('') + `<text x="${x + 90}" y="${y - 90}" font-family="M" font-weight="900" font-size="44" fill="#fff" opacity=".7">z</text><text x="${x + 120}" y="${y - 130}" font-family="M" font-weight="900" font-size="30" fill="#fff" opacity=".5">z</text>`;
+    b += `<text x="${x}" y="${y + r + 60}" text-anchor="middle" font-family="M" font-weight="600" font-size="28" fill="#ffffffaa">${name}</text>`;
+  });
+  svg('c9', b, '<b>Dot</b> · expresiones'); }
+document.fonts.ready.then(() => window.READY = true);
+</script>
+</body></html>
