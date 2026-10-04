@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Dot · serie 2</title>
+<style>
+@font-face{font-family:M;font-weight:900;src:url(../abba-video/Montserrat.ttf)}
+@font-face{font-family:M;font-weight:600;src:url(../abba-video/Montserrat-600.ttf)}
+body{margin:0}
+.card{position:relative;width:1080px;height:1080px;overflow:hidden;background:var(--bg)}
+.card canvas{position:absolute;inset:0}
+.label{position:absolute;left:0;right:0;bottom:56px;text-align:center;color:var(--lc,#ffffffb0);font:600 30px M;letter-spacing:6px;text-transform:uppercase}
+.label b{color:var(--lb,#fff);font-weight:900}
+</style>
+<script type="importmap">{"imports":{"three":"../clinic-videos/lib/three.module.js"}}</script>
+</head><body><div class="card" id="card"><div class="label" id="label"></div></div>
+<script type="module">
+// Serie 2 of the "Dot" character: one experimental material/shape per ?v=1..10.
+import * as THREE from 'three';
+import { RoomEnvironment } from '../clinic-videos/lib/RoomEnvironment.js';
+import { MarchingCubes } from '../clinic-videos/lib/MarchingCubes.js';
+const v = +new URLSearchParams(location.search).get('v') || 1, card = document.getElementById('card');
+const C = { blue: '#3B6BFF', mint: '#3CF2C8', gold: '#E8C27A', pink: '#FF6FA8', navy: '#081028' };
+let seed = 7 + v; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const noise = (x, y, z) => Math.sin(x * 1.7 + Math.sin(y * 2.3)) * Math.sin(y * 1.9 + Math.sin(z * 2.1)) * Math.sin(z * 2.2 + Math.sin(x * 1.3));
+
+function setup(bg, label, labelColors = {}) {
+  card.style.setProperty('--bg', bg);
+  for (const [k, c] of Object.entries(labelColors)) card.style.setProperty(k, c);
+  document.getElementById('label').innerHTML = label;
+  const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  r.setSize(1080, 1080); r.toneMapping = THREE.ACESFilmicToneMapping; card.prepend(r.domElement);
+  // studio environment with brand-coloured light panels, so chrome/glass reflect ABBA colours
+  const env = new RoomEnvironment();
+  [[C.blue, [-6, 2, 2]], [C.mint, [6, 1, 3]], [C.gold, [0, 6, -4]], [C.pink, [4, -4, -3]]].forEach(([c, p]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide }));
+    m.material.color.multiplyScalar(6); m.position.set(...p); m.lookAt(0, 0, 0); env.add(m); });
+  const scene = new THREE.Scene(); scene.environment = new THREE.PMREMGenerator(r).fromScene(env, .03).texture;
+  const cam = new THREE.PerspectiveCamera(30, 1, .1, 100); cam.position.set(0, .25, 10); cam.lookAt(0, 0, 0);
+  const key = new THREE.DirectionalLight('#fff', 1.6); key.position.set(3, 4, 5); scene.add(key);
+  return { r, scene, cam };
+}
+const eyes = (parent, { gap = .42, y = .15, z = 1.5, rad = .13, len = .32, color = '#fff', glow = 1, tilt = -.1 } = {}) => {
+  const m = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: glow, roughness: .3 });
+  for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.CapsuleGeometry(rad, len, 8, 24), m); e.position.set(s * gap, y, z); e.rotation.x = tilt; parent.add(e); }
+};
+const dotTex = () => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, '#fff'); gr.addColorStop(.4, '#ffffffaa'); gr.addColorStop(1, '#fff0'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); };
+const darkBg = 'radial-gradient(70% 70% at 50% 45%,#13245a,#060c22 72%)';
+
+const V = {
+  1() { // liquid glass: refracts a striped backdrop and coloured blobs inside
+    const { r, scene, cam } = setup(darkBg, '<b>Dot</b> · liquid glass');
+    const c = document.createElement('canvas'); c.width = c.height = 1024; const g = c.getContext('2d');
+    const gr = g.createLinearGradient(0, 0, 1024, 1024); gr.addColorStop(0, '#0a1640'); gr.addColorStop(1, '#16307a'); g.fillStyle = gr; g.fillRect(0, 0, 1024, 1024);
+    [C.blue, C.mint, C.gold, C.pink].forEach((col, i) => { g.fillStyle = col; g.globalAlpha = .9; g.fillRect(0, 300 + i * 90, 1024, 34); });
+    const back = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c) })); back.position.z = -4; back.rotation.z = -.35; scene.add(back);
+    const glass = new THREE.Mesh(new THREE.SphereGeometry(1.7, 128, 128), new THREE.MeshPhysicalMaterial({ transmission: 1, thickness: 2.2, ior: 1.45, roughness: .04, iridescence: .35, color: '#e8f0ff', clearcoat: 1 }));
+    scene.add(glass);
+    [[C.mint, .45, [-.6, -.7, -.3]], [C.gold, .3, [.75, -.5, .2]], [C.blue, .55, [.2, .55, -.5]]].forEach(([col, s, p]) => {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(s, 48, 48), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: .5 })); b.position.set(...p); scene.add(b); });
+    eyes(scene, { z: .95, glow: 1.4 });
+    return [r, scene, cam];
+  },
+  2() { // liquid chrome blob
+    const { r, scene, cam } = setup('radial-gradient(70% 70% at 50% 40%,#2a2f45,#07080e 72%)', '<b>Dot</b> · cromo líquido');
+    const g = new THREE.SphereGeometry(1.6, 220, 220), p = g.attributes.position, q = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) { q.fromBufferAttribute(p, i); const k = 1 + .14 * noise(q.x * 1.2, q.y * 1.2, q.z * 1.2) + .05 * Math.sin(q.y * 7); q.multiplyScalar(k); q.y *= 1.06; p.setXYZ(i, q.x, q.y, q.z); }
+    g.computeVertexNormals();
+    scene.add(new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: '#fff', metalness: 1, roughness: .04, envMapIntensity: 1.4 })));
+    eyes(scene, { color: C.mint, z: 1.62, glow: 2 });
+    return [r, scene, cam];
+  },
+  3() { // inflated / puffy squircle pillow
+    const { r, scene, cam } = setup('radial-gradient(70% 70% at 50% 40%,#f4f0ff,#cfc4ff 75%)', '<b>Dot</b> · inflable', { '--lc': '#4b3d8faa', '--lb': '#2c1f6b' });
+    scene.add(new THREE.HemisphereLight('#ffffff', '#8b7dff', 1.6));
+    const g = new THREE.SphereGeometry(1, 160, 160), p = g.attributes.position;
+    const sq = x => Math.sign(x) * Math.abs(x) ** .38;
+    for (let i = 0; i < p.count; i++) p.setXYZ(i, sq(p.getX(i)) * 1.75, sq(p.getY(i)) * 1.6, p.getZ(i) * .95);
+    g.computeVertexNormals();
+    const body = new THREE.Mesh(g, new THREE.MeshPhysicalMaterial({ color: '#8f7bff', roughness: .32, clearcoat: .6, clearcoatRoughness: .25, sheen: 1, sheenColor: '#ffffff' }));
+    body.rotation.set(.12, -.25, .05); scene.add(body);
+    eyes(body, { color: '#21154f', glow: 0, z: .96, y: .25, gap: .5 });
+    const blush = new THREE.MeshBasicMaterial({ color: C.pink, transparent: true, opacity: .55 });
+    for (const s of [-1, 1]) { const b = new THREE.Mesh(new THREE.CircleGeometry(.2, 32), blush); b.position.set(s * .95, -.25, .955); body.add(b); }
+    return [r, scene, cam];
+  },
+  4() { // iridescent loop (automation cycle)
+    const { r, scene, cam } = setup(darkBg, '<b>Dot</b> · loop iridiscente');
+    const loop = new THREE.Group(); scene.add(loop);
+    loop.add(new THREE.Mesh(new THREE.TorusGeometry(1.25, .6, 96, 220), new THREE.MeshPhysicalMaterial({ color: '#c9d6ff', metalness: .6, roughness: .1, iridescence: 1, iridescenceIOR: 2.2, iridescenceThicknessRange: [300, 1300], clearcoat: 1 })));
+    eyes(loop, { y: 1.28, z: .6, gap: .36, rad: .14, len: .3, color: '#0a1440', glow: 0, tilt: 0 });
+    loop.rotation.set(-.2, .3, .08);
+    return [r, scene, cam];
+  },
+  5() { // generative particle being
+    const { r, scene, cam } = setup('radial-gradient(70% 70% at 50% 45%,#0e1a44,#02040c 72%)', '<b>Dot</b> · partículas');
+    const N = 60000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), a = new THREE.Color(C.blue), b = new THREE.Color(C.mint), w = new THREE.Color('#fff'), t = new THREE.Color();
+    for (let i = 0; i < N; i++) {
+      const u = rnd() * 2 - 1, th = rnd() * 6.283, s = Math.sqrt(1 - u * u); let x = s * Math.cos(th), y = u, z = s * Math.sin(th);
+      const rr = 1.6 * (1 + .08 * noise(x * 3, y * 3, z * 3)) * (i % 7 === 0 ? .6 + rnd() * .4 : 1); x *= rr; y *= rr; z *= rr;
+      const eye = z > 1.2 && [-1, 1].some(sg => Math.abs(x - sg * .42) < .14 && Math.abs(y - .15) < .3);
+      pos.set([x, y, z], i * 3); t.copy(a).lerp(b, (y + 1.6) / 3.2); if (eye) t.copy(w).multiplyScalar(2.2); col.set([t.r, t.g, t.b], i * 3);
+    }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const pts = new THREE.Points(g, new THREE.PointsMaterial({ size: .05, map: dotTex(), vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    scene.add(pts);
+    const E = 5000, ep = new Float32Array(E * 3); for (let i = 0; i < E; i++) { const sg = i % 2 ? 1 : -1, yy = .15 + (rnd() - .5) * .6, xx = sg * .42 + (rnd() - .5) * .26; ep.set([xx, yy, Math.sqrt(Math.max(0, 2.6 - xx * xx - yy * yy)) + .05], i * 3); }
+    const eg = new THREE.BufferGeometry(); eg.setAttribute('position', new THREE.BufferAttribute(ep, 3));
+    scene.add(new THREE.Points(eg, new THREE.PointsMaterial({ size: .05, map: dotTex(), color: '#ffffff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
+    const R = 4000, rp = new Float32Array(R * 3); for (let i = 0; i < R; i++) { const th = rnd() * 6.283, d = 2.4 + (rnd() - .5) * .25; rp.set([Math.cos(th) * d, (rnd() - .5) * .06, Math.sin(th) * d], i * 3); }
+    const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.BufferAttribute(rp, 3));
+    const ring = new THREE.Points(rg, new THREE.PointsMaterial({ size: .03, map: dotTex(), color: C.gold, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); ring.rotation.set(1.25, .1, -.3); scene.add(ring);
+    return [r, scene, cam];
+  },
+  6() { // voxel
+    const { r, scene, cam } = setup(darkBg, '<b>Dot</b> · vóxel');
+    const S = .13, list = [];
+    for (let x = -12; x <= 12; x++) for (let y = -12; y <= 12; y++) for (let z = -12; z <= 12; z++) {
+      const d = Math.hypot(x, y, z); if (d > 12.2 || d < 10.6) continue;
+      const eye = z > 8 && [-1, 1].some(s => Math.abs(x - s * 3) <= 1) && y >= -1 && y <= 3; list.push([x, y, z, eye]); }
+    const m = new THREE.InstancedMesh(new THREE.BoxGeometry(S * .92, S * .92, S * .92), new THREE.MeshStandardMaterial({ roughness: .45, metalness: .1 }), list.length);
+    const o = new THREE.Object3D(), c = new THREE.Color(), a = new THREE.Color('#2347d6'), b = new THREE.Color('#7aa0ff');
+    list.forEach(([x, y, z, eye], i) => { o.position.set(x * S, y * S, z * S); o.updateMatrix(); m.setMatrixAt(i, o.matrix);
+      m.setColorAt(i, eye ? c.set('#ffffff') : c.copy(a).lerp(b, (y + 12) / 24 + (rnd() - .5) * .15)); });
+    m.rotation.set(.15, -.35, 0); scene.add(m);
+    for (let k = 0; k < 14; k++) { const cube = new THREE.Mesh(new THREE.BoxGeometry(S, S, S), new THREE.MeshStandardMaterial({ color: [C.mint, C.gold, '#fff'][k % 3], emissive: [C.mint, C.gold, '#fff'][k % 3], emissiveIntensity: .4 }));
+      cube.position.set(2.2 + rnd() * .8, -1 + rnd() * 2.4, (rnd() - .5)); cube.position.x *= k % 2 ? 1 : -1; cube.rotation.set(rnd() * 3, rnd() * 3, 0); scene.add(cube); }
+    return [r, scene, cam];
+  },
+  7() { // neon geodesic network
+    const { r, scene, cam } = setup('radial-gradient(70% 70% at 50% 45%,#0b1636,#02040c 72%)', '<b>Dot</b> · red neón');
+    const ico = new THREE.IcosahedronGeometry(1.75, 2);
+    const lines = new THREE.LineSegments(new THREE.EdgesGeometry(ico), new THREE.LineBasicMaterial({ color: C.mint, transparent: true, opacity: .75, blending: THREE.AdditiveBlending }));
+    scene.add(lines);
+    const p = ico.attributes.position, seen = new Set(), nodeM = new THREE.MeshBasicMaterial({ color: '#c9fff1' });
+    for (let i = 0; i < p.count; i++) { const k = [p.getX(i), p.getY(i), p.getZ(i)].map(n => n.toFixed(3)).join(); if (seen.has(k)) continue; seen.add(k);
+      const n = new THREE.Mesh(new THREE.SphereGeometry(.035, 12, 12), nodeM); n.position.fromBufferAttribute(p, i); scene.add(n); }
+    const core = new THREE.Mesh(new THREE.SphereGeometry(1.05, 64, 64), new THREE.MeshStandardMaterial({ color: '#0d2a8a', emissive: C.blue, emissiveIntensity: .9 })); scene.add(core);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: dotTex(), color: C.blue, transparent: true, opacity: .6, blending: THREE.AdditiveBlending, depthWrite: false })); halo.scale.setScalar(5); scene.add(halo);
+    eyes(scene, { z: 1.0, gap: .3, rad: .1, len: .24, glow: 2 });
+    scene.rotation.y = .3;
+    return [r, scene, cam];
+  },
+  8() { // claymation
+    const { r, scene, cam } = setup('radial-gradient(70% 70% at 50% 40%,#fff6ea,#f3d9bf 78%)', '<b>Dot</b> · plastilina', { '--lc': '#6b4a2eaa', '--lb': '#3d2614' });
+    scene.environment = null; scene.add(new THREE.HemisphereLight('#fff6ea', '#c99b7a', 1.8));
+    const clay = col => new THREE.MeshStandardMaterial({ color: col, roughness: .95 });
+    const g = new THREE.SphereGeometry(1.45, 160, 160), p = g.attributes.position, q = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) { q.fromBufferAttribute(p, i); q.multiplyScalar(1 + .025 * noise(q.x * 6, q.y * 6, q.z * 6) + .012 * Math.sin(q.x * 31 + q.y * 17)); q.y *= 1.05; p.setXYZ(i, q.x, q.y, q.z); }
+    g.computeVertexNormals(); const body = new THREE.Mesh(g, clay('#4f72f5')); scene.add(body);
+    for (const s of [-1, 1]) {
+      const w = new THREE.Mesh(new THREE.SphereGeometry(.27, 48, 48), clay('#ffffff')); w.scale.set(1, 1.35, .6); w.position.set(s * .45, .25, 1.33); scene.add(w);
+      const pu = new THREE.Mesh(new THREE.SphereGeometry(.12, 32, 32), clay('#1b1b2a')); pu.position.set(s * .45 + .05, .2, 1.5); scene.add(pu);
+      const arm = new THREE.Mesh(new THREE.CapsuleGeometry(.17, .45, 8, 24), clay('#4f72f5')); arm.position.set(s * 1.55, -.35, .2); arm.rotation.z = s * .9; scene.add(arm);
+      const foot = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), clay('#E8C27A')); foot.scale.set(1.2, .6, 1.3); foot.position.set(s * .55, -1.5, .4); scene.add(foot);
+    }
+    const smile = new THREE.Mesh(new THREE.TorusGeometry(.22, .045, 16, 48, Math.PI), clay('#1b1b2a')); smile.rotation.z = Math.PI; smile.position.set(0, -.25, 1.42); scene.add(smile);
+    return [r, scene, cam];
+  },
+  9() { // metaballs: Dot budding into its team of agents
+    const { r, scene, cam } = setup(darkBg, '<b>Dot</b> · metaballs');
+    const mc = new MarchingCubes(96, new THREE.MeshPhysicalMaterial({ color: '#4a74ff', roughness: .1, clearcoat: 1, clearcoatRoughness: .05, iridescence: .4 }), false, false, 200000);
+    mc.scale.setScalar(2.6); scene.add(mc); mc.reset();
+    mc.addBall(.5, .5, .5, 1.3, 12);
+    [[.63, .6, .52], [.63, .39, .5], [.37, .61, .5], [.38, .39, .52]].forEach(([x, y, z], i) => mc.addBall(x, y, z, .3 + i * .02, 12));
+    mc.update();
+    eyes(scene, { z: .95, gap: .26, rad: .09, len: .2, y: .08 });
+    return [r, scene, cam];
+  },
+};
+
+if (v === 10) { // ASCII terminal Dot (2D canvas)
+  card.style.setProperty('--bg', '#03060f'); card.style.setProperty('--lc', '#3CF2C8aa'); card.style.setProperty('--lb', '#3CF2C8');
+  document.getElementById('label').innerHTML = '<b>Dot</b> · ASCII';
+  const cv = document.createElement('canvas'); cv.width = cv.height = 1080; card.prepend(cv); const g = cv.getContext('2d');
+  const ramp = ' .,:;-=+*x%#@', cw = 13, ch = 22, cols = 1080 / cw | 0, rows = 1080 / ch | 0, L = [-.45, -.55, .7];
+  g.font = '600 20px "DejaVu Sans Mono", monospace'; g.textBaseline = 'top';
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const x = (i * cw - 540) / 360, y = (j * ch - 500) / 360, d = x * x + y * y;
+    let chr = ' ', col = '#1d4fd8';
+    if (d < 1) { const z = Math.sqrt(1 - d), li = Math.max(0, x * L[0] + y * L[1] + z * L[2]); chr = ramp[Math.min(ramp.length - 1, 1 + li * (ramp.length - 1) | 0)];
+      col = `hsl(${222 - li * 60},95%,${45 + li * 30}%)`;
+      if ([-1, 1].some(s => Math.abs(x - s * .24) < .045 && Math.abs(y + .05) < .17)) { chr = '█'; col = '#ffffff'; } }
+    else if (rnd() < .012) { chr = ramp[1 + rnd() * 4 | 0]; col = '#3CF2C855'; }
+    g.fillStyle = col; g.fillText(chr, i * cw, j * ch);
+  }
+  g.fillStyle = '#3CF2C8'; g.fillText('> abba.dot --status', 60, 60); g.fillStyle = '#ffffffaa'; g.fillText('online · automatizando 4 procesos_', 60, 90);
+  document.fonts.ready.then(() => window.READY = true);
+} else {
+  const [r, scene, cam] = V[v](); r.render(scene, cam);
+  document.fonts.ready.then(() => window.READY = true);
+}
+</script></body></html>
