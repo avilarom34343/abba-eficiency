@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Sin cepillarte</title>
+<link rel="stylesheet" href="lib/kit.css">
+<script type="importmap">{"imports":{"three":"./lib/three.module.js"}}</script>
+</head><body>
+<div id="stage"><div id="gl"></div><div id="ui">
+  <div class="bar" style="--len:22s"></div>
+  <div class="cap" style="--d:.1s;--o:2.4s;top:230px">Esto pasa<br>en tu boca</div>
+  <div class="cap" style="--d:.9s;--o:2.4s;top:1450px">si <span class="hl">NO</span> te cepillas</div>
+  <div class="cap pop" id="clock" style="--d:2.5s;--o:11.9s;top:1330px;font-size:140px">0 h</div>
+  <div class="cap pop" id="rew" style="--d:12s;--o:15.5s;top:1330px;font-size:70px;color:var(--mint)">REBOBINANDO</div>
+  <div class="cap sm" style="--d:2.6s;--o:4.9s;top:230px">Primeras horas:<br>se forma la <span class="yel">placa</span></div>
+  <div class="cap sm" style="--d:5.1s;--o:6.9s;top:230px">24 h:<br>crece y crece</div>
+  <div class="cap sm" style="--d:7.1s;--o:9.4s;top:230px">24–72 h: puede<br>endurecerse → <span class="hl">sarro</span></div>
+  <div class="cap sm" style="--d:9.6s;--o:11.9s;top:230px">1–3 semanas:<br><span class="red">encías inflamadas</span></div>
+  <div class="cap xs" style="--d:10.2s;--o:11.9s;top:400px;color:#ffffffaa">(gingivitis)</div>
+  <div class="cap sm" style="--d:12.1s;--o:15.4s;top:230px">La buena noticia:</div>
+  <div class="cap sm" style="--d:12.7s;--o:15.4s;top:310px">el cepillado <span class="hl">quita la placa</span></div>
+  <div class="cap sm" style="--d:15.6s;--o:17.4s;top:230px">Pero el sarro…</div>
+  <div class="cap sm" style="--d:16.1s;--o:17.4s;top:1450px">solo con <span class="mint">limpieza profesional</span></div>
+  <div class="cap" style="--d:17.6s;--o:19.9s;top:230px">2 minutos,<br><span class="hl">2 veces al día</span></div>
+  <div class="cap sm" style="--d:18.3s;--o:19.9s;top:1450px"><span class="chip">+ limpieza profesional periódica</span></div>
+  <div class="end" style="--d:20s">
+    <div class="cap sm" style="--d:20.1s;position:static">¿Hace cuánto fue tu última limpieza?</div>
+    <div class="cap" style="--d:20.4s;position:static"><span class="hl">Agéndala hoy</span></div>
+    <div class="small">Contenido de ejemplo · ABBA</div>
+  </div>
+  <div id="flashes"></div>
+</div></div>
+<script type="module">
+import { THREE, stage, run, toothGeo, mats, seg, lerp, out, back, rnd } from './lib/kit.js';
+const ctx = stage({ bg: '#0b1a2e' }), { scene, camera } = ctx;
+for (const t of [2.5, 9.5, 12, 15.5, 17.5, 20]) document.getElementById('flashes').insertAdjacentHTML('beforeend', `<div class="flash" style="--d:${t}s"></div>`);
+
+const geo = toothGeo('molar', .5), tooth = new THREE.Mesh(geo, mats.tooth()); tooth.scale.setScalar(1.6); scene.add(tooth);
+const gumMat = mats.gum(), gum = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 32), gumMat); gum.scale.set(1.45, .5, 1.4); gum.position.y = -.12; scene.add(gum);
+const pink = new THREE.Color('#e0707f'), red = new THREE.Color('#b0283a');
+
+// plaque: instanced blobs sampled on the crown surface; the ones near the gum turn into tartar
+const P = geo.attributes.position, Nn = geo.attributes.normal, spots = [];
+for (let i = 0; i < P.count && spots.length < 1600; i += 2) { const y = P.getY(i); if (y > .03 && y < .78 && rnd() < .55) spots.push(i); }
+const plaque = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.032, 2), new THREE.MeshStandardMaterial({ roughness: .55 }), spots.length);
+const blob = spots.map(i => { const y = P.getY(i), p = new THREE.Vector3(P.getX(i), y, P.getZ(i)).addScaledVector(new THREE.Vector3(Nn.getX(i), Nn.getY(i), Nn.getZ(i)), .025).multiplyScalar(1.6);
+  const tartar = y < .3 && rnd() < .5;
+  return { p, s: .7 + rnd() * .9, at: 2.6 + (y / .78) * 4.5 + rnd() * 1.5, tartar, gone: tartar ? 16 + rnd() * 1.2 : 12.8 + ((Math.atan2(p.x, p.z) + Math.PI) / 6.283) * 2.4 }; });
+scene.add(plaque);
+const yel = new THREE.Color('#efe08a'), beige = new THREE.Color('#b8914f'), dm = new THREE.Object3D(), col = new THREE.Color();
+
+// toothbrush orbiting the tooth with bristles facing it
+const brush = new THREE.Group(), arm = new THREE.Group(); brush.add(arm); scene.add(brush);
+const handle = new THREE.Mesh(new THREE.CapsuleGeometry(.16, 3.2, 8, 24), new THREE.MeshPhysicalMaterial({ color: '#3CF2C8', roughness: .25, clearcoat: 1 }));
+handle.rotation.z = Math.PI / 2; handle.position.x = 2.2;
+const headB = new THREE.Mesh(new THREE.BoxGeometry(1.1, .5, .18), new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .3 }));
+const bristles = new THREE.InstancedMesh(new THREE.CylinderGeometry(.035, .035, .42, 6), new THREE.MeshStandardMaterial({ color: '#dff7ff', roughness: .5 }), 60);
+let b = 0; for (let i = 0; i < 12; i++) for (let j = 0; j < 5; j++) { dm.position.set(-.48 + i * .087, -.18 + j * .09, -.27); dm.rotation.set(Math.PI / 2, 0, 0); dm.updateMatrix(); bristles.setMatrixAt(b++, dm.matrix); }
+arm.add(handle, headB, bristles); arm.position.set(0, .9, 1.55);
+// ultrasonic scaler tip for the tartar
+const scaler = new THREE.Group(), tip = new THREE.Mesh(new THREE.CylinderGeometry(.03, .09, 2.4, 16), mats.metal()); tip.position.y = 1.2; scaler.add(tip); scaler.rotation.x = -.9; scene.add(scaler);
+const spark = new THREE.Mesh(new THREE.SphereGeometry(.12, 16, 16), mats.glow('#9ff')); scene.add(spark);
+
+const clock = document.getElementById('clock');
+const H = [[2.5, 0], [5, 12], [7, 24], [9.4, 72]];
+run(ctx, 22, t => {
+  let h = 0; for (let i = 1; i < H.length; i++) if (t >= H[i - 1][0]) h = lerp(H[i - 1][1], H[i][1], seg(t, H[i - 1][0], H[i][0], x => x));
+  clock.textContent = t < 9.5 ? Math.round(h) + ' h' : '2 semanas';
+  clock.style.fontSize = t < 9.5 ? '140px' : '110px';
+  for (const [i, q] of blob.entries()) {
+    const g = seg(t, q.at, q.at + 1.4, out) * (1 - seg(t, q.gone, q.gone + .25)), hard = q.tartar ? seg(t, 7.2, 9.3) : 0;
+    dm.position.copy(q.p); dm.scale.setScalar(Math.max(g * q.s * (1 + .5 * hard), 1e-4)); dm.rotation.set(i, i * 2, 0); dm.updateMatrix();
+    plaque.setMatrixAt(i, dm.matrix); plaque.setColorAt(i, col.copy(yel).lerp(beige, hard));
+  }
+  plaque.instanceMatrix.needsUpdate = plaque.instanceColor.needsUpdate = true;
+  const inflam = seg(t, 9.6, 11.2) * (1 - seg(t, 13, 15));
+  gumMat.color.copy(pink).lerp(red, inflam); gum.scale.set(1.45 + .08 * inflam * (1 + .3 * Math.sin(t * 8)), .5 + .06 * inflam, 1.4 + .08 * inflam);
+  // brush: in at 12.2, one lap around the tooth, out at 15.4
+  const bin = seg(t, 12.2, 12.8, out) * (1 - seg(t, 15.2, 15.6));
+  brush.visible = bin > 0; brush.rotation.y = seg(t, 12.8, 15.2, x => x) * Math.PI * 2;
+  arm.position.set(Math.sin(t * 30) * .12, .9, 1.55 + (1 - bin) * 5);
+  const sc = seg(t, 15.7, 16.1, out) * (1 - seg(t, 17.2, 17.5)); scaler.visible = spark.visible = sc > 0;
+  const a = seg(t, 16, 17.2, x => x) * Math.PI * 2; scaler.position.set(Math.sin(a) * 1.25, .5 + (1 - sc) * 4, Math.cos(a) * 1.25);
+  spark.position.copy(scaler.position); spark.scale.setScalar(.6 + .5 * Math.sin(t * 60));
+  tooth.material.emissive.set('#ffffff').multiplyScalar(t > 17.5 ? .12 * Math.max(0, Math.sin((t - 17.5) * 3)) : 0);
+  // camera: fast spin-in for the hook, then a slow orbit
+  const r = t < 2.5 ? lerp(13, 7.4, seg(t, 0, 2.5, out)) : 7.4 - seg(t, 2.5, 11) * 1.2 + seg(t, 12, 13) * 1.2;
+  const ang = t < 2.5 ? lerp(-2.5, 0, seg(t, 0, 2.5, out)) : .55 * Math.sin(t * .35);
+  camera.position.set(Math.sin(ang) * r, 2.6, Math.cos(ang) * r); camera.lookAt(0, .45, 0);
+});
+</script>
+</body></html>

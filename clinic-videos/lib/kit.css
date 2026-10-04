@@ -1,0 +1,33 @@
+/* Shared caption system. Every time is absolute: --d = in, --o = out (seconds). */
+@font-face{font-family:M;font-weight:900;src:url(Montserrat.ttf)}
+@font-face{font-family:M;font-weight:600;src:url(Montserrat-600.ttf)}
+:root{--y:#FFE14D;--mint:#3CF2C8;--red:#FF4D6D;--ink:#fff;--spring:cubic-bezier(.34,1.7,.5,1);--out:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+body{font-family:M,sans-serif;font-weight:900;color:var(--ink)}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(90% 60% at 50% 45%,color-mix(in srgb,var(--bg),#4aa8ff 22%),var(--bg) 70%)}
+#gl{position:absolute;inset:0}
+#ui{position:absolute;inset:0;pointer-events:none}
+
+.cap{position:absolute;left:0;right:0;text-align:center;padding:0 70px;font-size:92px;line-height:1.02;letter-spacing:-2px;text-shadow:0 8px 40px #0009;
+  animation:slam .38s var(--spring) var(--d) both,gone .25s ease-in var(--o,99s) forwards}
+.cap.sm{font-size:58px;letter-spacing:-1px}
+.cap.xs{font-size:40px;font-weight:600;letter-spacing:0}
+@keyframes slam{from{opacity:0;transform:scale(2.4);filter:blur(12px)}to{opacity:1;transform:none;filter:none}}
+@keyframes gone{to{opacity:0;transform:scale(.85) translateY(-30px)}}
+.up{animation:up .45s var(--out) var(--d) both,gone .25s ease-in var(--o,99s) forwards}
+@keyframes up{from{opacity:0;transform:translateY(90px)}to{opacity:1;transform:none}}
+.pop{animation:pop .45s var(--spring) var(--d) both,gone .25s ease-in var(--o,99s) forwards}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+.hl{color:#0b1020;background:var(--y);padding:0 18px;border-radius:16px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.mint{color:var(--mint)}.yel{color:var(--y)}.red{color:var(--red)}
+.chip{display:inline-block;padding:16px 30px;border-radius:999px;background:#ffffff1c;border:2px solid #ffffff38;font-size:38px;font-weight:600;backdrop-filter:blur(8px)}
+.tag{position:absolute;padding:14px 24px;border-radius:18px;background:#0b1430d9;border:2px solid #ffffff30;font-size:34px;font-weight:600;white-space:nowrap;transform:translate(-50%,-50%)}
+
+.flash{position:absolute;inset:0;background:#fff;opacity:0;animation:flash .22s ease-out var(--d) forwards;z-index:9}
+@keyframes flash{from{opacity:.8}to{opacity:0}}
+.bar{position:absolute;left:0;top:0;height:10px;background:linear-gradient(90deg,var(--mint),var(--y));animation:bar var(--len) linear both;z-index:9}
+@keyframes bar{from{width:0}to{width:100%}}
+.end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;background:#050914ee;animation:fin .35s ease var(--d) both}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+.small{position:absolute;bottom:70px;left:0;right:0;text-align:center;font-size:24px;font-weight:600;color:#ffffff70}

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Brackets: ¿humo?</title>
+<link rel="stylesheet" href="lib/kit.css">
+<script type="importmap">{"imports":{"three":"./lib/three.module.js"}}</script>
+</head><body>
+<div id="stage"><div id="gl"></div><div id="ui">
+  <div class="bar" style="--len:24s"></div>
+  <!-- hook -->
+  <div class="cap" style="--d:.1s;--o:2.5s;top:230px">¿Los brackets<br>funcionan…</div>
+  <div class="cap" style="--d:.9s;--o:2.5s;top:1430px">…o son puro <span class="hl">HUMO?</span></div>
+  <!-- brackets -->
+  <div class="cap" style="--d:2.7s;--o:4.9s;top:230px">Sí funcionan.</div>
+  <div class="cap sm" style="--d:3.6s;--o:4.9s;top:1450px">Pero no por <span class="yel">magia.</span></div>
+  <!-- wire -->
+  <div class="cap sm" style="--d:5.1s;--o:7.9s;top:230px">El arco tiene <span class="hl">memoria</span></div>
+  <div class="cap sm" style="--d:6.1s;--o:7.9s;top:1450px">y quiere volver a<br><span class="mint">su forma ideal</span></div>
+  <!-- biology -->
+  <div class="cap sm" style="--d:8.2s;--o:13.9s;top:200px">Fuerza suave y constante</div>
+  <div class="tag pop" style="--d:9.1s;--o:13.9s;left:250px;top:1220px;border-color:var(--red)"><span class="red">Presión:</span> el hueso<br>se reabsorbe</div>
+  <div class="tag pop" style="--d:10.5s;--o:13.9s;left:790px;top:1220px;border-color:var(--mint)"><span class="mint">Tensión:</span> se forma<br>hueso nuevo</div>
+  <div class="cap sm" style="--d:12s;--o:13.9s;top:1500px">Así se mueve el diente<br><span class="hl">DE VERDAD</span></div>
+  <!-- timelapse -->
+  <div class="cap pop" id="month" style="--d:14.2s;--o:19.9s;top:1390px;font-size:120px">MES 1</div>
+  <div class="cap xs" style="--d:14.4s;--o:19.9s;top:1530px;color:#ffffff99">tiempo ilustrativo · cada caso es distinto</div>
+  <div class="cap sm" style="--d:14.4s;--o:16.9s;top:230px">Poquito a poquito</div>
+  <div class="cap sm" style="--d:17s;--o:19.9s;top:230px"><span class="chip">≈ 1 mm al mes</span></div>
+  <!-- result -->
+  <div class="cap" style="--d:20.2s;--o:22.4s;top:230px">No es humo.</div>
+  <div class="cap" style="--d:21s;--o:22.4s;top:1450px">Es <span class="hl">biología.</span></div>
+  <div class="end" style="--d:22.5s">
+    <div class="cap sm" style="--d:22.6s;position:static">¿Los necesitas?</div>
+    <div class="cap" style="--d:22.9s;position:static"><span class="hl">Agenda tu valoración</span></div>
+    <div class="small">Contenido de ejemplo · ABBA</div>
+  </div>
+  <div id="flashes"></div>
+</div></div>
+<script type="module">
+import { THREE, stage, run, arch, toothGeo, mats, seg, lerp, out, back, clamp, rnd } from './lib/kit.js';
+const ctx = stage({ bg: '#07122a' }), { scene, camera } = ctx;
+for (const t of [2.6, 5, 8, 14, 20, 22.5]) document.getElementById('flashes').insertAdjacentHTML('beforeend', `<div class="flash" style="--d:${t}s"></div>`);
+
+// ---- set A: upper arch with brackets + wire
+const A = new THREE.Group(); scene.add(A);
+const { group, teeth } = arch(); group.rotation.z = Math.PI; A.add(group);
+const metal = mats.metal(), bGeo = new THREE.BoxGeometry(.24, .22, .12);
+const frontZ = (g, Y) => { const p = g.attributes.position; let z = 0; for (let i = 0; i < p.count; i++) if (Math.abs(p.getX(i)) < .06 && Math.abs(p.getY(i) - Y) < .08) z = Math.max(z, p.getZ(i)); return z; };
+for (const [i, t] of teeth.entries()) {
+  const cy = { molar: .38, premolar: .42 }[t.kind] ?? .5;
+  const b = new THREE.Mesh(bGeo, metal); b.position.set(0, cy, frontZ(t.mesh.geometry, cy) + .04); t.mesh.add(b); t.bracket = b;
+  const k = t.kind === 'molar' ? .3 : 1; // crooked start pose
+  t.off = { yaw: (rnd() - .5) * 1.3 * k, tip: (rnd() - .5) * .55 * k, out: (rnd() - .5) * .7 * k, up: (rnd() - .5) * .18 * k };
+  t.at = 2.8 + i * .1;
+}
+const pose = p => { for (const t of teeth) {
+  const q = 1 - p, n = new THREE.Vector3(Math.sin(t.yaw), 0, Math.cos(t.yaw));
+  t.mesh.position.copy(t.base).addScaledVector(n, t.off.out * q); t.mesh.position.y += t.off.up * q;
+  t.mesh.rotation.set(0, t.yaw + t.off.yaw * q, t.off.tip * q);
+} group.updateMatrixWorld(true); };
+const wirePts = () => { const v = teeth.map(t => t.bracket.localToWorld(new THREE.Vector3(0, 0, .06))); return v; };
+const wireMat = mats.metal(); let wire;
+const setWire = (pts, draw) => {
+  if (wire) { A.remove(wire); wire.geometry.dispose(); }
+  wire = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 220, .03, 8), wireMat);
+  wire.geometry.setDrawRange(0, Math.floor(wire.geometry.index.count * draw / 6) * 6); A.add(wire);
+};
+pose(1); const ideal = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(wirePts()), 220, .05, 8), mats.glow('#3CF2C8')); A.add(ideal);
+// "humo": soft sprites around the crooked arch in the hook
+const c = document.createElement('canvas'); c.width = c.height = 128; const g2 = c.getContext('2d'), gr = g2.createRadialGradient(64, 64, 0, 64, 64, 64);
+gr.addColorStop(0, '#ffffffaa'); gr.addColorStop(1, '#ffffff00'); g2.fillStyle = gr; g2.fillRect(0, 0, 128, 128);
+const smokeTex = new THREE.CanvasTexture(c), smoke = [];
+for (let i = 0; i < 46; i++) { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, transparent: true, depthWrite: false, color: '#cfd8e8' }));
+  s.userData = { a: rnd() * 6.28, r: 1.5 + rnd() * 3.5, y: (rnd() - .5) * 3, sp: .3 + rnd() * .6, sz: 1.5 + rnd() * 2.5 }; scene.add(s); smoke.push(s); }
+
+// ---- set B: cut-away tooth in bone
+const B = new THREE.Group(); scene.add(B);
+const bone = new THREE.Mesh(new THREE.BoxGeometry(3.6, 3.4, 1.4), mats.bone()); bone.position.y = -1.9; bone.material.opacity = .32; bone.material.depthWrite = false;
+const gumSlab = new THREE.Mesh(new THREE.BoxGeometry(3.6, .45, 1.45), mats.gum()); gumSlab.position.y = -.05;
+const big = new THREE.Mesh(toothGeo('incisor'), mats.tooth()); big.scale.setScalar(1.55);
+const arrow = new THREE.Group(); arrow.add(new THREE.Mesh(new THREE.CylinderGeometry(.09, .09, 1.1, 24), mats.glow('#FFE14D')));
+const head = new THREE.Mesh(new THREE.ConeGeometry(.24, .45, 32), mats.glow('#FFE14D')); head.position.y = -.75; arrow.add(head);
+arrow.rotation.z = -Math.PI / 2; arrow.position.set(1.7, .9, .6);
+B.add(bone, gumSlab, big, arrow);
+const dots = (n, x0, col) => Array.from({ length: n }, () => { const m = new THREE.Mesh(new THREE.SphereGeometry(.07, 12, 12), mats.glow(col));
+  m.position.set(x0 + (rnd() - .5) * .35, -.5 - rnd() * 2, (rnd() - .5) * .6); m.userData.t = rnd(); B.add(m); return m; });
+const pres = dots(34, -.75, '#FF4D6D'), tens = dots(34, .75, '#3CF2C8');
+
+const monthEl = document.getElementById('month');
+const target = new THREE.Vector3(0, -.4, -1.4);
+run(ctx, 24, t => {
+  const inB = t >= 8 && t < 14; A.visible = !inB; B.visible = inB;
+  // arch pose: crooked until the time-lapse, then aligns
+  const p = seg(t, 14.3, 19.3);
+  pose(p);
+  monthEl.textContent = 'MES ' + Math.max(1, Math.round(p * 18));
+  for (const tt of teeth) { const k = seg(t, tt.at, tt.at + .25, back); tt.bracket.scale.setScalar(Math.max(k, .001));
+    tt.bracket.position.z = tt.bracket.userData.z ??= tt.bracket.position.z; tt.bracket.position.z += (1 - k) * 1.2;
+    if (t > 20.1) { const f = seg(t, 20.1 + tt.u * .5, 20.9 + tt.u * .5, out); tt.bracket.position.z += f * 6; tt.bracket.rotation.set(f * 9, f * 7, 0); tt.bracket.scale.setScalar(1 - f); } }
+  if (t >= 5 && t < 20.4) setWire(wirePts(), seg(t, 5, 6.3, out)); else if (wire) wire.visible = false;
+  if (wire && t >= 5 && t < 20.4) wire.visible = true;
+  wireMat.emissive.set('#3CF2C8').multiplyScalar(t > 6 && t < 8 ? .6 * (.5 + .5 * Math.sin(t * 9)) : 0);
+  ideal.material.opacity = seg(t, 6.3, 6.8) * (1 - seg(t, 7.6, 8)) * .7; ideal.visible = ideal.material.opacity > 0;
+  for (const s of smoke) { const u = s.userData, a = u.a + t * u.sp; s.position.set(Math.cos(a) * u.r, -.6 + u.y + t * .3, -.6 + Math.sin(a) * u.r * .6);
+    s.scale.setScalar(u.sz * (1 + t * .25)); s.material.opacity = .45 * (1 - seg(t, 1.8, 2.6)); s.visible = t < 2.6; }
+  group.rotation.y = .06 * Math.sin(t * 1.3);
+  // biology: tooth slides toward the force, bone resorbs ahead and forms behind
+  const mv = seg(t, 9, 13.6);
+  big.position.x = -.42 * mv; big.rotation.z = .05 * mv;
+  arrow.position.x = 1.7 - .42 * mv + .08 * Math.sin(t * 10); arrow.visible = t > 8.5;
+  for (const d of pres) d.scale.setScalar(1 - seg(t, 9.2 + d.userData.t * 3.6, 9.6 + d.userData.t * 3.6, out) + 1e-3);
+  for (const d of tens) d.scale.setScalar(seg(t, 10.5 + d.userData.t * 3, 10.9 + d.userData.t * 3, back) + 1e-3);
+  // camera
+  let r, ang, h;
+  if (t < 2.6) { const k = seg(t, 0, 2.6, out); r = lerp(30, 15, k); ang = lerp(-1.3, -.3, k); h = lerp(4, 1, k); }
+  else if (t < 5) { const k = seg(t, 2.6, 5); r = lerp(11, 9.5, k); ang = lerp(-.25, .1, k); h = .4; }
+  else if (t < 8) { const k = seg(t, 5, 8); r = lerp(9.5, 8.5, k); ang = lerp(.15, .5, k); h = lerp(.4, 1.6, k); }
+  else if (t < 14) { camera.position.set(.8 * Math.sin(t * .4), .4, 13.5 - seg(t, 8, 14) * 1.2); camera.lookAt(0, -1, 0); return; }
+  else { const k = seg(t, 14, 22.5); r = lerp(15, 12.5, k); ang = lerp(-.4, .25, k); h = lerp(1.2, .5, k); }
+  camera.position.set(target.x + Math.sin(ang) * r, target.y + h, target.z + Math.cos(ang) * r); camera.lookAt(target);
+});
+</script>
+</body></html>
