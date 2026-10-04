@@ -22,7 +22,7 @@ body{font-family:M,sans-serif;font-weight:900;color:var(--ink)}
 .hl{color:#0b1020;background:var(--y);padding:0 18px;border-radius:16px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .mint{color:var(--mint)}.yel{color:var(--y)}.red{color:var(--red)}
 .chip{display:inline-block;padding:16px 30px;border-radius:999px;background:#ffffff1c;border:2px solid #ffffff38;font-size:38px;font-weight:600;backdrop-filter:blur(8px)}
-.tag{position:absolute;padding:14px 24px;border-radius:18px;background:#0b1430d9;border:2px solid #ffffff30;font-size:34px;font-weight:600;white-space:nowrap;transform:translate(-50%,-50%)}
+.tag{position:absolute;padding:14px 24px;border-radius:18px;background:#0b1430d9;border:2px solid #ffffff30;font-size:34px;font-weight:600;white-space:nowrap;translate:-50% -50%}
 
 .flash{position:absolute;inset:0;background:#fff;opacity:0;animation:flash .22s ease-out var(--d) forwards;z-index:9}
 @keyframes flash{from{opacity:.8}to{opacity:0}}
