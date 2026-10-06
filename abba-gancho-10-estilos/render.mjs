@@ -19,7 +19,7 @@ fs.mkdirSync(path.join(root, 'out/preview'), { recursive: true });
 for (const id of ids.filter(i => !wanted.length || wanted.some(w => i.startsWith(w)))) {
   const composition = await selectComposition({ serveUrl, id, chromiumOptions });
   if (preview) {
-    for (const s of [0.6, 2.2, 3.4, 4.8, 6.3, 7.0, 7.8, 9.4]) {
+    for (const s of (process.env.TIMES ?? "0.6,2.2,3.4,4.8,6.3,7.0,7.8,9.4").split(",").map(Number)) {
       await renderStill({ serveUrl, composition, frame: Math.round(s * 30), output: path.join(root, `out/preview/${id}-${s}.png`), chromiumOptions, imageFormat: 'png' });
     }
     console.log('preview', id);

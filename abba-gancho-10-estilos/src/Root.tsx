@@ -14,6 +14,7 @@ import { S10Minimal } from './styles/S10Minimal';
 import { PREMIUM } from './premium';
 import { FLAT } from './flat';
 import { VIRAL } from './viral';
+import { Story15 } from './cartoon/Story15';
 
 // id = output file name (out/<id>.mp4) and audio track (public/audio/<id>.wav)
 export const STYLES: [string, React.FC][] = [
@@ -23,13 +24,13 @@ export const STYLES: [string, React.FC][] = [
 ];
 
 const WithSound: React.FC<{ id: string; C: React.FC }> = ({ id, C }) => (
-  <AbsoluteFill><C /><Audio src={staticFile(`audio/${id.startsWith('f') ? 'flat' : /^[ps]/.test(id) ? 'premium' : id}.wav`)} /></AbsoluteFill>
+  <AbsoluteFill><C /><Audio src={staticFile(`audio/${id.startsWith('c') ? 'action' : id.startsWith('f') ? 'flat' : /^[ps]/.test(id) ? 'premium' : id}.wav`)} /></AbsoluteFill>
 );
 
 export const Root: React.FC = () => (
   <>
-    {[...STYLES, ...PREMIUM, ...FLAT, ...VIRAL].map(([id, C]) => (
-      <Composition key={id} id={id} component={() => <WithSound id={id} C={C} />} durationInFrames={DUR * FPS} fps={FPS} width={1080} height={1920} />
+    {[...STYLES, ...PREMIUM, ...FLAT, ...VIRAL, ['c1-caricatura-15s', Story15, 15] as [string, React.FC, number]].map(([id, C, secs = DUR]) => (
+      <Composition key={id} id={id} component={() => <WithSound id={id} C={C} />} durationInFrames={secs * FPS} fps={FPS} width={1080} height={1920} />
     ))}
   </>
 );
