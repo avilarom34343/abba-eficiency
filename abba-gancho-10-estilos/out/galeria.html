@@ -34,9 +34,10 @@ button:focus-visible { outline: 3px solid var(--magenta); outline-offset: 2px }
 figure { margin: 0; display: grid; gap: 10px; min-width: 0 }
 video { width: 100%; max-width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; background: #000; display: block; border: 1px solid var(--line) }
 figcaption { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline }
-.n { font-family: var(--display); font-size: 22px; color: var(--magenta); font-variant-numeric: tabular-nums; grid-row: span 2 }
+.n { font-family: var(--display); font-size: 22px; color: var(--magenta); font-variant-numeric: tabular-nums; grid-row: span 3 }
 .name { font-weight: 600 }
 .desc { color: var(--mute); font-size: 14px; line-height: 1.35 }
+.audio { grid-column: 2; color: var(--lime); font-size: 13px; font-weight: 600 }
 footer { color: var(--mute); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px }
 @media (max-width: 720px) { .script { grid-template-columns: 1fr 1fr } .beat:nth-child(3) { border-left: 0 } .beat:nth-child(n+3) { border-top: 1px solid var(--line) } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto } }
@@ -46,7 +47,7 @@ footer { color: var(--mute); font-size: 14px; border-top: 1px solid var(--line);
   <header>
     <div class="eyebrow">ABBA · La historia detrás del negocio · Prueba de estilo</div>
     <h1>Cómo Kodak se fue a la <em>quiebra</em>: el gancho, en 10 estilos</h1>
-    <p class="lede">Mismo texto, misma música base y el mismo golpe en el segundo 6.7. Cambia solo la animación, para elegir el estilo de toda la serie.</p>
+    <p class="lede">Mismo texto y el mismo golpe en el segundo 6.7. Cada video trae una voz y un tono distintos, más música divertida que se frena en seco en “quiebra”. Elige la animación y la voz para toda la serie.</p>
     <div class="script" aria-label="Guion del gancho">
       <div class="beat"><span class="tc">0.0 – 3.0 s</span><p>“1975.” · “Kodak era intocable.” · contador a 90%</p></div>
       <div class="beat"><span class="tc">3.0 – 6.0 s</span><p>“Entonces inventó algo que cambiaría el mundo…”</p></div>
@@ -55,33 +56,33 @@ footer { color: var(--mute); font-size: 14px; border-top: 1px solid var(--line);
     </div>
     <div class="bar">
       <button id="sync" type="button">Reproducir los 10 a la vez</button>
-      <span class="hint">Se reproducen en silencio y sincronizados. Para escuchar uno, usa sus controles.</span>
+      <span class="hint">Se reproducen en silencio y sincronizados. Para escuchar la narración de uno, usa sus controles.</span>
     </div>
   </header>
 
   <section class="grid" id="grid"></section>
 
-  <footer>Cada video: 1080×1920, 30 fps, 10 s, H.264 con sonido generado por código. La miniatura es el fotograma del segundo 7.</footer>
+  <footer>Cada video: 1080×1920, 30 fps, 10 s, H.264. Narración y música creadas con ElevenLabs; efectos de sonido generados por código. La miniatura es el fotograma del segundo 7.</footer>
 </div>
 
 <script>
 const STYLES = [
-  ['01-particulas', 'Partículas', '“1975” y “90%” hechos con miles de partículas que se desmoronan como polvo.'],
-  ['02-collage-revista', 'Collage de revista', 'Recortes, cinta y letras de recorte que se rasgan en dos.'],
-  ['03-dato-como-arte', 'Dato como arte', 'La gráfica sube como imperio, se desploma y se vuelve un rollo de película.'],
-  ['04-objeto-3d', 'Objeto 3D', 'Rollo y cámara como producto premium; la cámara se agrieta y su luz se apaga.'],
-  ['05-tipografia-3d', 'Tipografía 3D', 'Palabras gruesas que se apilan en una torre que se derrumba.'],
-  ['06-viaje-en-el-tiempo', 'Viaje en el tiempo', 'Un pasillo de años con luces de neón que se apagan una por una.'],
-  ['07-personajes', 'Personajes', 'Ficha de jugador del ingeniero; su sonrisa se congela en gris.'],
-  ['08-pizarra-de-estrategia', 'Pizarra de estrategia', 'Notas y flechas a mano; una flecha enorme cae y tacha todo.'],
-  ['09-split-screen', 'Split-screen', 'Mundo a color arriba, gris abajo; el gris devora la pantalla.'],
-  ['10-metafora-minimal', 'Metáfora minimal', 'Una cámara pequeña brilla sola y un cajón la encierra en la oscuridad.'],
+  ['01-particulas', 'Partículas', '“1975” y “90%” hechos con miles de partículas que se desmoronan como polvo.', 'Joan · misterioso', 'synthwave'],
+  ['02-collage-revista', 'Collage de revista', 'Recortes, cinta y letras de recorte que se rasgan en dos.', 'Bramante · cómico', 'juguetona'],
+  ['03-dato-como-arte', 'Dato como arte', 'La gráfica sube como imperio, se desploma y se vuelve un rollo de película.', 'Joaquín · documental', 'lo-fi'],
+  ['04-objeto-3d', 'Objeto 3D', 'Rollo y cámara como producto premium; la cámara se agrieta y su luz se apaga.', 'Obed · premium', 'pop minimal'],
+  ['05-tipografia-3d', 'Tipografía 3D', 'Palabras gruesas que se apilan en una torre que se derrumba.', 'Isaac · hype', 'disco'],
+  ['06-viaje-en-el-tiempo', 'Viaje en el tiempo', 'Un pasillo de años con luces de neón que se apagan una por una.', 'Athena · tráiler épico', 'synthwave'],
+  ['07-personajes', 'Personajes', 'Ficha de jugador del ingeniero; su sonrisa se congela en gris.', 'Nico · amigo casual', 'juguetona'],
+  ['08-pizarra-de-estrategia', 'Pizarra de estrategia', 'Notas y flechas a mano; una flecha enorme cae y tacha todo.', 'Manu · fundador', 'lo-fi'],
+  ['09-split-screen', 'Split-screen', 'Mundo a color arriba, gris abajo; el gris devora la pantalla.', 'Yadira · dramática', 'disco'],
+  ['10-metafora-minimal', 'Metáfora minimal', 'Una cámara pequeña brilla sola y un cajón la encierra en la oscuridad.', 'Ximena · susurro', 'pop minimal'],
 ];
 const grid = document.getElementById('grid');
-grid.innerHTML = STYLES.map(([id, name, desc], i) => `
+grid.innerHTML = STYLES.map(([id, name, desc, voz, mus], i) => `
   <figure>
     <video id="v-${id}" src="${id}.mp4" poster="${id}.png" controls playsinline preload="metadata"></video>
-    <figcaption><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="name">${name}</span><span class="desc">${desc}</span></figcaption>
+    <figcaption><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="name">${name}</span><span class="desc">${desc}</span><span class="audio">🎙 ${voz} · ♫ ${mus}</span></figcaption>
   </figure>`).join('');
 const vids = [...grid.querySelectorAll('video')];
 const btn = document.getElementById('sync');
