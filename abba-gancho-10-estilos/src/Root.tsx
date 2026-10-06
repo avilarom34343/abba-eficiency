@@ -12,6 +12,7 @@ import { S08Pizarra } from './styles/S08Pizarra';
 import { S09Split } from './styles/S09Split';
 import { S10Minimal } from './styles/S10Minimal';
 import { PREMIUM } from './premium';
+import { FLAT } from './flat';
 
 // id = output file name (out/<id>.mp4) and audio track (public/audio/<id>.wav)
 export const STYLES: [string, React.FC][] = [
@@ -21,12 +22,12 @@ export const STYLES: [string, React.FC][] = [
 ];
 
 const WithSound: React.FC<{ id: string; C: React.FC }> = ({ id, C }) => (
-  <AbsoluteFill><C /><Audio src={staticFile(`audio/${/^[ps]/.test(id) ? 'premium' : id}.wav`)} /></AbsoluteFill>
+  <AbsoluteFill><C /><Audio src={staticFile(`audio/${id.startsWith('f') ? 'flat' : /^[ps]/.test(id) ? 'premium' : id}.wav`)} /></AbsoluteFill>
 );
 
 export const Root: React.FC = () => (
   <>
-    {[...STYLES, ...PREMIUM].map(([id, C]) => (
+    {[...STYLES, ...PREMIUM, ...FLAT].map(([id, C]) => (
       <Composition key={id} id={id} component={() => <WithSound id={id} C={C} />} durationInFrames={DUR * FPS} fps={FPS} width={1080} height={1920} />
     ))}
   </>
