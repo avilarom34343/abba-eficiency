@@ -1,0 +1,97 @@
+<title>Kodak en 10 estilos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600&display=swap">
+<style>
+/* Layout: a dark screening room. Header with the hook script as a timecoded strip, then a wall of 10 vertical screens. */
+:root {
+  --bg: #0A0912; --panel: #14121F; --line: #2A2640; --fg: #F2F0FA; --mute: #9C97B3;
+  --magenta: #FF2BD6; --lime: #B6FF3B;
+  --display: "Archivo Black", "Arial Black", Impact, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.5 }
+.wrap { max-width: 1320px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 48px); padding-block: 40px 72px; display: grid; gap: 40px }
+header { display: grid; gap: 18px }
+.eyebrow { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); font-weight: 600 }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 6vw, 64px); line-height: 1; margin: 0; text-wrap: balance }
+h1 em { font-style: normal; color: var(--magenta) }
+.lede { max-width: 62ch; color: var(--mute); margin: 0 }
+.script { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.beat { padding: 14px 16px; display: grid; gap: 4px; min-width: 0 }
+.beat + .beat { border-left: 1px solid var(--line) }
+.beat.hit { background: color-mix(in srgb, var(--magenta) 14%, var(--panel)) }
+.tc { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--mute); letter-spacing: .06em }
+.beat p { margin: 0; font-weight: 600; font-size: 15px }
+.beat.hit p strong { color: var(--magenta) }
+.bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between }
+button { font: 600 15px var(--body); color: var(--bg); background: var(--lime); border: 0; border-radius: 999px; padding: 12px 22px; cursor: pointer }
+button.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line) }
+button:focus-visible { outline: 3px solid var(--magenta); outline-offset: 2px }
+.hint { color: var(--mute); font-size: 14px }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 28px 20px }
+figure { margin: 0; display: grid; gap: 10px; min-width: 0 }
+video { width: 100%; max-width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; background: #000; display: block; border: 1px solid var(--line) }
+figcaption { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline }
+.n { font-family: var(--display); font-size: 22px; color: var(--magenta); font-variant-numeric: tabular-nums; grid-row: span 2 }
+.name { font-weight: 600 }
+.desc { color: var(--mute); font-size: 14px; line-height: 1.35 }
+footer { color: var(--mute); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px }
+@media (max-width: 720px) { .script { grid-template-columns: 1fr 1fr } .beat:nth-child(3) { border-left: 0 } .beat:nth-child(n+3) { border-top: 1px solid var(--line) } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ABBA · La historia detrás del negocio · Prueba de estilo</div>
+    <h1>Cómo Kodak se fue a la <em>quiebra</em>: el gancho, en 10 estilos</h1>
+    <p class="lede">Mismo texto, misma música base y el mismo golpe en el segundo 6.7. Cambia solo la animación, para elegir el estilo de toda la serie.</p>
+    <div class="script" aria-label="Guion del gancho">
+      <div class="beat"><span class="tc">0.0 – 3.0 s</span><p>“1975.” · “Kodak era intocable.” · contador a 90%</p></div>
+      <div class="beat"><span class="tc">3.0 – 6.0 s</span><p>“Entonces inventó algo que cambiaría el mundo…”</p></div>
+      <div class="beat hit"><span class="tc">6.0 – 8.5 s · golpe 6.7 s</span><p>“…y eso la llevó a la <strong>quiebra.</strong>”</p></div>
+      <div class="beat"><span class="tc">8.5 – 10.0 s</span><p>Casi negro, un detalle animado y ABBA en la esquina</p></div>
+    </div>
+    <div class="bar">
+      <button id="sync" type="button">Reproducir los 10 a la vez</button>
+      <span class="hint">Se reproducen en silencio y sincronizados. Para escuchar uno, usa sus controles.</span>
+    </div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+
+  <footer>Cada video: 1080×1920, 30 fps, 10 s, H.264 con sonido generado por código. La miniatura es el fotograma del segundo 7.</footer>
+</div>
+
+<script>
+const STYLES = [
+  ['01-particulas', 'Partículas', '“1975” y “90%” hechos con miles de partículas que se desmoronan como polvo.'],
+  ['02-collage-revista', 'Collage de revista', 'Recortes, cinta y letras de recorte que se rasgan en dos.'],
+  ['03-dato-como-arte', 'Dato como arte', 'La gráfica sube como imperio, se desploma y se vuelve un rollo de película.'],
+  ['04-objeto-3d', 'Objeto 3D', 'Rollo y cámara como producto premium; la cámara se agrieta y su luz se apaga.'],
+  ['05-tipografia-3d', 'Tipografía 3D', 'Palabras gruesas que se apilan en una torre que se derrumba.'],
+  ['06-viaje-en-el-tiempo', 'Viaje en el tiempo', 'Un pasillo de años con luces de neón que se apagan una por una.'],
+  ['07-personajes', 'Personajes', 'Ficha de jugador del ingeniero; su sonrisa se congela en gris.'],
+  ['08-pizarra-de-estrategia', 'Pizarra de estrategia', 'Notas y flechas a mano; una flecha enorme cae y tacha todo.'],
+  ['09-split-screen', 'Split-screen', 'Mundo a color arriba, gris abajo; el gris devora la pantalla.'],
+  ['10-metafora-minimal', 'Metáfora minimal', 'Una cámara pequeña brilla sola y un cajón la encierra en la oscuridad.'],
+];
+const grid = document.getElementById('grid');
+grid.innerHTML = STYLES.map(([id, name, desc], i) => `
+  <figure>
+    <video id="v-${id}" src="${id}.mp4" poster="${id}.png" controls playsinline preload="metadata"></video>
+    <figcaption><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="name">${name}</span><span class="desc">${desc}</span></figcaption>
+  </figure>`).join('');
+const vids = [...grid.querySelectorAll('video')];
+const btn = document.getElementById('sync');
+let playing = false;
+btn.addEventListener('click', () => {
+  playing = !playing;
+  vids.forEach(v => { if (playing) { v.muted = true; v.currentTime = 0; v.play().catch(() => {}); } else v.pause(); });
+  btn.textContent = playing ? 'Pausar todos' : 'Reproducir los 10 a la vez';
+  btn.classList.toggle('ghost', playing);
+});
+// playing one with sound pauses the synced wall
+vids.forEach(v => v.addEventListener('volumechange', () => { if (!v.muted && playing) { vids.forEach(o => o !== v && o.pause()); playing = false; btn.textContent = 'Reproducir los 10 a la vez'; btn.classList.remove('ghost'); } }));
+</script>
