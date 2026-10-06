@@ -7,14 +7,14 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { AbbaTag, Band, C, F, Flash, Grain, LINES, Outro, T, Vignette, Words, ease, inOut, prog, shake, useCount, useT } from '../kit';
 
-const Env: React.FC = () => { // studio reflections
+export const Env: React.FC = () => { // studio reflections
   const { gl, scene } = useThree();
   useEffect(() => { const pm = new THREE.PMREMGenerator(gl); scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture; }, [gl, scene]);
   return null;
 };
-const glossy = (color: string, extra: object = {}) => <meshPhysicalMaterial color={color} roughness={0.25} metalness={0.1} clearcoat={1} clearcoatRoughness={0.1} {...extra} />;
+export const glossy = (color: string, extra: object = {}) => <meshPhysicalMaterial color={color} roughness={0.25} metalness={0.1} clearcoat={1} clearcoatRoughness={0.1} {...extra} />;
 
-const Camera3D: React.FC<{ t: number }> = ({ t }) => {
+export const Camera3D: React.FC<{ t: number }> = ({ t }) => {
   const crack = prog(t, T.HIT, T.HIT + 0.25, x => x);          // the body splits a few mm
   const led = t < T.HIT ? 1 : Math.max(0, 1 - (t - T.HIT) * 6) * (Math.sin(t * 90) > 0 ? 1 : 0.2);
   const half = (side: number) => (

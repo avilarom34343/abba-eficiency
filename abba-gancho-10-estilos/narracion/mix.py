@@ -131,5 +131,6 @@ def mix(sid):
     os.replace(tmp, mp4)
     print(sid, 'tempo/placement', [round(v, 2) for v in timing])
 
-for sid in STYLES:
-    if len(sys.argv) < 2 or any(sid.startswith(a) for a in sys.argv[1:]): mix(sid)
+if __name__ == "__main__":
+  for sid in STYLES:
+      if len(sys.argv) < 2 or any(sid.startswith(a) for a in sys.argv[1:]): mix(sid)
