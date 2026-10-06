@@ -13,6 +13,7 @@ import { S09Split } from './styles/S09Split';
 import { S10Minimal } from './styles/S10Minimal';
 import { PREMIUM } from './premium';
 import { FLAT } from './flat';
+import { VIRAL } from './viral';
 
 // id = output file name (out/<id>.mp4) and audio track (public/audio/<id>.wav)
 export const STYLES: [string, React.FC][] = [
@@ -27,7 +28,7 @@ const WithSound: React.FC<{ id: string; C: React.FC }> = ({ id, C }) => (
 
 export const Root: React.FC = () => (
   <>
-    {[...STYLES, ...PREMIUM, ...FLAT].map(([id, C]) => (
+    {[...STYLES, ...PREMIUM, ...FLAT, ...VIRAL].map(([id, C]) => (
       <Composition key={id} id={id} component={() => <WithSound id={id} C={C} />} durationInFrames={DUR * FPS} fps={FPS} width={1080} height={1920} />
     ))}
   </>
