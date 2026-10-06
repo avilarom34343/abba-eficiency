@@ -14,7 +14,7 @@ import { KICKS, P, PF, V } from './pkit';
 
 const font = new FontLoader().parse(fontJson as never);
 const cache = new Map<string, { g: THREE.BufferGeometry; w: number }>();
-const glyph = (c: string) => {
+export const glyph = (c: string) => {
   if (!cache.has(c)) {
     const g = new TextGeometry(c, { font, size: 1, depth: 0.35, curveSegments: 12, bevelEnabled: true, bevelThickness: 0.22, bevelSize: 0.09, bevelSegments: 10 });
     g.computeBoundingBox(); const b = g.boundingBox!; g.translate(-(b.max.x + b.min.x) / 2, -(b.max.y + b.min.y) / 2, 0);
@@ -22,13 +22,13 @@ const glyph = (c: string) => {
   }
   return cache.get(c)!;
 };
-const Puffy: React.FC<{ color: string }> = ({ color }) => <meshPhysicalMaterial color={color} roughness={0.28} clearcoat={1} clearcoatRoughness={0.15} sheen={1} sheenColor="#ffffff" />;
+export const Puffy: React.FC<{ color: string }> = ({ color }) => <meshPhysicalMaterial color={color} roughness={0.28} clearcoat={1} clearcoatRoughness={0.15} sheen={1} sheenColor="#ffffff" />;
 /** squash & stretch for a bounce that landed `d` seconds ago */
-const squash = (d: number) => { const k = Math.exp(-d * 7) * Math.cos(d * 26); return [1 + 0.18 * k, 1 - 0.22 * k, 1 + 0.18 * k] as [number, number, number]; };
-const sinceKick = (t: number) => t - (KICKS.filter(k => k <= t).pop() ?? -9);
+export const squash = (d: number) => { const k = Math.exp(-d * 7) * Math.cos(d * 26); return [1 + 0.18 * k, 1 - 0.22 * k, 1 + 0.18 * k] as [number, number, number]; };
+export const sinceKick = (t: number) => t - (KICKS.filter(k => k <= t).pop() ?? -9);
 
 /** A word of balloon letters, each dropping in with a bounce. */
-const Word: React.FC<{ s: string; at: number; width: number; colors: string[]; t: number; y?: number; pop?: number; stagger?: number }> = ({ s, at, width, colors, t, y = 0, pop = 0, stagger = 0.08 }) => {
+export const Word: React.FC<{ s: string; at: number; width: number; colors: string[]; t: number; y?: number; pop?: number; stagger?: number }> = ({ s, at, width, colors, t, y = 0, pop = 0, stagger = 0.08 }) => {
   const gl = s.split('').map(glyph), gap = 0.12, total = gl.reduce((a, g) => a + g.w + gap, -gap), k = width / total;
   let x = -total / 2;
   return <group scale={k} position={[0, y, 0]}>{gl.map((g, i) => {

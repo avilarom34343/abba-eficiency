@@ -9,9 +9,14 @@ import { P07Zoom } from './P07Zoom';
 import { P08Puffy } from './P08Puffy';
 import { P09Speed } from './P09Speed';
 import { P10Ribbons } from './P10Ribbons';
+import { S1Diorama } from './S1Diorama';
+import { S2OneTake } from './S2OneTake';
+import { S3Dollhouse } from './S3Dollhouse';
 
 // id = out/<id>.mp4; all premium styles share public/audio/premium.wav (voice 03 + the original track)
 export const PREMIUM: [string, React.FC][] = [
   ['p01-cinetico', P01Kinetic], ['p02-keynote', P02Keynote], ['p03-vidrio-liquido', P03Glass], ['p04-cromo-3d', P04Chrome], ['p05-pixeles', P05Pixel],
   ['p06-formas', P06Shapes], ['p07-zoom-infinito', P07Zoom], ['p08-inflables-3d', P08Puffy], ['p09-velocidad', P09Speed], ['p10-cintas-3d', P10Ribbons],
+  // story versions (same audio)
+  ['s1-diorama', S1Diorama], ['s2-plano-secuencia', S2OneTake], ['s3-casa-de-munecas', S3Dollhouse],
 ];

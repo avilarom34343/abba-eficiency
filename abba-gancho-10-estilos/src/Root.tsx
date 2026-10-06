@@ -21,7 +21,7 @@ export const STYLES: [string, React.FC][] = [
 ];
 
 const WithSound: React.FC<{ id: string; C: React.FC }> = ({ id, C }) => (
-  <AbsoluteFill><C /><Audio src={staticFile(`audio/${id.startsWith('p') ? 'premium' : id}.wav`)} /></AbsoluteFill>
+  <AbsoluteFill><C /><Audio src={staticFile(`audio/${/^[ps]/.test(id) ? 'premium' : id}.wav`)} /></AbsoluteFill>
 );
 
 export const Root: React.FC = () => (
