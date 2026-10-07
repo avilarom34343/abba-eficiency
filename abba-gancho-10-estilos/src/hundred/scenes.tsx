@@ -183,7 +183,8 @@ export const Notif: Sc = ({ b, t }) => {
     {list.map((s, i) => {
       const a = 0.2 + i * 0.32, p = spr(t, a, 190, 18), above = list.filter((_, j) => j > i && t >= 0.2 + j * 0.32).length;
       const yy = (b.kind === 'text' ? 520 : 680) + above * 250 * spr(t, 0.2 + (i + above) * 0.32, 190, 20);
-      return <Glass key={i} t={t + i} r={52} style={{ left: 60, top: yy, width: 960, padding: '30px 34px', display: 'flex', gap: 28, alignItems: 'center', opacity: cl(p * 1.5) * (1 - above * 0.15),
+      return <Glass key={i} t={t + i} r={52} style={{ left: 60, top: yy, width: 960, padding: '30px 34px', display: 'flex', gap: 28, alignItems: 'center', opacity: cl(p * 1.5), zIndex: i,
+        background: c.dark ? 'rgba(30,30,36,.96)' : 'rgba(255,255,255,.97)', filter: `brightness(${1 - above * 0.12})`,
         transform: `translateY(${(1 - p) * -420}px) scale(${1 - above * 0.04})` }}>
         <Icon size={104} letter={apps[i % 4][0]} i={i} />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>

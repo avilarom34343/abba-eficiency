@@ -44,4 +44,4 @@ export const PLAN = STORIES.map((st, n) => {
 });
 
 declare const process: { env: Record<string, string | undefined> };
-if (typeof window === 'undefined' && process.env.DUMP_PLAN) console.log(JSON.stringify(PLAN.map(({ n, co, tone, scenes, typed }) => ({ n, co, tone, scenes, typed }))));
+if (typeof window === 'undefined' && process.env.DUMP_PLAN) console.log(JSON.stringify(PLAN.map(({ n, co, tone, scenes, typed, beats }) => ({ n, co, tone, scenes, typed, twist: beats[3].title, end: beats[9].title }))));
