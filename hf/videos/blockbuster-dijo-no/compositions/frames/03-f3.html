@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Barlow'; font-weight: 400; src: url('assets/fonts/barlow-400.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 700; src: url('assets/fonts/barlow-700.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 800; src: url('assets/fonts/barlow-800.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 900; src: url('assets/fonts/barlow-900.ttf') format('truetype'); }
+        @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url('assets/fonts/ibm-plex-mono-500.ttf') format('truetype'); }
+
+        [data-composition-id="03-f3"] #stage {
+          position: relative;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #111111;
+          font-family: "Barlow", sans-serif;
+          color: #F0ECE5;
+        }
+        [data-composition-id="03-f3"] #stage * { margin: 0; padding: 0; box-sizing: border-box; }
+        .f3-group, .f3-inner { position: absolute; inset: 0; }
+        .f3-mono {
+          font-family: "IBM Plex Mono", ui-monospace, monospace, sans-serif;
+          font-weight: 500;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+        }
+        .f3-w { display: inline-block; }
+
+        /* ---------- g1: decline chart ---------- */
+        #f3_g1_year {
+          position: absolute; top: 170px; left: 90px;
+          font-weight: 900; font-size: 300px; line-height: 0.85; letter-spacing: -0.04em;
+          color: #E85D26; transform-origin: 0 100%;
+        }
+        #f3_g1_rule1, #f3_g1_rule2 {
+          position: absolute; left: 90px; width: 900px; background: #E85D26;
+        }
+        #f3_g1_rule1 { top: 445px; height: 10px; transform-origin: 0 50%; }
+        #f3_g1_rule2 { top: 1052px; height: 6px; transform-origin: 100% 50%; }
+        #f3_g1_phrase {
+          position: absolute; top: 490px; left: 90px; width: 900px;
+          font-weight: 800; font-size: 112px; line-height: 0.95; letter-spacing: -0.02em;
+          text-transform: lowercase;
+        }
+        #f3_g1_count, #f3_g1_final {
+          position: absolute; top: 860px; left: 90px; width: 900px;
+          font-weight: 900; font-size: 180px; line-height: 0.9; letter-spacing: -0.04em;
+          font-variant-numeric: tabular-nums; white-space: nowrap;
+        }
+        #f3_g1_count { color: #F0ECE5; }
+        #f3_g1_final .f3-from { color: #888880; }
+        #f3_g1_final .f3-arrow, #f3_g1_final .f3-to { color: #E85D26; }
+        #f3_g1_chart { position: absolute; top: 1090px; left: 90px; width: 900px; height: 440px; overflow: visible; }
+        .f3-grid { stroke: #282826; stroke-width: 1; }
+        #f3_g1_line { fill: none; stroke: #E85D26; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+        #f3_g1_end, .f3-g1-ring { transform-box: fill-box; transform-origin: center; }
+        #f3_g1_end { fill: #E85D26; }
+        .f3-g1-ring { fill: none; stroke: #E85D26; stroke-width: 3; opacity: 0; }
+        .f3-axis { position: absolute; top: 1548px; font-size: 26px; color: #888880; }
+        #f3_g1_ax0 { left: 90px; }
+        #f3_g1_ax1 { right: 90px; color: #E85D26; }
+
+        /* ---------- g2: map pin + compare ---------- */
+        #f3_g2_head {
+          position: absolute; top: 160px; left: 90px; width: 900px;
+          font-weight: 900; font-size: 150px; line-height: 0.9; letter-spacing: -0.04em;
+          text-transform: lowercase;
+        }
+        #f3_g2_head .f3-line { display: block; white-space: nowrap; }
+        .f3-acc { color: #E85D26; }
+        #f3_g2_map { position: absolute; inset: 0; }
+        #f3_g2_svg { position: absolute; top: 520px; left: 90px; width: 900px; height: 900px; overflow: visible; }
+        .f3-dot { fill: #505048; transform-box: fill-box; transform-origin: center; }
+        #f3_g2_pin { fill: #E85D26; stroke: #111111; stroke-width: 4; }
+        .f3-g2-ripple { fill: none; stroke: #E85D26; stroke-width: 4; opacity: 0; transform-box: fill-box; transform-origin: center; }
+        #f3_g2_label {
+          position: absolute; top: 800px; left: 90px; max-width: 900px;
+          font-weight: 900; font-size: 110px; line-height: 1; letter-spacing: -0.03em;
+          text-transform: lowercase; color: #F0ECE5; background: #111111; padding: 0 16px 10px;
+          white-space: nowrap; transform-origin: 0 50%;
+        }
+        #f3_g2_card { position: absolute; inset: 0; }
+        #f3_g2_pa { position: absolute; top: 540px; left: 90px; width: 900px; padding-top: 40px; }
+        #f3_g2_pa_rule { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #282826; transform-origin: 0 50%; }
+        .f3-lab { display: block; font-weight: 800; font-size: 110px; line-height: 1; letter-spacing: -0.03em; text-transform: lowercase; }
+        #f3_g2_pa .f3-lab { color: #888880; }
+        #f3_g2_pa_big { display: block; font-weight: 900; font-size: 170px; line-height: 0.95; letter-spacing: -0.04em; text-transform: lowercase; }
+        #f3_g2_pb { position: absolute; top: 900px; left: 90px; width: 900px; height: 640px; padding: 52px 56px; color: #111111; }
+        #f3_g2_pb_fill { position: absolute; inset: 0; background: #E85D26; transform-origin: 0 50%; }
+        #f3_g2_pb_txt { position: relative; }
+        #f3_g2_pb_num { display: block; font-weight: 900; font-size: 220px; line-height: 0.95; letter-spacing: -0.04em; transform-origin: 0 60%; white-space: nowrap; }
+      </style>
+
+      <div id="stage" data-composition-id="03-f3" data-width="1080" data-height="1920" data-duration="6.16">
+        <!-- g1: 2010 bankruptcy, store count draws down -->
+        <div id="f3_g1" class="f3-group">
+          <div id="f3_g1_inner" class="f3-inner">
+            <div id="f3_g1_year">2010</div>
+            <div id="f3_g1_rule1"></div>
+            <div id="f3_g1_phrase"><span class="f3-w">blockbuster</span> <span class="f3-w">se</span> <span class="f3-w">declara</span> <span class="f3-w">en</span> <span class="f3-w">quiebra</span></div>
+            <div id="f3_g1_count">9,000</div>
+            <div id="f3_g1_final"><span class="f3-w f3-from">9,000</span> <span class="f3-w f3-arrow">→</span> <span class="f3-w f3-to">0</span></div>
+            <div id="f3_g1_rule2"></div>
+            <svg id="f3_g1_chart" viewBox="0 0 900 440" aria-hidden="true">
+              <line class="f3-grid" x1="0" y1="110" x2="900" y2="110"></line>
+              <line class="f3-grid" x1="0" y1="220" x2="900" y2="220"></line>
+              <line class="f3-grid" x1="0" y1="330" x2="900" y2="330"></line>
+              <line class="f3-grid" x1="0" y1="439" x2="900" y2="439"></line>
+              <path id="f3_g1_line" d="M 8 22 C 80 26, 140 44, 200 78 S 300 118, 360 150 S 440 190, 500 236 S 600 300, 660 330 S 790 392, 888 424"></path>
+              <circle class="f3-g1-ring" cx="888" cy="424" r="14"></circle>
+              <circle class="f3-g1-ring" cx="888" cy="424" r="14"></circle>
+              <circle id="f3_g1_end" cx="888" cy="424" r="14"></circle>
+            </svg>
+            <div id="f3_g1_ax0" class="f3-axis f3-mono">2004</div>
+            <div id="f3_g1_ax1" class="f3-axis f3-mono">2010</div>
+          </div>
+        </div>
+
+        <!-- g2: one store left (Bend, Oregon) then compare -->
+        <div id="f3_g2" class="f3-group">
+          <div id="f3_g2_inner" class="f3-inner">
+            <div id="f3_g2_head">
+              <span class="f3-line"><span class="f3-w">hoy</span> <span class="f3-w">queda</span></span>
+              <span class="f3-line"><span class="f3-w f3-acc">1</span> <span class="f3-w">tienda</span></span>
+            </div>
+            <div id="f3_g2_map">
+              <svg id="f3_g2_svg" viewBox="0 0 900 900" aria-hidden="true">
+                <g id="f3_g2_dots"></g>
+                <circle class="f3-g2-ripple" r="20"></circle>
+                <circle class="f3-g2-ripple" r="20"></circle>
+                <circle class="f3-g2-ripple" r="20"></circle>
+                <g id="f3_g2_pinpos"><g id="f3_g2_pinwrap"><path id="f3_g2_pin" d="M0 0 C -8 -18 -30 -34 -30 -58 A 30 30 0 1 1 30 -58 C 30 -34 8 -18 0 0 Z"></path><circle cx="0" cy="-58" r="11" fill="#111111"></circle></g></g>
+              </svg>
+              <div id="f3_g2_label">bend, oregon</div>
+            </div>
+            <div id="f3_g2_card">
+              <div id="f3_g2_pa">
+                <div id="f3_g2_pa_rule"></div>
+                <span class="f3-lab">blockbuster ·</span>
+                <span id="f3_g2_pa_big"><span class="f3-acc">1</span> tienda</span>
+              </div>
+              <div id="f3_g2_pb">
+                <div id="f3_g2_pb_fill"></div>
+                <div id="f3_g2_pb_txt">
+                  <span class="f3-lab">netflix ·</span>
+                  <span id="f3_g2_pb_num">300 M+</span>
+                  <span class="f3-lab">cuentas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="03-f3"]');
+          var $ = function (s) { return root.querySelector(s); };
+          var $$ = function (s) { return root.querySelectorAll(s); };
+          var NS = "http://www.w3.org/2000/svg";
+          var D = 6.16;
+          // Frame-local anchors (track_t - 15.23)
+          var G1 = [0, 0.4, 1.14, 1.54, 2.3];
+          var G2_START = 3.07;
+          var G2 = [3.07, 3.46, 3.83, 4.62, 5.39, 5.76];
+
+          // ---------- g1 setup: line draw + countdown from one progress value ----------
+          var line = $("#f3_g1_line");
+          var len = line.getTotalLength();
+          line.style.strokeDasharray = len + " " + len;
+          var count = $("#f3_g1_count");
+          var prog = { p: 0 };
+          function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+          function render() {
+            line.style.strokeDashoffset = String(len * (1 - prog.p));
+            count.textContent = fmt(Math.round(9000 * (1 - prog.p)));
+          }
+          render();
+
+          // ---------- g2 setup: dot-matrix US west (inline, no remote data) ----------
+          // Simplified outline (lon, lat) of WA OR CA NV ID MT WY UT CO AZ NM.
+          var OUT = [[-124.7,48.4],[-123.3,49],[-104.05,49],[-104.05,41],[-102.05,41],[-102.05,37],[-103,37],[-103,32],
+            [-106.6,32],[-108.2,31.8],[-111.1,31.3],[-114.8,32.5],[-117.1,32.5],[-118.5,34],[-120.6,34.5],
+            [-121.9,36.6],[-122.5,37.8],[-123.8,39.8],[-124.4,40.4],[-124.2,42],[-124.5,43],[-124,46.3]];
+          var COS = 0.743, K = 50.85, OX = 22;
+          function proj(lon, lat) { return [OX + (lon + 124.7) * COS * K, (49 - lat) * K]; }
+          var poly = OUT.map(function (c) { return proj(c[0], c[1]); });
+          function inside(x, y) {
+            var a = false;
+            for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+              var xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+              if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) a = !a;
+            }
+            return a;
+          }
+          var dotsG = $("#f3_g2_dots");
+          var dots = [];
+          for (var gy = 15; gy < 900; gy += 30) {
+            for (var gx = 15; gx < 900; gx += 30) {
+              if (!inside(gx, gy)) continue;
+              var c = document.createElementNS(NS, "circle");
+              c.setAttribute("cx", gx); c.setAttribute("cy", gy); c.setAttribute("r", 7);
+              c.setAttribute("class", "f3-dot");
+              dotsG.appendChild(c); dots.push(c);
+            }
+          }
+          var bend = proj(-121.31, 44.06); // Bend, Oregon
+          $("#f3_g2_pinpos").setAttribute("transform", "translate(" + bend[0] + " " + bend[1] + ")");
+          var pinPath = $("#f3_g2_pinwrap");
+          var ripples = $$(".f3-g2-ripple");
+          ripples.forEach(function (r) { r.setAttribute("cx", bend[0]); r.setAttribute("cy", bend[1]); });
+
+          var tl = gsap.timeline({ paused: true });
+
+          // group spans: 0ms swap at the group->group cut
+          tl.set("#f3_g1", { autoAlpha: 1 }, 0);
+          gsap.set("#f3_g2", { autoAlpha: 0 });
+          tl.set("#f3_g1", { autoAlpha: 0 }, G2_START);
+          tl.set("#f3_g2", { autoAlpha: 1 }, G2_START);
+
+          // ================= g1 =================
+          // ambient drift keeps the frame alive between hits (vertical only, margins hold)
+          tl.fromTo("#f3_g1_inner", { y: 0 }, { y: -26, duration: G2_START, ease: "none" }, 0);
+          // a0: year slams in
+          tl.fromTo("#f3_g1_year", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power3.out" }, G1[0]);
+          tl.fromTo("#f3_g1_chart, .f3-axis", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, G1[0] + 0.05);
+          tl.fromTo("#f3_g1_count", { opacity: 0 }, { opacity: 1, duration: 0.2 }, G1[0] + 0.1);
+          tl.set("#f3_g1_final", { opacity: 0 }, 0);
+          tl.set("#f3_g1_rule2", { scaleX: 0 }, 0);
+          // a1: directional fill under the year, phrase staggers in
+          tl.fromTo("#f3_g1_rule1", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, G1[1]);
+          tl.fromTo("#f3_g1_phrase .f3-w", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", stagger: 0.07 }, G1[1]);
+          // a1 -> a4: decline draw + countdown (build, then lock)
+          tl.fromTo(prog, { p: 0 }, { p: 1, duration: G1[4] - G1[1], ease: "power1.inOut", onUpdate: render }, G1[1]);
+          // a2 / a3: beat kicks
+          tl.fromTo("#f3_g1_year", { scale: 1.07 }, { scale: 1, duration: 0.22, ease: "power2.out", immediateRender: false }, G1[2]);
+          tl.fromTo("#f3_g1_phrase", { x: -14 }, { x: 0, duration: 0.22, ease: "power2.out" }, G1[3]);
+          // a4: lock — countdown swaps to "9,000 → 0", reverse fill sweeps, endpoint hits
+          tl.set("#f3_g1_count", { opacity: 0 }, G1[4]);
+          tl.set("#f3_g1_final", { opacity: 1 }, G1[4]);
+          tl.fromTo("#f3_g1_final .f3-w", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.22, ease: "power3.out", stagger: 0.05 }, G1[4]);
+          tl.fromTo("#f3_g1_rule2", { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power2.out", immediateRender: false }, G1[4]);
+          tl.fromTo("#f3_g1_end", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, transformOrigin: "50% 50%", duration: 0.3, ease: "back.out(2.4)" }, G1[4] - 0.05);
+          $$(".f3-g1-ring").forEach(function (r, i) {
+            tl.fromTo(r, { scale: 1, opacity: 0.9, transformOrigin: "50% 50%" }, { scale: 5, transformOrigin: "50% 50%", opacity: 0, duration: 0.6, ease: "power2.out" }, G1[4] + i * 0.2);
+          });
+
+          // ================= g2 =================
+          tl.fromTo("#f3_g2_inner", { y: 0 }, { y: -24, duration: D - G2_START, ease: "none" }, G2_START);
+          tl.set("#f3_g2_map", { autoAlpha: 1 }, 0);
+          tl.set("#f3_g2_card", { autoAlpha: 0 }, 0);
+          // b0: headline staggered reveal
+          tl.fromTo("#f3_g2_head .f3-w", { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", stagger: 0.07 }, G2[0]);
+          // b1: map dots sweep in west -> east
+          tl.fromTo(dots, { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, {
+            opacity: 1, scale: 1, transformOrigin: "50% 50%", duration: 0.22, ease: "power2.out",
+            stagger: function (i, el) { return (parseFloat(el.getAttribute("cx")) / 900) * 0.32; }
+          }, G2[1]);
+          tl.set("#f3_g2_label", { opacity: 0 }, 0);
+          tl.set(pinPath, { opacity: 0 }, 0);
+          // b2 (the drop at 19.0): pin pops on Bend, dots recede, ripples
+          tl.to("#f3_g2_dots", { opacity: 0.45, duration: 0.3, ease: "power1.out" }, G2[2]);
+          tl.fromTo(pinPath, { opacity: 0, y: -260, scale: 1.4, transformOrigin: "50% 100%" },
+            { opacity: 1, y: 0, scale: 1.4, transformOrigin: "50% 100%", duration: 0.26, ease: "back.out(1.6)" }, G2[2]);
+          ripples.forEach(function (r, i) {
+            tl.fromTo(r, { scale: 0.5, opacity: 0.9, transformOrigin: "50% 50%" }, { scale: 6, transformOrigin: "50% 50%", opacity: 0, duration: 0.75, ease: "power2.out" }, G2[2] + 0.18 + i * 0.22);
+          });
+          tl.fromTo("#f3_g2_label", { opacity: 0, x: -30, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.24, ease: "back.out(2)", immediateRender: false }, G2[2] + 0.2);
+          // b3: hard cut map -> compare card; blockbuster panel staggers in
+          tl.set("#f3_g2_map", { autoAlpha: 0 }, G2[3]);
+          tl.set("#f3_g2_card", { autoAlpha: 1 }, G2[3]);
+          tl.fromTo("#f3_g2_pa_rule", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, G2[3]);
+          tl.fromTo("#f3_g2_pa .f3-lab, #f3_g2_pa_big", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.28, ease: "power3.out", stagger: 0.09 }, G2[3]);
+          tl.set("#f3_g2_pb_fill", { scaleX: 0 }, 0);
+          tl.set("#f3_g2_pb_txt > *", { opacity: 0 }, 0);
+          // b4: netflix panel — directional fill sweeps, ink text reveals
+          tl.fromTo("#f3_g2_pb_fill", { scaleX: 0 }, { scaleX: 1, duration: 0.24, ease: "power2.out", immediateRender: false }, G2[4]);
+          tl.fromTo("#f3_g2_pb_txt > *", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.26, ease: "power3.out", stagger: 0.07, immediateRender: false }, G2[4] + 0.1);
+          // b5 (surge at 21.0): 300 M+ punches, blockbuster panel recedes
+          tl.fromTo("#f3_g2_pb_num", { scale: 1.16 }, { scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, G2[5]);
+          tl.to("#f3_g2_pa", { opacity: 0.4, duration: 0.25, ease: "power1.out" }, G2[5]);
+          tl.fromTo("#f3_g2_pb", { y: 14 }, { y: 0, duration: 0.25, ease: "power2.out", immediateRender: false }, G2[5]);
+
+          window.__timelines["03-f3"] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>

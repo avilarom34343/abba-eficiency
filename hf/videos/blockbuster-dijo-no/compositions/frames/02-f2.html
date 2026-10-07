@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>02-f2 — no.</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Barlow'; font-weight: 400; src: url('assets/fonts/barlow-400.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 700; src: url('assets/fonts/barlow-700.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 800; src: url('assets/fonts/barlow-800.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 900; src: url('assets/fonts/barlow-900.ttf') format('truetype'); }
+        @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url('assets/fonts/ibm-plex-mono-500.ttf') format('truetype'); }
+
+        [data-composition-id="02-f2"] #stage {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #111111;
+          font-family: "Barlow", sans-serif;
+          --ink: #111111;
+          --fire: #e85d26;
+          --cream: #f0ece5;
+          --muted: #888880;
+        }
+        [data-composition-id="02-f2"] #stage * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        [data-composition-id="02-f2"] #stage .f2-group {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+        }
+
+        /* ---- g1: "no." slam, orange register ---- */
+        #f2-g1 { background: var(--fire); }
+        #f2-g1_shake { position: absolute; inset: 0; }
+        #f2-g1_burst { position: absolute; left: 540px; top: 760px; width: 0; height: 0; }
+        [data-composition-id="02-f2"] #stage .f2-ray {
+          position: absolute; left: 0; top: 0; width: 0; height: 0;
+        }
+        [data-composition-id="02-f2"] #stage .f2-ray i {
+          position: absolute; display: block; left: -5px; bottom: 0;
+          width: 10px; height: 170px; background: rgba(17, 17, 17, 0.55);
+          transform-origin: 50% 100%;
+        }
+        #f2-g1_drift {
+          position: absolute; left: 90px; right: 90px; top: 560px; height: 400px;
+          display: flex; align-items: center; justify-content: center;
+          transform-origin: 50% 50%;
+        }
+        #f2-g1_word { position: relative; display: block; transform-origin: 50% 55%; }
+        [data-composition-id="02-f2"] #stage .f2-no {
+          display: block; font-weight: 900; font-size: 480px; line-height: 0.85;
+          letter-spacing: -0.04em; color: var(--ink); white-space: nowrap;
+        }
+        [data-composition-id="02-f2"] #stage .f2-ghost {
+          position: absolute; left: 0; top: 0;
+        }
+        #f2-g1_ghostA { opacity: 0.4; }
+        #f2-g1_ghostB { opacity: 0.2; }
+        #f2-g1_sub {
+          position: absolute; left: 90px; right: 90px; top: 1040px;
+          font-weight: 700; font-size: 84px; line-height: 1.02; letter-spacing: -0.02em;
+          color: var(--ink); text-align: center;
+        }
+        #f2-g1_sub b { font-weight: 900; }
+
+        /* ---- g2: kinetic stack, dark register ---- */
+        #f2-g2 { background: var(--ink); visibility: hidden; opacity: 0; }
+        #f2-g2_push {
+          position: absolute; left: 90px; right: 90px; top: 520px;
+          transform-origin: 0% 50%;
+        }
+        #f2-g2_rule { width: 96px; height: 8px; background: var(--fire); margin-bottom: 56px; transform-origin: 0 50%; }
+        [data-composition-id="02-f2"] #stage .f2-line {
+          display: block; font-weight: 900; font-size: 180px; line-height: 0.95;
+          letter-spacing: -0.03em; color: var(--cream); white-space: nowrap;
+        }
+        [data-composition-id="02-f2"] #stage .f2-w { display: inline-block; margin-right: 0.2em; }
+        [data-composition-id="02-f2"] #stage .f2-c { display: inline-block; }
+        #f2-g2_attr {
+          margin-top: 110px; font-weight: 500; font-size: 52px; line-height: 1.2;
+          color: var(--muted); max-width: 900px;
+        }
+
+        /* ---- g3: iris + play triangle + year roll ---- */
+        #f2-g3 { background: var(--ink); visibility: hidden; opacity: 0; }
+        #f2-g3_iris { position: absolute; inset: 0; background: var(--fire); clip-path: circle(0% at 50% 27.6%); }
+        #f2-g3_ring {
+          position: absolute; left: 390px; top: 380px; width: 300px; height: 300px;
+          border: 6px solid var(--ink); border-radius: 50%; opacity: 0;
+        }
+        #f2-g3_breathe {
+          position: absolute; left: 330px; top: 300px; width: 460px; height: 460px;
+          transform-origin: 40% 50%;
+        }
+        #f2-g3_play { display: block; width: 460px; height: 460px; transform-origin: 40% 50%; }
+        #f2-g3_yearwrap { position: absolute; left: 90px; right: 90px; top: 860px; display: flex; justify-content: center; }
+        #f2-g3_year {
+          display: flex; font-weight: 900; font-size: 300px; line-height: 1; height: 1em;
+          letter-spacing: -0.04em; color: var(--ink); font-variant-numeric: tabular-nums;
+        }
+        [data-composition-id="02-f2"] #stage .f2-win { display: inline-block; height: 1em; overflow: hidden; margin-right: -0.04em; }
+        [data-composition-id="02-f2"] #stage .f2-strip { display: block; }
+        [data-composition-id="02-f2"] #stage .f2-strip span { display: block; height: 1em; }
+        #f2-g3_cap {
+          position: absolute; left: 90px; right: 90px; top: 1230px;
+          font-weight: 800; font-size: 80px; line-height: 1.02; letter-spacing: -0.02em;
+          color: var(--ink); text-align: center;
+        }
+      </style>
+
+      <div id="stage" data-composition-id="02-f2" data-width="1080" data-height="1920" data-duration="7.68">
+        <!-- g1 -->
+        <div id="f2-g1" class="f2-group">
+          <div id="f2-g1_shake">
+            <div id="f2-g1_burst"></div>
+            <div id="f2-g1_drift">
+              <div id="f2-g1_word">
+                <span id="f2-g1_ghostB" class="f2-no f2-ghost" aria-hidden="true">no.</span>
+                <span id="f2-g1_ghostA" class="f2-no f2-ghost" aria-hidden="true">no.</span>
+                <span id="f2-g1_main" class="f2-no">no.</span>
+              </div>
+            </div>
+            <div id="f2-g1_sub">a comprar netflix por <b>$50&nbsp;M</b></div>
+          </div>
+        </div>
+
+        <!-- g2 -->
+        <div id="f2-g2" class="f2-group">
+          <div id="f2-g2_push">
+            <div id="f2-g2_rule"></div>
+            <div id="f2-g2_lines"></div>
+            <div id="f2-g2_attr">según el cofundador de netflix</div>
+          </div>
+        </div>
+
+        <!-- g3 -->
+        <div id="f2-g3" class="f2-group">
+          <div id="f2-g3_iris">
+            <div id="f2-g3_ring"></div>
+            <div id="f2-g3_breathe">
+              <svg id="f2-g3_play" viewBox="0 0 100 100" aria-hidden="true">
+                <polygon points="14,4 14,96 94,50" fill="#111111" />
+              </svg>
+            </div>
+            <div id="f2-g3_yearwrap">
+              <div id="f2-g3_year" aria-label="2007"></div>
+            </div>
+            <div id="f2-g3_cap">netflix lanza el streaming</div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="02-f2"]');
+          var $ = function (id) { return root.querySelector("#" + id); };
+          var tl = gsap.timeline({ paused: true });
+          var F = 1 / 30;
+
+          function shake(el, t, amps) {
+            amps.forEach(function (a, i) {
+              tl.set(el, { x: a, y: a * 0.6 * (i % 2 ? -1 : 1) }, t + i * F);
+            });
+            tl.set(el, { x: 0, y: 0 }, t + amps.length * F);
+          }
+
+          // Frame-local anchors (track_t - 7.55)
+          var A1 = [0, 0.34, 0.65, 0.95];
+          var A2 = [1.53, 1.9, 2.3, 2.69, 3.06, 3.46, 3.83];
+          var A3 = [4.59, 4.99, 5.38, 6.15, 6.8];
+          var END = 7.68;
+
+          // group cuts (0ms)
+          var g1 = $("f2-g1"), g2 = $("f2-g2"), g3 = $("f2-g3");
+          // initial visibility is static CSS (g2/g3 hidden) so seek-back to 0 reverts cleanly
+          tl.set(g1, { autoAlpha: 0 }, A2[0]).set(g2, { autoAlpha: 1 }, A2[0]);
+          tl.set(g2, { autoAlpha: 0 }, A3[0]).set(g3, { autoAlpha: 1 }, A3[0]);
+
+          /* ================= g1: no. ================= */
+          var main = $("f2-g1_main"), word = $("f2-g1_word");
+          var gA = $("f2-g1_ghostA"), gB = $("f2-g1_ghostB");
+          var drift = $("f2-g1_drift"), sk1 = $("f2-g1_shake"), sub = $("f2-g1_sub");
+
+          // burst rays (radial-burst-lines), built statically, seek-safe fromTo
+          var burst = $("f2-g1_burst"), rays = [], N = 24;
+          for (var i = 0; i < N; i++) {
+            var w = document.createElement("div");
+            w.className = "f2-ray";
+            w.style.transform = "rotate(" + (i * 360) / N + "deg)";
+            var ln = document.createElement("i");
+            w.appendChild(ln);
+            burst.appendChild(w);
+            rays.push(ln);
+          }
+          function fireBurst(t, r0, r1, first, fade) {
+            rays.forEach(function (ln, i) {
+              var d = (i % 3) * 0.015;
+              tl.fromTo(ln, { y: -r0 - (i % 3) * 30, scaleY: 0.2, opacity: 1 },
+                { y: -r1 - (i % 4) * 40, scaleY: 1, duration: 0.2, ease: "power4.out", immediateRender: first }, t + d);
+              tl.to(ln, { y: -r1 - 260, scaleY: 0, opacity: 0, duration: fade, ease: "power2.in" }, t + d + 0.2);
+            });
+          }
+          fireBurst(A1[0], 330, 470, true, 0.3);
+          fireBurst(A1[2], 340, 520, false, 0.06); // must end before the 0.95 hit
+          fireBurst(A1[3], 360, 560, false, 0.3);
+          tl.fromTo(burst, { rotation: 0 }, { rotation: 15, duration: A2[0], ease: "none" }, 0);
+
+          // braam slam: already huge at frame 0, lands in 0.2s
+          tl.fromTo(word, { scale: 1.18 }, { scale: 1, duration: 0.22, ease: "expo.out" }, A1[0]);
+          tl.fromTo(drift, { scale: 1 }, { scale: 0.94, duration: A2[0] - 0.22, ease: "sine.inOut" }, 0.22);
+          shake(sk1, A1[0], [34, -28, 22, -18, 12, -8, 4]);
+
+          // chromatic split (brand-safe: ink ghosts at 40% / 20%)
+          tl.fromTo(gA, { x: -36, y: 10 }, { x: -6, y: 0, duration: 0.3, ease: "power2.out" }, A1[0]);
+          tl.fromTo(gB, { x: 30, y: -12 }, { x: 8, y: 0, duration: 0.3, ease: "power2.out" }, A1[0]);
+
+          // subtitle on 0.34
+          tl.fromTo(sub, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "power3.out" }, A1[1]);
+
+          // 0.65: second punch + 2-frame invert flash
+          tl.to(main, { scale: 1.12, duration: 0.06, ease: "power4.out" }, A1[2]);
+          tl.to(main, { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.5)" }, A1[2] + 0.06);
+          tl.set(g1, { backgroundColor: "#111111" }, A1[2]).set(g1, { backgroundColor: "#E85D26" }, A1[2] + 2 * F);
+          tl.set([main, sub], { color: "#E85D26" }, A1[2]).set([main, sub], { color: "#111111" }, A1[2] + 2 * F);
+          shake(sk1, A1[2], [26, -22, 16, -10, 5]);
+          tl.to(gA, { x: -34, duration: F, ease: "none" }, A1[2]);
+          tl.to(gB, { x: 40, duration: F, ease: "none" }, A1[2]);
+          tl.to([gA, gB], { x: 0, duration: 0.2, ease: "power2.out" }, A1[2] + 0.08);
+
+          // 0.95: glitch hit
+          tl.to(gA, { x: -60, y: -8, duration: F, ease: "none" }, A1[3]);
+          tl.to(gB, { x: 40, y: 8, duration: F, ease: "none" }, A1[3]);
+          tl.to(gA, { x: -10, y: 0, duration: 0.35, ease: "power2.out" }, A1[3] + 0.1);
+          tl.to(gB, { x: 12, y: 0, duration: 0.35, ease: "power2.out" }, A1[3] + 0.1);
+          shake(sk1, A1[3], [18, -14, 8, -4]);
+          tl.to([gA, gB], { x: 0, duration: 0.3, ease: "sine.inOut" }, A1[3] + 0.5);
+
+          /* ================= g2: kinetic stack ================= */
+          var lines = [["se", "rieron"], ["de", "netflix"], ["en", "la", "junta"]];
+          var host = $("f2-g2_lines"), words = [], kws = [];
+          lines.forEach(function (ws, li) {
+            var line = document.createElement("div");
+            line.className = "f2-line";
+            ws.forEach(function (t) {
+              var sw = document.createElement("span");
+              sw.className = "f2-w";
+              for (var k = 0; k < t.length; k++) {
+                var c = document.createElement("span");
+                c.className = "f2-c";
+                c.textContent = t[k];
+                sw.appendChild(c);
+              }
+              line.appendChild(sw);
+              words.push(sw);
+              if (li === 0) kws.push(sw);
+            });
+            host.appendChild(line);
+          });
+
+          tl.fromTo($("f2-g2_rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "expo.out" }, A2[0]);
+          tl.fromTo($("f2-g2_push"), { scale: 1 }, { scale: 1.05, duration: A3[0] - A2[0], ease: "none" }, A2[0]);
+          words.forEach(function (sw, i) {
+            var cs = sw.querySelectorAll(".f2-c");
+            tl.fromTo(cs, { y: 90, opacity: 0, rotation: 8 },
+              { y: 0, opacity: 1, rotation: 0, duration: 0.24, stagger: 0.022, ease: "back.out(2)" }, A2[i]);
+          });
+          // keyword recolor (palette flip) on the last hit
+          tl.to(kws, { color: "#E85D26", duration: 0.08, ease: "none" }, A2[6]);
+          tl.fromTo(kws, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, A2[6]);
+          tl.fromTo($("f2-g2_attr"), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, A2[6]);
+
+          /* ================= g3: iris + play + 2007 ================= */
+          var iris = $("f2-g3_iris"), ring = $("f2-g3_ring"), sk3 = $("f2-g3_iris");
+          tl.fromTo(iris, { clipPath: "circle(4% at 50% 27.6%)" },
+            { clipPath: "circle(100% at 50% 27.6%)", duration: 0.7, ease: "expo.out" }, A3[0]);
+          [A3[0], A3[2], A3[3], A3[4]].forEach(function (t, i) {
+            tl.fromTo(ring, { scale: 0.5, opacity: 0.9 },
+              { scale: 3.2, opacity: 0, duration: 0.55, ease: "expo.out", immediateRender: i === 0 }, t);
+          });
+
+          var play = $("f2-g3_play");
+          tl.fromTo(play, { scale: 0, rotation: -25 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.2)" }, A3[1]);
+          tl.fromTo($("f2-g3_breathe"), { scale: 1 }, { scale: 1.07, duration: END - A3[1] - 0.05, ease: "sine.inOut" }, A3[1]);
+
+          // year: 2000 -> 2007 via slot reels (strip translate, no text swaps)
+          var year = $("f2-g3_year");
+          var reels = [["2"], ["0"], "01234567890".split(""), "012345678901234567".split("")];
+          var strips = reels.map(function (cells) {
+            var win = document.createElement("span");
+            win.className = "f2-win";
+            var st = document.createElement("span");
+            st.className = "f2-strip";
+            cells.forEach(function (d) { var s = document.createElement("span"); s.textContent = d; st.appendChild(s); });
+            win.appendChild(st);
+            year.appendChild(win);
+            return { el: st, n: cells.length };
+          });
+          tl.fromTo($("f2-g3_yearwrap"), { y: 90, opacity: 0, scale: 0.85 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, A3[2]);
+          tl.fromTo(strips[2].el, { yPercent: 0 }, { yPercent: (-10 / 11) * 100, duration: 0.55, ease: "power2.inOut" }, A3[2] + 0.05);
+          tl.fromTo(strips[3].el, { yPercent: 0 }, { yPercent: (-17 / 18) * 100, duration: A3[3] - A3[2] - 0.05, ease: "power3.out" }, A3[2] + 0.05);
+          tl.fromTo(year, { scale: 1.12 }, { scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, A3[3]);
+          shake(sk3, A3[3], [16, -12, 8, -4]);
+          tl.fromTo(year, { y: 0 }, { y: -18, duration: END - A3[3] - 0.4, ease: "sine.inOut", immediateRender: false }, A3[3] + 0.35);
+
+          tl.fromTo($("f2-g3_cap"), { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, A3[4]);
+          shake(sk3, A3[4], [12, -8, 4]);
+
+          tl.seek(0);
+          window.__timelines["02-f2"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>01-f1</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Barlow'; font-weight: 400; src: url('assets/fonts/barlow-400.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 700; src: url('assets/fonts/barlow-700.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 800; src: url('assets/fonts/barlow-800.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 900; src: url('assets/fonts/barlow-900.ttf') format('truetype'); }
+        @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url('assets/fonts/ibm-plex-mono-500.ttf') format('truetype'); }
+
+
+        [data-composition-id="01-f1"] #stage {
+          position: relative;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #111111;
+          color: #f0ece5;
+          font-family: "Barlow", sans-serif;
+          container-type: size;
+        }
+        [data-composition-id="01-f1"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* group containers: frame-local spans swapped with 0ms tl.set */
+        .f1-group {
+          position: absolute;
+          inset: 0;
+          padding: 0 90px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        #f1_g2, #f1_g3 { visibility: hidden; opacity: 0; }
+
+        .f1-kicker {
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 500;
+          font-size: 26px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #e85d26;
+          display: flex;
+          align-items: center;
+          gap: 18px;
+        }
+        .f1-stub { display: block; width: 36px; height: 3px; background: #e85d26; }
+
+        /* ---------- g1: year + cassette + wordmark ---------- */
+        #f1_g1_inner {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 36px;
+          transform-origin: 50% 50%;
+        }
+        #f1_g1_year {
+          display: flex;
+          font-weight: 900;
+          font-size: 340px;
+          line-height: 1;
+          letter-spacing: -0.04em;
+          color: #e85d26;
+          font-variant-numeric: tabular-nums;
+        }
+        .f1-reel-win {
+          display: block;
+          height: 1em;
+          width: 0.56em;
+          overflow: hidden;
+          position: relative;
+          text-align: center;
+        }
+        .f1-reel-strip { display: block; }
+        .f1-reel-strip span { display: block; height: 1em; line-height: 1; }
+        #f1_g1_vhs { display: block; width: 720px; height: 430px; }
+        #f1_g1_word {
+          font-weight: 900;
+          font-size: 150px;
+          line-height: 1;
+          letter-spacing: -0.04em;
+          color: #f0ece5;
+          white-space: nowrap;
+        }
+        .f1-char { display: inline-block; }
+        #f1_g1_place {
+          display: flex;
+          align-items: center;
+          gap: 22px;
+          font-weight: 700;
+          font-size: 64px;
+          letter-spacing: -0.02em;
+          color: #f0ece5;
+          transform-origin: 50% 50%;
+        }
+        #f1_g1_place .f1-stub { width: 54px; height: 6px; transform-origin: 0 50%; }
+
+        /* ---------- g2: store grid + count ---------- */
+        #f1_g2_grid {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1080px;
+          height: 1944px;
+          transform-origin: 50% 50%;
+        }
+        #f1_g2_card {
+          position: relative;
+          width: 900px;
+          padding: 48px 0 56px;
+          background: #111111;
+          border-top: 1px solid #282826;
+          box-shadow: 0 0 0 40px #111111;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 18px;
+        }
+        #f1_g2_num {
+          font-weight: 900;
+          font-size: 300px;
+          line-height: 1;
+          letter-spacing: -0.04em;
+          color: #e85d26;
+          font-variant-numeric: tabular-nums;
+          font-feature-settings: "tnum" 1;
+          transform-origin: 50% 60%;
+          white-space: nowrap;
+        }
+        #f1_g2_unit {
+          font-weight: 900;
+          font-size: 150px;
+          line-height: 0.95;
+          letter-spacing: -0.04em;
+          color: #f0ece5;
+        }
+        #f1_g2_cap {
+          margin-top: 18px;
+          font-weight: 500;
+          font-size: 50px;
+          line-height: 1.2;
+          color: #888880;
+          text-align: center;
+        }
+
+        /* ---------- g3: phone chat ---------- */
+        #f1_g3_phone {
+          position: absolute;
+          left: 90px;
+          top: 190px;
+          width: 900px;
+          height: 1560px;
+          border-radius: 72px;
+          background: #1a1a18;
+          border: 2px solid #282826;
+          padding: 22px;
+          transform-origin: 50% 30%;
+        }
+        #f1_g3_screen {
+          width: 100%;
+          height: 100%;
+          border-radius: 52px;
+          background: #111111;
+          overflow: hidden;
+          position: relative;
+        }
+        #f1_g3_head {
+          height: 230px;
+          border-bottom: 1px solid #282826;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 14px;
+          padding-bottom: 26px;
+        }
+        #f1_g3_avatars { display: flex; }
+        #f1_g3_avatars i {
+          display: block;
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          border: 4px solid #111111;
+          margin-left: -18px;
+        }
+        #f1_g3_avatars i:first-child { margin-left: 0; background: #888880; }
+        #f1_g3_avatars i:nth-child(2) { background: #e85d26; }
+        #f1_g3_avatars i:nth-child(3) { background: #505048; }
+        #f1_g3_title {
+          font-weight: 700;
+          font-size: 50px;
+          letter-spacing: -0.02em;
+          color: #f0ece5;
+        }
+        #f1_g3_chat {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          padding: 56px 34px;
+        }
+        .f1-bub {
+          max-width: 720px;
+          border-radius: 40px;
+          padding: 26px 36px;
+          font-weight: 600;
+          font-size: 60px;
+          line-height: 1.15;
+          letter-spacing: -0.01em;
+          opacity: 0;
+          visibility: hidden;
+        }
+        .f1-recv {
+          align-self: flex-start;
+          background: #282826;
+          color: #f0ece5;
+          border-bottom-left-radius: 8px;
+          transform-origin: 0% 100%;
+        }
+        .f1-sent {
+          align-self: flex-end;
+          background: #e85d26;
+          color: #111111;
+          font-weight: 900;
+          font-size: 120px;
+          line-height: 1;
+          letter-spacing: -0.04em;
+          padding: 30px 44px 38px;
+          border-bottom-right-radius: 8px;
+          transform-origin: 100% 100%;
+          white-space: nowrap;
+        }
+      </style>
+
+      <div
+        id="stage"
+        data-composition-id="01-f1"
+        data-width="1080"
+        data-height="1920"
+        data-duration="7.55"
+      >
+        <!-- g1 [0, 2.93] -->
+        <div id="f1_g1" class="f1-group">
+          <div id="f1_g1_inner">
+            <div class="f1-kicker" id="f1_g1_kicker"><span class="f1-stub"></span>No. 01</div>
+            <div id="f1_g1_year" aria-label="2000"></div>
+            <svg id="f1_g1_vhs" viewBox="0 0 720 430" aria-hidden="true">
+              <rect x="2" y="2" width="716" height="426" fill="#1a1a18" stroke="#505048" stroke-width="4" />
+              <rect x="70" y="34" width="580" height="120" fill="#f0ece5" />
+              <rect x="70" y="34" width="580" height="34" fill="#e85d26" />
+              <rect x="100" y="94" width="300" height="10" fill="#888880" />
+              <rect x="100" y="122" width="200" height="10" fill="#888880" />
+              <rect x="150" y="190" width="420" height="150" fill="#111111" stroke="#505048" stroke-width="3" />
+              <rect x="272" y="226" width="176" height="78" fill="#282826" />
+              <g id="f1_g1_spoolL" transform="translate(222 265)">
+                <circle r="58" fill="#505048" />
+                <circle r="22" fill="#111111" />
+                <g fill="#f0ece5">
+                  <rect x="-4" y="-20" width="8" height="14" />
+                  <rect x="-4" y="6" width="8" height="14" />
+                  <rect x="-20" y="-4" width="14" height="8" />
+                  <rect x="6" y="-4" width="14" height="8" />
+                </g>
+              </g>
+              <g id="f1_g1_spoolR" transform="translate(498 265)">
+                <circle r="38" fill="#505048" />
+                <circle r="22" fill="#111111" />
+                <g fill="#f0ece5">
+                  <rect x="-4" y="-20" width="8" height="14" />
+                  <rect x="-4" y="6" width="8" height="14" />
+                  <rect x="-20" y="-4" width="14" height="8" />
+                  <rect x="6" y="-4" width="14" height="8" />
+                </g>
+              </g>
+              <rect x="110" y="370" width="500" height="34" fill="#282826" />
+              <circle cx="60" cy="390" r="14" fill="#282826" />
+              <circle cx="660" cy="390" r="14" fill="#282826" />
+            </svg>
+            <div id="f1_g1_word" aria-label="blockbuster"></div>
+            <div id="f1_g1_place"><span class="f1-stub"></span>dallas, texas</div>
+          </div>
+        </div>
+
+        <!-- g2 [2.93, 4.46] -->
+        <div id="f1_g2" class="f1-group">
+          <svg id="f1_g2_grid" viewBox="0 0 1080 1944" aria-hidden="true">
+            <defs>
+              <symbol id="f1_g2_store" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M3 3h18l1.6 5.5H1.4z M3.5 10h17v11h-6v-6.5h-5V21h-6z" />
+              </symbol>
+            </defs>
+          </svg>
+          <div id="f1_g2_card">
+            <div id="f1_g2_num">0</div>
+            <div id="f1_g2_unit">tiendas</div>
+            <div id="f1_g2_cap">blockbuster en su mejor momento</div>
+          </div>
+        </div>
+
+        <!-- g3 [4.46, 7.55] -->
+        <div id="f1_g3" class="f1-group">
+          <div id="f1_g3_phone">
+            <div id="f1_g3_screen">
+              <div id="f1_g3_head">
+                <div id="f1_g3_avatars"><i></i><i></i><i></i></div>
+                <div id="f1_g3_title">junta de blockbuster</div>
+              </div>
+              <div id="f1_g3_chat">
+                <div class="f1-bub f1-recv" id="f1_g3_b1">netflix se vende por $50 M.</div>
+                <div class="f1-bub f1-recv" id="f1_g3_b2">¿películas por correo?</div>
+                <div class="f1-bub f1-sent" id="f1_g3_b3">no, gracias.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="01-f1"]');
+          var $ = function (s) { return root.querySelector(s); };
+          var $$ = function (s) { return root.querySelectorAll(s); };
+          var hash = function (i) { var x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+          var FPS = 30;
+          var END = 7.55;
+          var tl = gsap.timeline({ paused: true });
+
+          // group cuts (0ms swaps) — anchors are frame-local == track seconds (frame starts at 0)
+          var G1 = [0, 2.93], G2 = [2.93, 4.46], G3 = [4.46, END];
+          tl.set("#f1_g1", { autoAlpha: 0 }, G1[1]);
+          tl.set("#f1_g2", { autoAlpha: 1 }, G2[0]);
+          tl.set("#f1_g2", { autoAlpha: 0 }, G2[1]);
+          tl.set("#f1_g3", { autoAlpha: 1 }, G3[0]);
+
+          /* ================= g1 ================= */
+          // slow push on the whole group so the hold is never static
+          tl.fromTo("#f1_g1_inner", { scale: 1 }, { scale: 1.045, duration: G1[1], ease: "none" }, 0);
+
+          // slot-machine-reveal: "2000" — reels spin from t=0, start 0.05, land by 0.49 (before 0.51 hit)
+          var year = $("#f1_g1_year");
+          "2000".split("").forEach(function (target, i) {
+            var n = 12, html = "";
+            for (var k = 0; k < n - 1; k++) html += "<span>" + ((k * 7 + i * 3 + 1) % 10) + "</span>";
+            html += "<span>" + target + "</span>";
+            var win = document.createElement("span");
+            win.className = "f1-reel-win";
+            win.innerHTML = '<span class="f1-reel-strip">' + html + "</span>";
+            year.appendChild(win);
+            tl.fromTo(win.firstChild, { yPercent: 0 }, { yPercent: -((n - 1) / n) * 100, duration: 0.32 + i * 0.04, ease: "power3.out" }, 0.05);
+          });
+          // tiny settle pulse when the last reel lands
+          tl.fromTo(year, { scale: 1 }, { scale: 1.06, duration: 0.07, ease: "power2.out" }, 0.49);
+          tl.to(year, { scale: 1, duration: 0.25, ease: "power2.out" }, 0.56);
+          tl.fromTo("#f1_g1_kicker", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }, 0.05);
+
+          // overlay-pop: cassette slides in from the right at 0.51
+          tl.fromTo("#f1_g1_vhs", { x: 820, rotation: 10, opacity: 1 }, { x: 0, rotation: -2, duration: 0.42, ease: "back.out(1.4)" }, 0.51);
+          tl.to("#f1_g1_vhs", { rotation: 1.5, y: -10, duration: G1[1] - 0.93, ease: "sine.inOut" }, 0.93);
+          // spools keep turning through the hold
+          tl.fromTo(["#f1_g1_spoolL", "#f1_g1_spoolR"], { rotation: 0, transformOrigin: "50% 50%" }, { rotation: -900, transformOrigin: "50% 50%", duration: G1[1] - 0.51, ease: "none" }, 0.51);
+
+          // kinetic-letter-in: "blockbuster" at 1.39
+          var word = $("#f1_g1_word");
+          "blockbuster".split("").forEach(function (c) {
+            var s = document.createElement("span");
+            s.className = "f1-char";
+            s.textContent = c;
+            word.appendChild(s);
+          });
+          tl.fromTo($$("#f1_g1_word .f1-char"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.035, ease: "back.out(2)", duration: 0.45 }, 1.39);
+
+          // overlay-pop: "dallas, texas" at 2.04
+          tl.fromTo("#f1_g1_place", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(3)" }, 2.04);
+          tl.fromTo("#f1_g1_place .f1-stub", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 2.08);
+
+          /* ================= g2 ================= */
+          // color-grid-shuffle: store icons accumulate behind the stat
+          var grid = $("#f1_g2_grid");
+          var NS = "http://www.w3.org/2000/svg";
+          var COLS = 15, ROWS = 27, CELL = 72, ICON = 44, icons = [];
+          for (var r = 0; r < ROWS; r++) {
+            for (var c = 0; c < COLS; c++) {
+              var u = document.createElementNS(NS, "use");
+              u.setAttribute("href", "#f1_g2_store");
+              u.setAttribute("x", c * CELL + (CELL - ICON) / 2);
+              u.setAttribute("y", r * CELL + (CELL - ICON) / 2);
+              u.setAttribute("width", ICON);
+              u.setAttribute("height", ICON);
+              u.style.color = "#282826";
+              grid.appendChild(u);
+              icons.push(u);
+            }
+          }
+          tl.fromTo(icons, { opacity: 0 }, {
+            opacity: 1, duration: 0.12, ease: "none",
+            stagger: function (i) { return hash(i) * 0.62; }
+          }, G2[0]);
+          tl.fromTo(grid, { scale: 1.08 }, { scale: 1, duration: G2[1] - G2[0], ease: "power1.out" }, G2[0]);
+          // palette shuffle on the hits: a seeded share of icons flips orange
+          [[3.11, 0.06], [3.6, 0.14], [3.69, 0.22]].forEach(function (hit, h) {
+            icons.forEach(function (el, i) {
+              var on = hash(i * 3 + h * 101) < hit[1];
+              tl.set(el, { color: on ? "#E85D26" : (hash(i + h * 7) < 0.5 ? "#282826" : "#505048") }, hit[0]);
+            });
+          });
+
+          // stat card arrives on the cut
+          tl.fromTo("#f1_g2_card", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18, ease: "power3.out" }, G2[0]);
+          // counting-punch: 0 -> 9,000 from 3.11, lands on 3.6, deterministic frame rows
+          var num = $("#f1_g2_num");
+          var COUNT = 3.6 - 3.11, rows = Math.round(COUNT * FPS), ease = gsap.parseEase("expo.out");
+          for (var f = 0; f <= rows; f++) {
+            var v = f === rows ? 9000 : Math.round(9000 * ease(f / rows) / 10) * 10;
+            tl.set(num, { textContent: v.toLocaleString("en-US") }, 3.11 + COUNT * (f / rows));
+          }
+          tl.fromTo(num, { scale: 1 }, { scale: 1.12, duration: 0.06, ease: "power4.out" }, 3.6);
+          tl.to(num, { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.5)" }, 3.66);
+          // "tiendas" + caption at 3.69
+          tl.fromTo("#f1_g2_unit", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" }, 3.69);
+          tl.fromTo("#f1_g2_cap", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 3.77);
+          tl.fromTo("#f1_g2_card", { scale: 1 }, { scale: 1.03, duration: G2[1] - 3.69, ease: "none", immediateRender: false }, 3.69);
+
+          /* ================= g3 ================= */
+          // phone rises on the cut, then slow push through the hold
+          tl.fromTo("#f1_g3_phone", { y: 340, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, G3[0]);
+          tl.fromTo("#f1_g3_phone", { scale: 1 }, { scale: 1.035, immediateRender: false, duration: END - G3[0] - 0.02, ease: "none" }, G3[0]);
+          tl.fromTo("#f1_g3_head", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, G3[0] + 0.15);
+          // staggered-reveal + overlay-pop: one bubble per hit
+          [["#f1_g3_b1", 5.13], ["#f1_g3_b2", 5.99], ["#f1_g3_b3", 6.66]].forEach(function (b) {
+            tl.fromTo(b[0], { autoAlpha: 0, scale: 0.4, y: 30 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.32, ease: "back.out(2.2)" }, b[1]);
+          });
+          // 7.15: the "no" lands harder — punch + phone shake into the drop
+          tl.fromTo("#f1_g3_b3", { scale: 1 }, { scale: 1.12, duration: 0.06, ease: "power4.out", immediateRender: false }, 7.15);
+          tl.to("#f1_g3_b3", { scale: 1, duration: 0.3, ease: "elastic.out(1, 0.45)" }, 7.21);
+          tl.fromTo("#f1_g3_screen", { x: 0, rotation: 0 }, {
+            keyframes: [{ x: -14, rotation: -0.6, duration: 0.04 }, { x: 12, rotation: 0.5, duration: 0.04 }, { x: -8, rotation: -0.3, duration: 0.04 }, { x: 0, rotation: 0, duration: 0.05 }],
+            ease: "none"
+          }, 7.15);
+
+          tl.seek(0);
+          window.__timelines["01-f1"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

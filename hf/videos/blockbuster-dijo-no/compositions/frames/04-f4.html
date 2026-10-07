@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Barlow'; font-weight: 400; src: url('assets/fonts/barlow-400.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 700; src: url('assets/fonts/barlow-700.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 800; src: url('assets/fonts/barlow-800.ttf') format('truetype'); }
+        @font-face { font-family: 'Barlow'; font-weight: 900; src: url('assets/fonts/barlow-900.ttf') format('truetype'); }
+        @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url('assets/fonts/ibm-plex-mono-500.ttf') format('truetype'); }
+
+        [data-composition-id="04-f4"] #stage {
+          position: relative;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #111111;
+          container-type: size;
+          font-family: "Barlow", sans-serif;
+        }
+        [data-composition-id="04-f4"] #stage * { margin: 0; padding: 0; box-sizing: border-box; }
+        #g1 {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+        }
+        #g1_push {
+          position: absolute;
+          inset: 0;
+          padding: 0;
+          transform-origin: 50% 40%;
+        }
+        #g1_num {
+          position: absolute;
+          top: 150px;
+          left: 112px;
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 500;
+          font-size: 28px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #505048;
+        }
+        #g1_rule {
+          position: absolute;
+          top: 400px;
+          left: 112px;
+          width: 72px;
+          height: 4px;
+          background: #E85D26;
+          transform-origin: 0 50%;
+        }
+        #g1_line {
+          position: absolute;
+          top: 450px;
+          left: 112px;
+          right: 112px;
+          font-weight: 900;
+          font-size: 180px;
+          line-height: 0.95;
+          letter-spacing: -0.04em;
+          text-transform: lowercase;
+          color: #F0ECE5;
+        }
+        #g1_line .w { display: block; white-space: nowrap; }
+        #g1_line .c { display: inline-block; }
+        #g1_key .c {
+          color: transparent;
+          background: linear-gradient(105deg, #E85D26 0%, #E85D26 42%, #F0ECE5 50%, #E85D26 58%, #E85D26 100%);
+          background-size: 300% 100%;
+          background-position: 100% 0;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        #g1_tape {
+          position: absolute;
+          top: 1140px;
+          left: 112px;
+          width: 380px;
+          height: 236px;
+          transform-origin: 0 100%;
+        }
+        #g1_tape svg { display: block; width: 100%; height: 100%; }
+        #g1_tag {
+          position: absolute;
+          top: 1420px;
+          left: 112px;
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 500;
+          font-size: 34px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #888880;
+          white-space: nowrap;
+        }
+        #g1_tag b { font-weight: 500; color: #E85D26; }
+        #g1_hair {
+          position: absolute;
+          top: 1400px;
+          left: 112px;
+          width: 856px;
+          height: 1px;
+          background: #282826;
+          transform-origin: 0 50%;
+        }
+      </style>
+
+      <div id="stage" data-composition-id="04-f4" data-width="1080" data-height="1920" data-duration="3.61">
+        <div id="g1">
+          <div id="g1_push">
+            <div id="g1_num">No. 04</div>
+            <div id="g1_rule"></div>
+            <div id="g1_line" aria-label="se rieron del futuro.">
+              <span class="w" id="g1_w1"><span class="c">s</span><span class="c">e</span><span class="c">&nbsp;</span><span class="c">r</span><span class="c">i</span><span class="c">e</span><span class="c">r</span><span class="c">o</span><span class="c">n</span></span>
+              <span class="w" id="g1_w2"><span class="c">d</span><span class="c">e</span><span class="c">l</span></span>
+              <span class="w" id="g1_key"><span class="c">f</span><span class="c">u</span><span class="c">t</span><span class="c">u</span><span class="c">r</span><span class="c">o</span><span class="c">.</span></span>
+            </div>
+            <div id="g1_tape">
+              <svg viewBox="0 0 380 236" aria-hidden="true">
+                <rect x="1" y="1" width="378" height="234" fill="#1A1A18" stroke="#505048" stroke-width="2" />
+                <rect x="24" y="20" width="332" height="56" fill="#E85D26" />
+                <rect x="40" y="38" width="150" height="6" fill="rgba(17,17,17,0.55)" />
+                <rect x="40" y="52" width="96" height="6" fill="rgba(17,17,17,0.40)" />
+                <rect x="70" y="100" width="240" height="96" fill="#111111" stroke="#282826" stroke-width="2" />
+                <rect x="138" y="128" width="104" height="40" fill="#282826" />
+                <g id="g1_reelL">
+                  <circle cx="122" cy="148" r="34" fill="#505048" />
+                  <circle cx="122" cy="148" r="12" fill="#111111" />
+                  <rect x="119" y="114" width="6" height="22" fill="#111111" />
+                  <rect x="119" y="160" width="6" height="22" fill="#111111" />
+                  <rect x="88" y="145" width="22" height="6" fill="#111111" />
+                  <rect x="134" y="145" width="22" height="6" fill="#111111" />
+                </g>
+                <g id="g1_reelR">
+                  <circle cx="258" cy="148" r="24" fill="#505048" />
+                  <circle cx="258" cy="148" r="12" fill="#111111" />
+                  <rect x="255" y="124" width="6" height="12" fill="#111111" />
+                  <rect x="255" y="160" width="6" height="12" fill="#111111" />
+                  <rect x="234" y="145" width="12" height="6" fill="#111111" />
+                  <rect x="270" y="145" width="12" height="6" fill="#111111" />
+                </g>
+                <rect x="40" y="212" width="300" height="2" fill="#282826" />
+              </svg>
+            </div>
+            <div id="g1_hair"></div>
+            <div id="g1_tag">blockbuster <b>×</b> netflix</div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const D = 3.61;
+          // frame-local anchors (track 21.39 → 0): 0, 0.76, 1.53, 3.06
+          const A = [0, 0.76, 1.53, 3.06];
+          const tl = gsap.timeline({ paused: true });
+
+          // group span = whole frame
+          tl.set("#g1", { opacity: 1 }, 0);
+
+          // negative-space-hold: slow continuous push for the whole frame (always moving)
+          tl.fromTo("#g1_push", { scale: 1 }, { scale: 1.045, duration: D, ease: "none" }, 0);
+          tl.fromTo("#g1_reelL", { rotation: 0 }, { rotation: -540, svgOrigin: "122 148", duration: D, ease: "none" }, 0);
+          tl.fromTo("#g1_reelR", { rotation: 0 }, { rotation: -720, svgOrigin: "258 148", duration: D, ease: "none" }, 0);
+
+          // chrome + rule stub live from t=0
+          tl.fromTo("#g1_num", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0);
+          tl.fromTo("#g1_rule", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0);
+
+          // kinetic-letter-in, word by word on the anchors
+          const letterIn = (sel, at, stagger) =>
+            tl.fromTo(sel, { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: stagger, ease: "back.out(2)", duration: 0.5 }, at);
+          letterIn("#g1_w1 .c", A[0] + 0.02, 0.045);
+          letterIn("#g1_w2 .c", A[1], 0.05);
+          letterIn("#g1_key .c", A[2], 0.05);
+          // keyword pop on land
+          tl.fromTo("#g1_key", { scale: 1.08, transformOrigin: "0% 100%" }, { scale: 1, duration: 0.5, ease: "power3.out" }, A[2] + 0.1);
+
+          // tape + tag settle into the hold
+          tl.fromTo("#g1_tape", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 2.1);
+          tl.fromTo("#g1_hair", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut" }, 2.2);
+          tl.fromTo("#g1_tag", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, 2.35);
+
+          // final kick 24.45 → chrome-sweep across "futuro." + tape punch
+          tl.fromTo("#g1_key .c", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.45, ease: "power2.inOut", stagger: 0.015 }, A[3] - 0.04);
+          tl.fromTo("#g1_tape", { scale: 1.07 }, { scale: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, A[3]);
+          tl.fromTo("#g1_rule", { scaleX: 1 }, { scaleX: 2.5, duration: 0.4, ease: "power3.out", immediateRender: false }, A[3]);
+
+          window.__timelines["04-f4"] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>
