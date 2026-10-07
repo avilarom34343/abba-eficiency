@@ -315,7 +315,7 @@ const parse = (s: string, co: string, tone: 'up' | 'down'): Beat => {
   switch (k) {
     case 'Y': return { kind: 'year', num: Number(f[0]), from: Number(f[1]), title: f[2], sub: f[3], q: `${f[2]} ${f[0]}`.toLowerCase() };
     case 'N': return { kind: 'num', num: Number(f[0]), pre: f[1] || undefined, suf: f[2] ? (f[2].trim() === '%' ? '%' : ' ' + f[2].trim()) : undefined, title: f[3], sub: f[4] || undefined,
-      q: `${co} ${f[3]} ${f[1]}${Number(f[0]).toLocaleString('en-US')}${f[2].trim() === '%' ? '%' : f[2] ? ' ' + f[2].trim() : ''}`.toLowerCase() };
+      q: `${f[3].toLowerCase().includes(co.toLowerCase()) ? '' : co + ' '}${f[3]} ${f[1]}${Number(f[0]).toLocaleString('en-US')}${f[2].trim() === '%' ? '%' : f[2] ? ' ' + f[2].trim() : ''}`.toLowerCase() };
     case 'T': return { kind: 'text', title: f[0], hl: f[1] || undefined, sub: f[2] || undefined };
     case 'Q': return { kind: 'quote', title: `“${f[0]}”`, hl: f[1] || undefined, sub: f[2], who: f[2] };
     case 'M': return { kind: 'chat', title: f[1].split(';').slice(-1)[0], who: f[0], items: f[1].split(';'), hl: f[2] || undefined };
