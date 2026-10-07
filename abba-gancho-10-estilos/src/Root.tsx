@@ -15,6 +15,8 @@ import { PREMIUM } from './premium';
 import { FLAT } from './flat';
 import { VIRAL } from './viral';
 import { Story15 } from './cartoon/Story15';
+import { SPECS, Video } from './hundred/Video';
+import { DUR as DUR100 } from './hundred/core';
 
 // id = output file name (out/<id>.mp4) and audio track (public/audio/<id>.wav)
 export const STYLES: [string, React.FC][] = [
@@ -32,5 +34,6 @@ export const Root: React.FC = () => (
     {[...STYLES, ...PREMIUM, ...FLAT, ...VIRAL, ['c1-caricatura-15s', Story15, 15] as [string, React.FC, number]].map(([id, C, secs = DUR]) => (
       <Composition key={id} id={id} component={() => <WithSound id={id} C={C} />} durationInFrames={secs * FPS} fps={FPS} width={1080} height={1920} />
     ))}
+    {SPECS.map(sp => <Composition key={sp.id} id={sp.id} component={() => <Video sp={sp} />} durationInFrames={DUR100 * FPS} fps={FPS} width={1080} height={1920} />)}
   </>
 );
