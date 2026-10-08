@@ -1,0 +1,417 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>s06 — becomes content: media control room, tunnel of screens</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Inter'; font-weight: 300; src: url('assets/fonts/inter-300.ttf') format('truetype'); }
+        @font-face { font-family: 'Inter'; font-weight: 600; src: url('assets/fonts/inter-600.ttf') format('truetype'); }
+        [data-composition-id="s06"] #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: #01030a; font-family: 'Inter', sans-serif; }
+        [data-composition-id="s06"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-composition-id="s06"] #stage .s06_full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        [data-composition-id="s06"] #stage .s06_phase { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        [data-composition-id="s06"] #stage #s06_tunnel, [data-composition-id="s06"] #stage #s06_vast { opacity: 0; }
+
+        /* screens */
+        [data-composition-id="s06"] #stage .s06_scr { position: absolute; overflow: hidden; background: #000; border: 2px solid #1c263c; border-radius: 4px; }
+        [data-composition-id="s06"] #stage .s06_feed { position: absolute; left: 0; top: 0; width: 112%; height: 100%; display: block; }
+        [data-composition-id="s06"] #stage .s06_scan { position: absolute; inset: 0;
+          background: linear-gradient(125deg, rgba(255,255,255,0.10) 0%, transparent 28%, transparent 70%, rgba(120,170,255,0.08) 100%), repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 1px, transparent 1px, transparent 3px); }
+        [data-composition-id="s06"] #stage .s06_live { position: absolute; left: 6%; top: 8%; display: flex; align-items: center; gap: 0.35em; padding: 0.18em 0.45em; border-radius: 0.25em;
+          background: rgba(6,8,14,0.7); color: #f2f4f8; font-weight: 600; letter-spacing: 0.08em; line-height: 1; }
+        [data-composition-id="s06"] #stage .s06_rec { display: block; width: 0.7em; height: 0.7em; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 0.6em #ff3b3b; }
+        [data-composition-id="s06"] #stage .s06_tc { position: absolute; right: 6%; bottom: 8%; color: rgba(226,234,248,0.9); font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; line-height: 1;
+          text-shadow: 0 0 6px rgba(0,0,0,0.9); }
+        [data-composition-id="s06"] #stage .s06_cam { position: absolute; right: 6%; top: 8%; color: rgba(200,214,240,0.75); font-weight: 300; letter-spacing: 0.12em; line-height: 1; }
+
+        /* room */
+        [data-composition-id="s06"] #stage #s06_roomCam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 695px; }
+        [data-composition-id="s06"] #stage #s06_roomBg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 45% at 50% 38%, #0c1c3c 0%, #050b1c 50%, #01030a 100%); }
+        [data-composition-id="s06"] #stage #s06_wall1 { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        [data-composition-id="s06"] #stage #s06_wallGlow { position: absolute; left: -100px; top: 200px; width: 1280px; height: 1100px; mix-blend-mode: screen; filter: blur(60px);
+          background: radial-gradient(ellipse at 50% 45%, rgba(80,140,255,0.35) 0%, rgba(40,80,180,0.15) 45%, transparent 70%); }
+        [data-composition-id="s06"] #stage #s06_beams { position: absolute; left: -200px; top: 1000px; width: 1480px; height: 700px; mix-blend-mode: screen; filter: blur(24px);
+          background: repeating-linear-gradient(100deg, rgba(110,160,255,0.0) 0px, rgba(110,160,255,0.10) 60px, rgba(110,160,255,0.0) 140px);
+          -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, transparent 100%); }
+        [data-composition-id="s06"] #stage #s06_haze { position: absolute; left: -300px; top: 1150px; width: 1700px; height: 320px; mix-blend-mode: screen; filter: blur(40px);
+          background: linear-gradient(180deg, transparent, rgba(120,150,220,0.18), transparent); }
+        [data-composition-id="s06"] #stage #s06_console { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        [data-composition-id="s06"] #stage #s06_ops { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; filter: blur(1.5px); }
+        [data-composition-id="s06"] #stage #s06_btns { position: absolute; inset: 0; }
+        [data-composition-id="s06"] #stage .s06_btn { position: absolute; width: 10px; height: 6px; border-radius: 2px; }
+        [data-composition-id="s06"] #stage .s06_dot { position: absolute; border-radius: 50%; }
+
+        /* tunnel */
+        [data-composition-id="s06"] #stage #s06_tunBg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #3a64c8 0%, #12244e 12%, #050b1c 40%, #01030a 80%); }
+        [data-composition-id="s06"] #stage .s06_ring { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; }
+        [data-composition-id="s06"] #stage .s06_card { position: absolute; left: 160px; top: 746px; width: 760px; height: 428px; transform-origin: 380px 214px; opacity: 0;
+          box-shadow: 0 0 80px rgba(90,150,255,0.45); border-color: #3a4c74; }
+        [data-composition-id="s06"] #stage #s06_core { position: absolute; left: 340px; top: 760px; width: 400px; height: 400px; border-radius: 50%; mix-blend-mode: screen;
+          background: radial-gradient(circle, rgba(220,235,255,0.9) 0%, rgba(120,170,255,0.4) 20%, transparent 60%); }
+
+        /* vast wall */
+        [data-composition-id="s06"] #stage #s06_vastBg { position: absolute; inset: 0; background: linear-gradient(180deg, #01030a 0%, #06102a 40%, #06102a 60%, #01030a 100%); }
+        [data-composition-id="s06"] #stage #s06_vastCam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; }
+        [data-composition-id="s06"] #stage #s06_wall2 { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        [data-composition-id="s06"] #stage #s06_floorRefl { position: absolute; left: -600px; top: 1780px; width: 2280px; height: 900px; opacity: 0.35; filter: blur(10px);
+          background: linear-gradient(180deg, rgba(90,140,255,0.5), transparent 60%); }
+        [data-composition-id="s06"] #stage #s06_rig { position: absolute; left: -40px; top: 1180px; width: 560px; height: 760px; filter: blur(3px); transform-origin: 0 100%; }
+
+        /* overlays */
+        [data-composition-id="s06"] #stage #s06_motes { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none; }
+        [data-composition-id="s06"] #stage #s06_flash { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 50% 50%, #ffffff 0%, #bcd4ff 45%, #4a74d8 100%); }
+        [data-composition-id="s06"] #stage #s06_grade { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(180deg, rgba(1,2,6,0.55) 0%, transparent 18%, transparent 80%, rgba(1,2,6,0.65) 100%); }
+      </style>
+
+      <div id="stage" data-composition-id="s06" data-width="1080" data-height="1920" data-duration="9.8" style="width:1080px;height:1920px">
+        <!-- shared gradients for every feed -->
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <linearGradient id="s06_gSunset" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1336" /><stop offset="0.45" stop-color="#a23c2c" /><stop offset="0.62" stop-color="#ffc070" /><stop offset="0.75" stop-color="#5a2420" /><stop offset="1" stop-color="#120a10" /></linearGradient>
+            <radialGradient id="s06_gSun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff6e0" /><stop offset="0.35" stop-color="#ffc888" stop-opacity="0.8" /><stop offset="1" stop-color="#ff8040" stop-opacity="0" /></radialGradient>
+            <linearGradient id="s06_gNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020510" /><stop offset="0.55" stop-color="#16305e" /><stop offset="1" stop-color="#050a18" /></linearGradient>
+            <linearGradient id="s06_gPeak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0e8ff" /><stop offset="0.35" stop-color="#6a80b4" /><stop offset="1" stop-color="#0a1228" /></linearGradient>
+            <linearGradient id="s06_gStage" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05040c" /><stop offset="0.5" stop-color="#2a1236" /><stop offset="1" stop-color="#0a0610" /></linearGradient>
+            <linearGradient id="s06_gBeamW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2b0" stop-opacity="0.9" /><stop offset="1" stop-color="#ff9a50" stop-opacity="0" /></linearGradient>
+            <linearGradient id="s06_gBeamB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd4ff" stop-opacity="0.9" /><stop offset="1" stop-color="#4a74d8" stop-opacity="0" /></linearGradient>
+            <radialGradient id="s06_gStudio" cx="0.5" cy="0.35" r="0.7"><stop offset="0" stop-color="#2a4a8e" /><stop offset="0.6" stop-color="#0a1430" /><stop offset="1" stop-color="#02040a" /></radialGradient>
+            <linearGradient id="s06_gTrack" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020308" /><stop offset="0.5" stop-color="#0e1a36" /><stop offset="0.56" stop-color="#05070e" /><stop offset="1" stop-color="#0c111e" /></linearGradient>
+            <linearGradient id="s06_gCanyon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1b38" /><stop offset="0.5" stop-color="#ffb070" /><stop offset="1" stop-color="#3a1810" /></linearGradient>
+            <linearGradient id="s06_gSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1a34" /><stop offset="0.5" stop-color="#1e5a7a" /><stop offset="1" stop-color="#04101c" /></linearGradient>
+            <linearGradient id="s06_gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c2a5e" /><stop offset="1" stop-color="#8ab4e8" /></linearGradient>
+            <linearGradient id="s06_gSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a3c66" /><stop offset="1" stop-color="#05080f" /></linearGradient>
+            <linearGradient id="s06_gCar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8e0ee" /><stop offset="0.25" stop-color="#2a4482" /><stop offset="1" stop-color="#03060e" /></linearGradient>
+            <filter id="s06_rimOp" x="-20%" y="-20%" width="140%" height="140%">
+              <feMorphology in="SourceAlpha" operator="erode" radius="3" result="er" />
+              <feComposite in="SourceAlpha" in2="er" operator="out" result="edge" />
+              <feOffset in="edge" dy="-1" result="edge2" />
+              <feFlood flood-color="#9cc0ff" />
+              <feComposite in2="edge2" operator="in" result="rim" />
+              <feGaussianBlur in="rim" stdDeviation="2" result="rb" />
+              <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+            </filter>
+            <filter id="s06_rimRig" x="-20%" y="-20%" width="140%" height="140%">
+              <feOffset in="SourceAlpha" dx="5" dy="-3" result="o" />
+              <feComposite in="SourceAlpha" in2="o" operator="out" result="edge" />
+              <feFlood flood-color="#a8c8ff" />
+              <feComposite in2="edge" operator="in" result="rim" />
+              <feGaussianBlur in="rim" stdDeviation="1.5" result="rb" />
+              <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+            </filter>
+          </defs>
+        </svg>
+
+        <!-- ================= phase 1–2: the control room ================= -->
+        <div id="s06_room" class="s06_phase">
+          <div id="s06_roomCam">
+            <div id="s06_roomBg"></div>
+            <div id="s06_wallGlow"></div>
+            <div id="s06_wall1"></div>
+            <div id="s06_beams"></div>
+            <div id="s06_haze"></div>
+            <svg id="s06_console" viewBox="0 0 1080 1920">
+              <defs>
+                <linearGradient id="s06_desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2a4c" /><stop offset="0.12" stop-color="#0a1226" /><stop offset="1" stop-color="#02040a" /></linearGradient>
+                <linearGradient id="s06_deskTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e4a86" /><stop offset="1" stop-color="#0a1428" /></linearGradient>
+              </defs>
+              <path d="M-100,1400 L1180,1400 L1180,1920 L-100,1920 Z" fill="url(#s06_desk)" />
+              <path d="M-100,1400 L1180,1400 L1180,1450 L-100,1450 Z" fill="url(#s06_deskTop)" />
+              <path d="M-100,1400 L1180,1400" stroke="#8ab4ff" stroke-width="2.5" opacity="0.8" />
+              <!-- small preview monitors on the desk -->
+              <rect x="70" y="1320" width="150" height="86" rx="3" fill="#0a1020" stroke="#2a3a5e" stroke-width="2" />
+              <rect x="860" y="1320" width="150" height="86" rx="3" fill="#0a1020" stroke="#2a3a5e" stroke-width="2" />
+              <rect x="78" y="1328" width="134" height="70" fill="#3a64c8" opacity="0.55" />
+              <rect x="868" y="1328" width="134" height="70" fill="#c86a3a" opacity="0.5" />
+              <g id="s06_faders" fill="#0e1830" stroke="#2e4470" stroke-width="1.5"></g>
+            </svg>
+            <div id="s06_btns"></div>
+            <svg id="s06_ops" viewBox="0 0 1080 1920">
+              <defs><linearGradient id="s06_opG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1628" /><stop offset="1" stop-color="#020308" /></linearGradient></defs>
+              <g filter="url(#s06_rimOp)">
+                <g id="s06_op1" transform="translate(220,1560)">
+                  <path d="M-150,400 L-140,140 Q-120,60 -40,50 L40,50 Q120,60 140,140 L150,400 Z" fill="url(#s06_opG)" />
+                  <rect x="-24" y="10" width="48" height="50" fill="url(#s06_opG)" />
+                  <ellipse cx="0" cy="-30" rx="58" ry="66" fill="url(#s06_opG)" />
+                  <path d="M-62,-30 Q0,-118 62,-30" stroke="#0a1020" stroke-width="10" fill="none" />
+                  <rect x="-74" y="-50" width="20" height="44" rx="8" fill="#0a1020" />
+                </g>
+                <g id="s06_op2" transform="translate(830,1600)">
+                  <path d="M-150,400 L-140,140 Q-120,60 -40,50 L40,50 Q120,60 140,140 L150,400 Z" fill="url(#s06_opG)" />
+                  <rect x="-24" y="10" width="48" height="50" fill="url(#s06_opG)" />
+                  <ellipse cx="0" cy="-30" rx="56" ry="64" fill="url(#s06_opG)" />
+                  <path d="M-60,-30 Q0,-114 60,-30" stroke="#0a1020" stroke-width="10" fill="none" />
+                  <rect x="52" y="-50" width="20" height="44" rx="8" fill="#0a1020" />
+                </g>
+                <g id="s06_op3" transform="translate(540,1700) scale(1.15)">
+                  <path d="M-150,400 L-140,140 Q-120,60 -40,50 L40,50 Q120,60 140,140 L150,400 Z" fill="url(#s06_opG)" />
+                  <rect x="-24" y="10" width="48" height="50" fill="url(#s06_opG)" />
+                  <ellipse cx="0" cy="-30" rx="58" ry="66" fill="url(#s06_opG)" />
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ================= phase 3: the tunnel of screens ================= -->
+        <div id="s06_tunnel" class="s06_phase">
+          <div id="s06_tunBg"></div>
+          <div id="s06_core"></div>
+          <div id="s06_rings" class="s06_full"></div>
+          <div id="s06_cards" class="s06_full"></div>
+        </div>
+
+        <!-- ================= phase 4: a vast wall — a media company ================= -->
+        <div id="s06_vast" class="s06_phase">
+          <div id="s06_vastBg"></div>
+          <div id="s06_vastCam">
+            <div id="s06_floorRefl"></div>
+            <div id="s06_wall2"></div>
+          </div>
+          <svg id="s06_rig" viewBox="0 0 560 760">
+            <defs><linearGradient id="s06_rigG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a2440" /><stop offset="1" stop-color="#03050a" /></linearGradient></defs>
+            <g filter="url(#s06_rimRig)">
+              <path d="M260,330 L120,760 L150,760 L272,360 Z M290,330 L300,760 L328,760 L306,330 Z M300,330 L470,760 L500,760 L322,350 Z" fill="#05070e" />
+              <rect x="150" y="190" width="300" height="150" rx="14" fill="url(#s06_rigG)" />
+              <path d="M450,210 L540,180 L540,350 L450,320 Z" fill="url(#s06_rigG)" />
+              <rect x="170" y="140" width="150" height="56" rx="8" fill="#0a1020" />
+              <rect x="40" y="250" width="120" height="16" rx="8" fill="#0a1020" />
+              <circle cx="540" cy="265" r="58" fill="#05070e" />
+              <circle cx="540" cy="265" r="40" fill="#10204a" />
+              <circle cx="528" cy="252" r="12" fill="#cfe0ff" opacity="0.7" />
+            </g>
+            <circle id="s06_tally" cx="200" cy="168" r="10" fill="#ff3b3b" />
+          </svg>
+        </div>
+
+        <div id="s06_motes"></div>
+        <div id="s06_grade"></div>
+        <div id="s06_flash"></div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="s06"]');
+          var $ = function (id) { return root.querySelector('#' + id); };
+          var tl = gsap.timeline({ paused: true });
+          var D = 9.8;
+          var seed = 6066;
+          function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+          function r(a, b) { return a + (b - a) * rnd(); }
+          function div(cls, css, parent) { var d = document.createElement('div'); d.className = cls; d.style.cssText = css; parent.appendChild(d); return d; }
+          var seen = [];
+          function F(el, from, to, t) {
+            var rec = null;
+            for (var i = 0; i < seen.length; i++) if (seen[i].el === el) rec = seen[i];
+            if (!rec) { rec = { el: el, p: {} }; seen.push(rec); }
+            var rep = false;
+            Object.keys(from).forEach(function (k) { if (k === 'transformOrigin' || k === 'svgOrigin') return; if (rec.p[k]) rep = true; rec.p[k] = 1; });
+            if (rep) to.immediateRender = false;
+            tl.fromTo(el, from, to, t);
+          }
+          function loops(dur, cyc) { return Math.max(0, Math.floor(dur / cyc) - 1); }
+
+          // ---------- feed artwork (viewBox 320×180), shaded silhouettes on cinematic grounds ----------
+          var PERSON = 'M-8,0 L-6,-44 L-13,-47 L-15,-80 Q0,-90 15,-80 L13,-47 L6,-44 L8,0 L2,0 L0,-38 L-2,0 Z M-10,-96 a10,11 0 1,0 20,0 a10,11 0 1,0 -20,0 Z';
+          function sil(x, y, s, d, fill) { return '<g transform="translate(' + x + ',' + y + ') scale(' + s + ')"><path d="' + d + '" fill="' + (fill || '#05070d') + '" /></g>'; }
+          var MOTO = 'M-150,60 m-70,0 a70,70 0 1,0 140,0 a70,70 0 1,0 -140,0 Z M150,60 m-70,0 a70,70 0 1,0 140,0 a70,70 0 1,0 -140,0 Z M-150,60 L-20,10 L80,-60 L150,60 L60,-10 L-40,30 Z M-20,-60 L40,-150 L90,-120 L40,-40 Z M36,-170 a34,34 0 1,0 68,0 a34,34 0 1,0 -68,0 Z';
+          var CAR = 'M-460,40 L-420,-20 L-200,-30 L40,-60 L100,-82 L160,-60 L300,-30 L470,10 L470,40 Z M-470,-110 L-390,-110 L-390,-90 L-470,-90 Z M-340,40 m-62,0 a62,62 0 1,0 124,0 a62,62 0 1,0 -124,0 Z M320,40 m-56,0 a56,56 0 1,0 112,0 a56,56 0 1,0 -112,0 Z';
+          var PLANE = 'M0,-8 L-140,-2 L-140,4 L0,10 L140,4 L140,-2 Z M-6,-40 L6,-40 L6,0 L-6,0 Z M-50,-14 L50,-14 L50,-10 L-50,-10 Z M0,-14 m-18,0 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0 Z';
+          var BOARDER = 'M-60,10 L60,10 L60,18 L-60,18 Z M-24,10 L-18,-20 L0,-30 L10,-18 L-4,-12 L-8,10 Z M24,10 L20,-18 L4,-26 L0,-14 L12,-10 L12,10 Z M-16,-24 Q-4,-62 16,-60 Q26,-44 18,-22 Z M4,-78 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0 Z M-10,-50 L-56,-74 L-52,-80 L-4,-60 Z';
+          var CAMRIG = 'M-40,0 L-10,-80 L-4,-80 L-30,0 Z M40,0 L10,-80 L4,-80 L30,0 Z M-2,0 L-2,-80 L2,-80 L2,0 Z M-50,-120 L40,-120 L40,-76 L-50,-76 Z M40,-112 L70,-122 L70,-74 L40,-84 Z M-36,-136 L0,-136 L0,-120 L-36,-120 Z';
+          var FEEDS = {
+            moto: '<rect width="320" height="180" fill="url(#s06_gSunset)" /><circle cx="230" cy="112" r="64" fill="url(#s06_gSun)" />' +
+              '<path d="M0,150 Q70,140 120,100 L132,106 L132,180 L0,180 Z" fill="#120806" /><path d="M0,150 Q70,140 120,100" stroke="#ffb070" stroke-width="1.5" fill="none" />' +
+              '<path d="M200,180 L226,150 Q280,140 320,146 L320,180 Z" fill="#160a08" />' + sil(180, 70, 0.16, MOTO, '#0a0606'),
+            snow: '<rect width="320" height="180" fill="url(#s06_gNight)" /><circle cx="70" cy="40" r="40" fill="#dfeaff" opacity="0.18" /><circle cx="70" cy="40" r="10" fill="#eef4ff" />' +
+              '<path d="M0,140 L60,80 L100,110 L170,50 L230,110 L280,80 L320,110 L320,180 L0,180 Z" fill="url(#s06_gPeak)" />' + sil(200, 60, 0.7, BOARDER, '#0a1226'),
+            plane: '<rect width="320" height="180" fill="url(#s06_gCanyon)" /><circle cx="160" cy="88" r="40" fill="url(#s06_gSun)" />' +
+              '<path d="M0,0 L110,0 L96,60 L118,120 L90,180 L0,180 Z" fill="#1a0c0c" /><path d="M320,0 L214,0 L226,60 L204,120 L232,180 L320,180 Z" fill="#1a0c0c" />' +
+              '<path d="M110,0 L96,60 L118,120 L90,180 M214,0 L226,60 L204,120 L232,180" stroke="#ffb070" stroke-width="1.5" fill="none" />' + sil(160, 104, 0.5, PLANE, '#0c1430'),
+            f1: '<rect width="320" height="180" fill="url(#s06_gTrack)" /><ellipse cx="70" cy="60" rx="50" ry="30" fill="#cfe0ff" opacity="0.25" /><ellipse cx="250" cy="56" rx="50" ry="30" fill="#cfe0ff" opacity="0.25" />' +
+              '<rect x="0" y="80" width="320" height="2" fill="#ffd0a0" opacity="0.6" /><rect x="0" y="92" width="320" height="1.5" fill="#bcd4ff" opacity="0.5" />' +
+              '<path d="M0,150 Q160,140 320,120" stroke="#b8222a" stroke-width="8" stroke-dasharray="12 12" fill="none" />' + sil(160, 128, 0.22, CAR, 'url(#s06_gCar)'),
+            event: '<rect width="320" height="180" fill="url(#s06_gStage)" />' +
+              '<path d="M100,0 L120,0 L180,150 L60,150 Z" fill="url(#s06_gBeamW)" opacity="0.6" /><path d="M200,0 L220,0 L280,150 L160,150 Z" fill="url(#s06_gBeamB)" opacity="0.6" /><path d="M150,0 L170,0 L240,150 L90,150 Z" fill="url(#s06_gBeamW)" opacity="0.35" />' +
+              '<rect x="60" y="96" width="200" height="8" fill="#0a0610" /><rect x="60" y="92" width="200" height="3" fill="#ffc888" opacity="0.8" />' +
+              '<path d="M0,180 L0,150 Q8,140 16,150 Q24,138 32,150 Q40,142 48,150 Q56,136 64,150 Q72,140 80,150 Q88,138 96,150 Q104,142 112,150 Q120,134 128,150 Q136,140 144,150 Q152,138 160,150 Q168,142 176,150 Q184,136 192,150 Q200,140 208,150 Q216,138 224,150 Q232,142 240,150 Q248,136 256,150 Q264,140 272,150 Q280,138 288,150 Q296,142 304,150 Q312,140 320,150 L320,180 Z" fill="#05030a" />' +
+              '<path d="M60,150 L56,128 L64,128 Z M140,150 L136,124 L144,124 Z M230,150 L226,126 L234,126 Z" fill="#05030a" />',
+            team: '<rect width="320" height="180" fill="url(#s06_gStudio)" /><path d="M140,0 L180,0 L260,180 L60,180 Z" fill="url(#s06_gBeamB)" opacity="0.3" />' +
+              '<rect x="0" y="150" width="320" height="30" fill="#04070f" /><rect x="0" y="150" width="320" height="1.5" fill="#8ab4ff" opacity="0.6" />' +
+              sil(80, 150, 0.9, PERSON, 'url(#s06_gSuit)') + sil(120, 150, 0.98, PERSON, 'url(#s06_gSuit)') + sil(160, 150, 1.05, PERSON, 'url(#s06_gSuit)') + sil(200, 150, 0.98, PERSON, 'url(#s06_gSuit)') + sil(240, 150, 0.9, PERSON, 'url(#s06_gSuit)'),
+            prod: '<rect width="320" height="180" fill="url(#s06_gStudio)" /><rect x="220" y="20" width="70" height="60" fill="#e8eefa" opacity="0.8" /><rect x="214" y="14" width="82" height="72" fill="none" stroke="#0a1020" stroke-width="6" />' +
+              '<path d="M220,80 L60,180 L320,180 L290,80 Z" fill="#cfe0ff" opacity="0.08" /><rect x="0" y="156" width="320" height="24" fill="#04070f" />' +
+              sil(110, 156, 0.8, CAMRIG, '#06080f') + sil(60, 156, 0.95, PERSON, '#06080f') + sil(230, 156, 0.85, PERSON, 'url(#s06_gSuit)'),
+            surf: '<rect width="320" height="180" fill="url(#s06_gSea)" /><circle cx="250" cy="44" r="30" fill="url(#s06_gSun)" />' +
+              '<path d="M0,130 Q120,128 190,80 Q240,50 270,90 Q240,84 226,124 L320,132 L320,180 L0,180 Z" fill="#0c2a40" /><path d="M110,126 Q160,112 190,80 Q240,50 270,90" stroke="#e8f4ff" stroke-width="3" fill="none" />' +
+              sil(180, 108, 0.5, PERSON, '#05070d'),
+            sky: '<rect width="320" height="180" fill="url(#s06_gSky)" /><ellipse cx="90" cy="140" rx="120" ry="24" fill="#ffffff" opacity="0.5" /><ellipse cx="260" cy="150" rx="100" ry="20" fill="#ffffff" opacity="0.4" />' +
+              '<g transform="translate(170,80) rotate(90) scale(0.7)"><path d="' + PERSON + '" fill="#0a1020" /><path d="M-14,-74 L-50,-60 L-50,-54 L-14,-66 Z M14,-74 L50,-60 L50,-54 L14,-66 Z" fill="#0a1020" /></g>'
+          };
+          var TYPES = ['moto', 'snow', 'plane', 'f1', 'event', 'team', 'prod', 'surf', 'sky'];
+
+          var tcs = [];
+          function screen(parent, x, y, w, h, type, opts) {
+            opts = opts || {};
+            var s = div('s06_scr', 'left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;' + (opts.css || ''), parent);
+            var fs = Math.max(8, h * 0.075);
+            var html = '<svg class="s06_feed" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">' + FEEDS[type] + '</svg><div class="s06_scan"></div>';
+            if (opts.live) html += '<div class="s06_live" style="font-size:' + fs.toFixed(1) + 'px"><span class="s06_rec"></span>LIVE</div>';
+            else if (opts.cam) html += '<div class="s06_cam" style="font-size:' + fs.toFixed(1) + 'px;left:6%;right:auto">CAM ' + opts.cam + '</div>';
+            if (opts.tc) html += '<div class="s06_tc" style="font-size:' + fs.toFixed(1) + 'px"></div>';
+            s.innerHTML = html;
+            if (opts.tc) tcs.push({ el: s.querySelector('.s06_tc'), off: Math.floor(r(0, 36000)) });
+            return s;
+          }
+          function pan(scr, t0, dur) { F(scr.querySelector('.s06_feed'), { xPercent: 0 }, { xPercent: -9, duration: dur, ease: 'none' }, t0); }
+          var recs = [];
+
+          // ================= phase 1–2: control room (0 – 3.6) =================
+          var wall1 = $('s06_wall1');
+          var hero = screen(wall1, 300, 560, 480, 270, 'f1', { live: true, tc: true, css: 'box-shadow:0 0 60px rgba(90,150,255,0.5);border-color:#3a4c74' });
+          pan(hero, 0, 3.6);
+          var wallScreens = [];
+          for (var row = 0; row < 8; row++) {
+            for (var col = 0; col < 5; col++) {
+              var x = -60 + col * 240, y = 290 + row * 140;
+              if (x + 230 > 290 && x < 790 && y + 130 > 550 && y < 840) continue; // keep the hero slot clear
+              if (y > 1250) continue;
+              var t = TYPES[(row * 5 + col * 3) % TYPES.length];
+              var sc = screen(wall1, x, y, 230, 130, t, { live: rnd() > 0.65, tc: rnd() > 0.5, cam: (row * 5 + col) % 9 + 1 });
+              wallScreens.push(sc);
+              pan(sc, 0, 3.6);
+            }
+          }
+          // screens flicker on in a cascade out from the hero
+          wallScreens.forEach(function (sc) {
+            var dx = parseFloat(sc.style.left) + 115 - 540, dy = parseFloat(sc.style.top) + 65 - 695;
+            var t = 0.25 + Math.sqrt(dx * dx + dy * dy) / 1100;
+            F(sc, { opacity: 0.05 }, { opacity: 1, duration: 0.18, ease: 'steps(3)' }, t);
+          });
+          // console faders + blinking buttons
+          (function () {
+            var g = '';
+            for (var i = 0; i < 16; i++) g += '<rect x="' + (260 + i * 36) + '" y="1418" width="20" height="26" rx="3" />';
+            $('s06_faders').innerHTML = g;
+            var p = $('s06_btns');
+            var cols = ['#ff4a4a', '#4aff9a', '#6aa8ff', '#ffc04a'];
+            for (var j = 0; j < 60; j++) {
+              var c = cols[Math.floor(r(0, 4))];
+              var b = div('s06_btn', 'left:' + r(240, 840).toFixed(0) + 'px;top:' + r(1455, 1530).toFixed(0) + 'px;background:' + c + ';box-shadow:0 0 8px ' + c + ';opacity:0.3', p);
+              F(b, { opacity: 0.25 }, { opacity: 1, duration: r(0.15, 0.5), ease: 'steps(1)', yoyo: true, repeat: loops(3.6, 0.5) }, r(0, 0.5));
+            }
+          })();
+          var roomCam = $('s06_roomCam');
+          // start INSIDE the hero screen (the race we just left), pull back to reveal the room
+          F(roomCam, { scale: 7.2, y: 265 }, { scale: 1.0, y: 0, duration: 2.6, ease: 'power3.out' }, 0);
+          F(roomCam, { scale: 1.0, y: 0 }, { scale: 1.06, y: 10, duration: 0.4, ease: 'sine.inOut' }, 2.6);
+          // ...then fly forward, straight through the screens
+          F(roomCam, { scale: 1.06, y: 10, filter: 'blur(0px)' }, { scale: 9, y: 265, filter: 'blur(6px)', duration: 0.65, ease: 'power3.in' }, 3.0);
+          F($('s06_wallGlow'), { opacity: 0.6 }, { opacity: 1, duration: 3, ease: 'sine.inOut' }, 0);
+          F($('s06_beams'), { x: 0 }, { x: 120, duration: 3.6, ease: 'none' }, 0);
+          F($('s06_haze'), { x: -80 }, { x: 120, duration: 3.6, ease: 'none' }, 0);
+          F($('s06_op1'), { rotation: 0, svgOrigin: '220 1560' }, { rotation: -6, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 0.6);
+          F($('s06_op2'), { rotation: 0, svgOrigin: '830 1600' }, { rotation: 5, duration: 1.2, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 0.9);
+          F($('s06_ops'), { y: 120 }, { y: 0, duration: 2.6, ease: 'power3.out' }, 0);
+
+          var flash = $('s06_flash');
+          F(flash, { opacity: 0 }, { opacity: 0.85, duration: 0.2, ease: 'power2.in' }, 3.45);
+          F(flash, { opacity: 0.85 }, { opacity: 0, duration: 0.45, ease: 'power2.out' }, 3.65);
+          tl.set($('s06_room'), { opacity: 0 }, 3.65);
+          tl.set($('s06_tunnel'), { opacity: 1 }, 3.65);
+
+          // ================= phase 3: tunnel of screens (3.65 – 7.4) =================
+          var T = 2.0, N = 5, TUN0 = 3.65, TUN1 = 7.5;
+          for (var i = 0; i < N; i++) {
+            var ring = div('s06_ring', '', $('s06_rings'));
+            var tw = 360, th = 203;
+            for (var cx = 0; cx < 3; cx++) {
+              screen(ring, cx * 360, 0, tw - 8, th - 8, TYPES[(i + cx) % 9], { live: cx === 1, tc: cx !== 1 });
+              screen(ring, cx * 360, 1920 - th, tw - 8, th - 8, TYPES[(i + cx + 4) % 9], { live: cx === 0, tc: true });
+            }
+            for (var cy = 1; cy < 9; cy++) {
+              screen(ring, 0, cy * th, tw - 8, th - 8, TYPES[(i * 2 + cy) % 9], { live: cy % 3 === 0, tc: cy % 2 === 0 });
+              screen(ring, 1080 - tw, cy * th, tw - 8, th - 8, TYPES[(i * 2 + cy + 5) % 9], { live: cy % 4 === 1, tc: cy % 2 === 1 });
+            }
+            var start = TUN0 - (i + 1) * T / N + 0.4;
+            var rt = gsap.timeline({ repeat: Math.max(0, Math.floor((TUN1 - start) / T) - 0) });
+            rt.fromTo(ring, { scale: 0.06 }, { scale: 2.4, duration: T, ease: 'power3.in' }, 0);
+            rt.fromTo(ring, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'none' }, 0);
+            rt.fromTo(ring, { filter: 'brightness(0.35)' }, { filter: 'brightness(1.1)', duration: T, ease: 'power2.in' }, 0);
+            tl.add(rt, start);
+          }
+          F($('s06_core'), { scale: 0.8, opacity: 0.7 }, { scale: 1.3, opacity: 1, duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: loops(TUN1 - TUN0, 0.35) }, TUN0);
+          // feature cards fly out of the vanishing point: events (≈"eventos"), then teams (≈"equipos")
+          function card(type, t0, t1) {
+            var c = screen($('s06_cards'), 160, 746, 760, 428, type, { live: true, tc: true });
+            c.className += ' s06_card';
+            c.style.left = '160px'; c.style.top = '746px';
+            pan(c, t0, t1 - t0 + 0.4);
+            F(c, { scale: 0.04, opacity: 0, rotation: -4 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.65, ease: 'power3.out' }, t0);
+            F(c, { scale: 1 }, { scale: 1.12, duration: t1 - t0 - 0.65, ease: 'none' }, t0 + 0.65);
+            F(c, { scale: 1.12, opacity: 1 }, { scale: 3.6, opacity: 0, duration: 0.35, ease: 'power2.in' }, t1);
+            return c;
+          }
+          card('event', 4.45, 5.75);
+          card('team', 5.8, 7.1);
+
+          // ================= phase 4: the vast wall (7.45 – 9.8) =================
+          F(flash, { opacity: 0 }, { opacity: 0.7, duration: 0.15, ease: 'power2.in' }, 7.3);
+          F(flash, { opacity: 0.7 }, { opacity: 0, duration: 0.5, ease: 'power2.out' }, 7.45);
+          tl.set($('s06_tunnel'), { opacity: 0 }, 7.45);
+          tl.set($('s06_vast'), { opacity: 1 }, 7.45);
+          (function () {
+            var w2 = $('s06_wall2'), pw = 188, ph = 109, C = 13, R = 19;
+            var x0 = 540 - (C * pw) / 2, y0 = 960 - (R * ph) / 2;
+            for (var rr = 0; rr < R; rr++) {
+              for (var cc = 0; cc < C; cc++) {
+                var center = rr === 9 && cc === 6;
+                var t = center ? 'prod' : TYPES[(rr * 7 + cc * 5) % 9];
+                var sc = screen(w2, Math.round(x0 + cc * pw), Math.round(y0 + rr * ph), pw - 8, ph - 8, t, { live: center || rnd() > 0.7, tc: center || rnd() > 0.55 });
+                if (center || rnd() > 0.5) pan(sc, 7.45, 2.35);
+                var dx = cc - 6, dy = rr - 9;
+                // the wall lights up outward from the centre screen
+                F(sc, { opacity: center ? 1 : 0.08 }, { opacity: 1, duration: 0.15, ease: 'steps(2)' }, 7.5 + Math.sqrt(dx * dx + dy * dy) * 0.12);
+              }
+            }
+          })();
+          var vastCam = $('s06_vastCam');
+          F(vastCam, { scale: 5.6, rotation: 0 }, { scale: 0.93, rotation: -1.2, duration: 2.35, ease: 'power3.inOut' }, 7.45);
+          F($('s06_rig'), { x: -420, opacity: 0 }, { x: 0, opacity: 1, duration: 1.6, ease: 'power2.out' }, 8.1);
+          F($('s06_tally'), { opacity: 1 }, { opacity: 0.2, duration: 0.3, ease: 'steps(1)', yoyo: true, repeat: loops(1.6, 0.3) }, 8.1);
+
+          // ---------- every LIVE dot pulses, every timecode runs ----------
+          root.querySelectorAll('.s06_rec').forEach(function (d, i) {
+            F(d, { opacity: 1 }, { opacity: 0.25, duration: 0.5, ease: 'steps(1)', yoyo: true, repeat: loops(D, 0.5) }, (i % 4) * 0.12);
+          });
+          function pad(n) { return (n < 10 ? '0' : '') + n; }
+          var clock = { t: 0 };
+          tl.fromTo(clock, { t: 0 }, { t: D, duration: D, ease: 'none', onUpdate: function () {
+            var f = Math.floor(clock.t * 30);
+            for (var k = 0; k < tcs.length; k++) {
+              var fr = tcs[k].off * 30 + 54000 * 30 + f; // starts around 15:00:00
+              var ff = fr % 30, s = Math.floor(fr / 30);
+              tcs[k].el.textContent = pad(Math.floor(s / 3600) % 24) + ':' + pad(Math.floor(s / 60) % 60) + ':' + pad(s % 60) + ':' + pad(ff);
+            }
+          } }, 0);
+
+          // ---------- drifting light motes over everything ----------
+          (function () {
+            var p = $('s06_motes');
+            for (var i = 0; i < 40; i++) {
+              var s = r(2, i < 5 ? 14 : 5);
+              var d = div('s06_dot', 'left:' + r(0, 1080).toFixed(0) + 'px;top:' + r(0, 1920).toFixed(0) + 'px;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) + 'px;background:#bcd4ff;opacity:' + r(0.15, 0.5).toFixed(2) + ';filter:blur(' + (s * 0.3).toFixed(1) + 'px)', p);
+              F(d, { x: 0, y: 0 }, { x: r(-100, 100), y: -r(150, 450), duration: D, ease: 'none' }, 0);
+            }
+          })();
+
+          window.__timelines['s06'] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>
