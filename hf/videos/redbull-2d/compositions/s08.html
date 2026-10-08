@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        [data-composition-id="s08"] #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+        [data-composition-id="s08"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-composition-id="s08"] #stage .s08_shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+        [data-composition-id="s08"] #stage #s08_A { opacity: 1; }
+        [data-composition-id="s08"] #stage .s08_cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+        [data-composition-id="s08"] #stage .s08_l { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        [data-composition-id="s08"] #stage .s08_l svg { position: absolute; left: 0; top: 0; overflow: visible; }
+        [data-composition-id="s08"] #stage .s08_blur2 { filter: blur(2px); }
+        [data-composition-id="s08"] #stage .s08_blur6 { filter: blur(6px); }
+        [data-composition-id="s08"] #stage #s08_grade { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light; opacity: 0.55;
+          background: linear-gradient(180deg, #0b1a44 0%, #1a2a5a 40%, #ff9a4a 75%, #0a1430 100%); }
+        [data-composition-id="s08"] #stage #s08_leak { position: absolute; left: -300px; top: 300px; width: 900px; height: 1300px; pointer-events: none; mix-blend-mode: screen; opacity: 0.35;
+          background: radial-gradient(ellipse at 30% 50%, rgba(255,150,70,0.55), rgba(255,90,40,0.12) 45%, transparent 70%); }
+        [data-composition-id="s08"] #stage #s08_flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; mix-blend-mode: screen;
+          background: radial-gradient(ellipse at 50% 42%, rgba(255,240,220,0.95), rgba(150,185,255,0.35) 50%, rgba(40,60,120,0.2) 100%); }
+        [data-composition-id="s08"] #stage #s08_bars { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 11%, transparent 89%, rgba(0,0,0,0.65) 100%); }
+        /* final: the can alone */
+        [data-composition-id="s08"] #stage #s08_end { position: absolute; inset: 0; opacity: 0; }
+        [data-composition-id="s08"] #stage #s08_endcam { position: absolute; inset: 0; transform-origin: 540px 980px; }
+        [data-composition-id="s08"] #stage #s08_spot { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; filter: blur(26px);
+          background: conic-gradient(from 168deg at 50% -8%, transparent 0deg, rgba(150,180,255,0.22) 7deg, rgba(210,225,255,0.34) 12deg, rgba(150,180,255,0.22) 17deg, transparent 24deg); }
+        [data-composition-id="s08"] #stage #s08_pool { position: absolute; left: 190px; top: 1260px; width: 700px; height: 220px; opacity: 0; mix-blend-mode: screen;
+          background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(170,195,255,0.35), rgba(90,120,200,0.1) 55%, transparent 75%); }
+        [data-composition-id="s08"] #stage #s08_halo { position: absolute; left: 140px; top: 480px; width: 800px; height: 1000px; opacity: 0; mix-blend-mode: screen;
+          background: radial-gradient(ellipse 34% 40% at 50% 50%, rgba(255,165,90,0.30), rgba(90,130,230,0.10) 55%, transparent 75%); }
+        [data-composition-id="s08"] #stage #s08_canwrap { position: absolute; left: 340px; top: 380px; width: 400px; height: 1200px; transform-origin: 200px 600px; transform: scale(0.62); filter: brightness(0); }
+        [data-composition-id="s08"] #stage #s08_refl { position: absolute; left: 0; top: 1200px; width: 400px; height: 1200px; transform: scaleY(-1); transform-origin: 50% 0%; opacity: 0.2;
+          -webkit-mask-image: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 30%); mask-image: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 30%); }
+        [data-composition-id="s08"] #stage #s08_dust { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0; }
+        [data-composition-id="s08"] #stage .s08_p { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,240,225,0.95), rgba(255,190,120,0.3) 45%, transparent 70%); }
+        [data-composition-id="s08"] #stage .s08_d { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(220,232,255,0.9), rgba(150,180,255,0.25) 50%, transparent 70%); }
+      </style>
+
+      <div id="stage" data-composition-id="s08" data-width="1080" data-height="1920" data-duration="9.1" style="width:1080px;height:1920px">
+        <div id="s08_A" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_B" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_C" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_D" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_E" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_F" class="s08_shot"><div class="s08_cam"></div></div>
+        <div id="s08_grade"></div>
+        <div id="s08_leak"></div>
+        <div id="s08_flash"></div>
+        <div id="s08_end">
+          <div id="s08_endcam">
+            <div id="s08_spot"></div>
+            <div id="s08_pool"></div>
+            <div id="s08_halo"></div>
+            <div id="s08_canwrap"><div id="s08_refl"></div><div id="s08_can"></div></div>
+          </div>
+          <div id="s08_dust"></div>
+        </div>
+        <div id="s08_bars"></div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="s08"]');
+          var $ = function (id) { return root.querySelector('#' + id); };
+          var tl = gsap.timeline({ paused: true });
+          var D = 9.1;
+          var seed = 808;
+          function rnd() { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+          function f(n) { return n.toFixed(1); }
+          function svg(inner, defs) { return '<svg viewBox="0 0 1080 1920" width="1080" height="1920"><defs>' + (defs || '') + '</defs>' + inner + '</svg>'; }
+          function cam(id) { return $(id).querySelector('.s08_cam'); }
+          function layer(id, html, cls) { var d = document.createElement('div'); d.className = 's08_l' + (cls ? ' ' + cls : ''); d.innerHTML = html; cam(id).appendChild(d); return d; }
+          function q(sel) { return root.querySelector(sel); }
+
+          /* ---------- the can (same design as s01 / s07) ---------- */
+          function makeCan(p) {
+            var P = 360, content = '';
+            for (var k = -1; k <= 2; k++) {
+              var x0 = k * P;
+              content += '<rect x="' + x0 + '" y="0" width="180" height="600" fill="url(#' + p + 'blue)"/>' +
+                '<rect x="' + (x0 + 180) + '" y="0" width="180" height="600" fill="url(#' + p + 'silv)"/>' +
+                '<circle cx="' + (x0 + 90) + '" cy="300" r="52" fill="url(#' + p + 'sun)"/>' +
+                '<circle cx="' + (x0 + 90) + '" cy="300" r="64" fill="none" stroke="rgba(255,190,110,0.35)" stroke-width="2"/>' +
+                '<rect x="' + (x0 + 196) + '" y="210" width="148" height="10" fill="#1a3a8a" opacity="0.8"/>' +
+                '<rect x="' + (x0 + 196) + '" y="380" width="148" height="10" fill="#1a3a8a" opacity="0.8"/>' +
+                '<rect x="' + (x0 - 12) + '" y="0" width="24" height="600" fill="url(#' + p + 'chk)"/>' +
+                '<rect x="' + (x0 + 168) + '" y="0" width="24" height="600" fill="url(#' + p + 'chk)"/>';
+            }
+            var drops = '';
+            for (var i = 0; i < 60; i++) {
+              var dx = 18 + rnd() * 164, dy = 90 + rnd() * 460, r = 1.2 + rnd() * rnd() * 5;
+              drops += '<circle cx="' + f(dx) + '" cy="' + f(dy) + '" r="' + r.toFixed(2) + '" fill="rgba(200,225,255,0.16)" stroke="rgba(230,240,255,0.35)" stroke-width="0.5"/>' +
+                '<circle cx="' + f(dx - r * 0.35) + '" cy="' + f(dy - r * 0.35) + '" r="' + (r * 0.3).toFixed(2) + '" fill="rgba(255,255,255,0.85)"/>';
+            }
+            var body = 'M10,82 Q10,62 26,52 L30,46 L170,46 L174,52 Q190,62 190,82 L190,548 Q190,566 176,576 L170,584 L30,584 L24,576 Q10,566 10,548 Z';
+            return '<svg viewBox="0 0 200 600" width="400" height="1200" style="position:absolute;left:0;top:0">' +
+              '<defs>' +
+              '<linearGradient id="' + p + 'blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1f5c"/><stop offset="0.5" stop-color="#1238a0"/><stop offset="1" stop-color="#081845"/></linearGradient>' +
+              '<linearGradient id="' + p + 'silv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9aa6b8"/><stop offset="0.5" stop-color="#e6ebf2"/><stop offset="1" stop-color="#8794a8"/></linearGradient>' +
+              '<radialGradient id="' + p + 'sun"><stop offset="0" stop-color="#fff2c0"/><stop offset="0.45" stop-color="#ffb347"/><stop offset="0.85" stop-color="#e8562a"/><stop offset="1" stop-color="#b8321a"/></radialGradient>' +
+              '<pattern id="' + p + 'chk" patternUnits="userSpaceOnUse" width="24" height="24"><rect width="24" height="24" fill="#c8d0dc"/><polygon points="12,0 24,12 12,24 0,12" fill="#10308a"/></pattern>' +
+              '<linearGradient id="' + p + 'shade" x1="0" y1="0" x2="1" y2="0">' +
+              '<stop offset="0" stop-color="#000" stop-opacity="0.85"/><stop offset="0.12" stop-color="#000" stop-opacity="0.35"/><stop offset="0.3" stop-color="#000" stop-opacity="0"/>' +
+              '<stop offset="0.55" stop-color="#000" stop-opacity="0.12"/><stop offset="0.82" stop-color="#000" stop-opacity="0.6"/><stop offset="1" stop-color="#000" stop-opacity="0.9"/></linearGradient>' +
+              '<linearGradient id="' + p + 'rimW" x1="0" y1="0" x2="1" y2="0"><stop offset="0.86" stop-color="#ff8a3a" stop-opacity="0"/><stop offset="0.95" stop-color="#ff9a4a" stop-opacity="0.75"/><stop offset="1" stop-color="#ff7a2a" stop-opacity="0"/></linearGradient>' +
+              '<linearGradient id="' + p + 'rimC" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fb8ff" stop-opacity="0"/><stop offset="0.04" stop-color="#9cc2ff" stop-opacity="0.6"/><stop offset="0.12" stop-color="#8fb8ff" stop-opacity="0"/></linearGradient>' +
+              '<linearGradient id="' + p + 'spec" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.2" stop-color="#fff" stop-opacity="0.85"/><stop offset="0.8" stop-color="#fff" stop-opacity="0.75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+              '<linearGradient id="' + p + 'lid" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a4250"/><stop offset="0.3" stop-color="#f2f5fa"/><stop offset="0.6" stop-color="#9aa4b4"/><stop offset="1" stop-color="#2a303c"/></linearGradient>' +
+              '<clipPath id="' + p + 'clip"><path d="' + body + '"/></clipPath>' +
+              '<filter id="' + p + 'soft" x="-50%" y="-10%" width="200%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>' +
+              '</defs>' +
+              '<g clip-path="url(#' + p + 'clip)">' +
+              '<g id="' + p + 'label">' + content + '</g>' +
+              '<rect x="0" y="40" width="200" height="56" fill="url(#' + p + 'lid)" opacity="0.92"/>' +
+              '<rect x="0" y="540" width="200" height="50" fill="url(#' + p + 'lid)" opacity="0.92"/>' +
+              '<rect x="0" y="0" width="200" height="600" fill="url(#' + p + 'shade)"/>' +
+              '<rect x="0" y="0" width="200" height="600" fill="url(#' + p + 'rimW)"/>' +
+              '<rect x="0" y="0" width="200" height="600" fill="url(#' + p + 'rimC)"/>' +
+              '<rect x="40" y="40" width="40" height="560" fill="#fff" opacity="0.18" filter="url(#' + p + 'soft)"/>' +
+              '<rect id="' + p + 'spec1" x="54" y="60" width="9" height="520" fill="url(#' + p + 'spec)"/>' +
+              '<rect x="150" y="80" width="4" height="470" fill="url(#' + p + 'spec)" opacity="0.35"/>' +
+              '<g>' + drops + '</g>' +
+              '</g>' +
+              '<ellipse cx="100" cy="46" rx="70" ry="9" fill="url(#' + p + 'lid)"/>' +
+              '<ellipse cx="100" cy="46" rx="58" ry="6" fill="#4a5262"/>' +
+              '<ellipse cx="96" cy="45" rx="14" ry="3" fill="#c9d1dd"/>' +
+              '</svg>';
+          }
+
+          /* ---------- rim-lit silhouette figure ---------- */
+          var POSES = {
+            crouch: { head: [-30, -122, 16], parts: [[30, [[0, -60], [-25, -104]]], [17, [[0, -60], [-32, -34], [-6, 0]]], [17, [[0, -60], [-18, -28], [16, 0]]], [13, [[-25, -102], [6, -80], [38, -96]]], [13, [[-22, -100], [12, -74], [44, -84]]]] },
+            cheer: { head: [0, -162, 19], parts: [[44, [[0, -40], [0, -132]]], [15, [[-16, -128], [-42, -182], [-48, -236]]], [15, [[16, -128], [42, -180], [52, -230]]]] },
+            sky: { head: [0, -58, 16], parts: [[34, [[0, -32], [0, 30]]], [13, [[-10, -22], [-58, -44], [-92, -22]]], [13, [[10, -22], [58, -44], [92, -22]]], [15, [[-8, 30], [-40, 72], [-58, 108]]], [15, [[8, 30], [40, 72], [58, 108]]]] },
+            land: { head: [16, -130, 15], parts: [[12, [[-90, 0], [90, 0]]], [28, [[0, -62], [12, -112]]], [17, [[0, -62], [-28, -32], [-28, -2]]], [17, [[0, -62], [32, -36], [28, -2]]], [12, [[10, -106], [-40, -92], [-84, -112]]], [12, [[10, -106], [52, -86], [94, -104]]]] }
+          };
+          function figInner(pose, col, extra) {
+            var s = '';
+            pose.parts.forEach(function (pt) { s += '<path d="M' + pt[1].map(function (p) { return p.join(','); }).join(' L') + '" stroke-width="' + (pt[0] + extra) + '"/>'; });
+            return s + '<circle cx="' + pose.head[0] + '" cy="' + pose.head[1] + '" r="' + (pose.head[2] + extra / 2) + '" stroke="none" fill="' + col + '"/>';
+          }
+          function fig(name, x, y, s, rot, id) {
+            var p = POSES[name], g = 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
+            return '<g' + (id ? ' id="' + id + '"' : '') + ' transform="translate(' + f(x) + ',' + f(y) + ') rotate(' + (rot || 0) + ') scale(' + s.toFixed(2) + ')">' +
+              '<g ' + g + ' stroke="rgba(130,170,255,0.75)" transform="translate(3,2)">' + figInner(p, 'rgba(130,170,255,0.75)', 3) + '</g>' +
+              '<g ' + g + ' stroke="#ff9a4a" transform="translate(-3,-3)">' + figInner(p, '#ff9a4a', 3) + '</g>' +
+              '<g ' + g + ' stroke="#03050b">' + figInner(p, '#03050b', 0) + '</g>' +
+              '<g ' + g + ' stroke="rgba(70,95,150,0.35)" transform="translate(-1.5,-1.5)">' + figInner(p, 'rgba(70,95,150,0.35)', -8) + '</g></g>';
+          }
+          var SUN = '<radialGradient id="s08_gSun"><stop offset="0" stop-color="#fff1cc"/><stop offset="0.3" stop-color="#ffb347" stop-opacity="0.85"/><stop offset="0.6" stop-color="#ff6a2a" stop-opacity="0.35"/><stop offset="1" stop-color="#ff5a20" stop-opacity="0"/></radialGradient>';
+          function ridge(y0, amp, step, x0, x1) {
+            var d = 'M' + x0 + ',' + y0, x = x0;
+            while (x < x1) { x += step * (0.6 + rnd() * 0.8); d += ' L' + f(x) + ',' + f(y0 - rnd() * amp); }
+            return d + ' L' + x1 + ',2100 L' + x0 + ',2100 Z';
+          }
+
+          /* ---------- A: athlete on the edge, about to jump ---------- */
+          layer('s08_A', svg(
+            '<rect width="1080" height="1920" fill="url(#s08_aSky)"/>' +
+            '<circle id="s08_aSun" cx="540" cy="900" r="330" fill="url(#s08_gSun)"/>' +
+            '<path d="' + ridge(1120, 120, 60, -200, 1300) + '" fill="#0b1430" stroke="rgba(255,160,90,0.5)" stroke-width="2"/>',
+            SUN + '<linearGradient id="s08_aSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040c"/><stop offset="0.3" stop-color="#0b1a44"/><stop offset="0.5" stop-color="#3a3a6a"/><stop offset="0.58" stop-color="#c26a3a"/><stop offset="0.62" stop-color="#1a1a30"/></linearGradient>'), 's08_blur2');
+          var clouds = '';
+          for (var i = 0; i < 14; i++) clouds += '<ellipse cx="' + f(rnd() * 1300 - 100) + '" cy="' + f(1200 + rnd() * 260) + '" rx="' + f(160 + rnd() * 220) + '" ry="' + f(30 + rnd() * 40) + '" fill="rgba(' + (rnd() < 0.5 ? '150,175,230' : '230,160,120') + ',0.22)"/>';
+          var aCloud = layer('s08_A', svg(clouds), 's08_blur6');
+          var aMid = layer('s08_A', svg(
+            '<path d="M1180,1300 L760,1290 Q700,1296 690,1330 L640,1920 L1180,1920 Z" fill="url(#s08_aCliff)" stroke="#ff9a4a" stroke-width="3"/>' +
+            fig('crouch', 760, 1294, 1.9, 0, 's08_aFig'),
+            '<linearGradient id="s08_aCliff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2440"/><stop offset="0.15" stop-color="#070a14"/><stop offset="1" stop-color="#020306"/></linearGradient>'));
+          var wind = '';
+          for (var i = 0; i < 40; i++) wind += '<rect x="' + f(rnd() * 1400) + '" y="' + f(300 + rnd() * 1500) + '" width="' + f(60 + rnd() * 200) + '" height="2" fill="rgba(210,225,255,' + (0.15 + rnd() * 0.35).toFixed(2) + ')"/>';
+          var aWind = layer('s08_A', svg('<g>' + wind + '</g>'));
+
+          /* ---------- B: crowd screaming ---------- */
+          var beams = '';
+          [[180, -18], [400, -6], [680, 6], [900, 18]].forEach(function (b, k) {
+            beams += '<g class="s08_beam" data-o="' + b[0] + ' -40" transform="translate(' + b[0] + ',-40) rotate(' + b[1] + ')"><path d="M-14,0 L14,0 L230,1500 L-230,1500 Z" fill="url(#s08_bBeam' + (k % 2) + ')"/></g>';
+          });
+          layer('s08_B', svg(
+            '<rect width="1080" height="1920" fill="url(#s08_bBg)"/>' +
+            '<circle cx="540" cy="760" r="300" fill="url(#s08_gSun)" id="s08_bSun"/>' + beams,
+            SUN + '<linearGradient id="s08_bBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#030612"/><stop offset="0.6" stop-color="#0d1838"/><stop offset="1" stop-color="#05070f"/></linearGradient>' +
+            '<linearGradient id="s08_bBeam0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6e4ff" stop-opacity="0.55"/><stop offset="1" stop-color="#8fb0ff" stop-opacity="0"/></linearGradient>' +
+            '<linearGradient id="s08_bBeam1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc890" stop-opacity="0.5"/><stop offset="1" stop-color="#ff8a40" stop-opacity="0"/></linearGradient>'), 's08_blur2');
+          var crowdRows = [];
+          for (var row = 0; row < 3; row++) {
+            var n = 7 - row * 2, sc = 1.7 + row * 0.9, by = 1520 + row * 260, h = '';
+            for (var i = 0; i < n; i++) h += '<g class="s08_cr' + row + '">' + fig('cheer', -60 + (i + 0.2 + rnd() * 0.6) * (1200 / n), by, sc * (0.9 + rnd() * 0.2), (rnd() - 0.5) * 14) + '</g>';
+            crowdRows.push(layer('s08_B', svg(h), row === 2 ? 's08_blur6' : ''));
+          }
+
+          /* ---------- C: race car accelerating ---------- */
+          var streaks = '';
+          for (var i = 0; i < 70; i++) {
+            var y = 400 + rnd() * 1300, warm = rnd() < 0.35;
+            streaks += '<rect x="' + f(rnd() * 3200) + '" y="' + f(y) + '" width="' + f(150 + rnd() * 500) + '" height="' + f(2 + rnd() * 5) + '" fill="' + (warm ? 'rgba(255,160,90,' : 'rgba(170,200,255,') + (0.2 + rnd() * 0.5).toFixed(2) + ')"/>';
+          }
+          layer('s08_C', svg('<rect width="1080" height="1920" fill="url(#s08_cBg)"/><circle cx="540" cy="760" r="260" fill="url(#s08_gSun)"/>',
+            SUN + '<linearGradient id="s08_cBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040a"/><stop offset="0.45" stop-color="#101c40"/><stop offset="0.6" stop-color="#1e1a2a"/><stop offset="0.62" stop-color="#05070c"/><stop offset="1" stop-color="#020306"/></linearGradient>'));
+          var cStreak = layer('s08_C', svg('<g>' + streaks + '</g>'), 's08_blur2');
+          function wheel(x, id) {
+            var sp = '';
+            for (var k = 0; k < 6; k++) sp += '<rect x="-4" y="-44" width="8" height="44" fill="#4a5468" transform="rotate(' + k * 60 + ')"/>';
+            return '<g transform="translate(' + x + ',0)"><circle r="78" fill="#030409" stroke="rgba(255,150,80,0.6)" stroke-width="3"/><circle r="50" fill="url(#s08_cHub)"/><g id="' + id + '">' + sp + '<rect x="-46" y="-3" width="92" height="6" fill="rgba(220,230,255,0.5)"/></g><circle r="10" fill="#c8d0dc"/></g>';
+          }
+          var cCar = layer('s08_C', svg(
+            '<ellipse cx="540" cy="1300" rx="520" ry="34" fill="rgba(0,0,0,0.7)" filter="url(#s08_cSoft)"/>' +
+            '<g id="s08_car" transform="translate(540,1220)">' +
+            '<path d="M-470,40 L-462,-22 L-380,-34 L-360,-110 L-310,-110 L-300,-40 L-150,-52 L-60,-104 L40,-108 L90,-60 L300,-50 L440,-30 L478,6 L470,40 Z" fill="url(#s08_cBody)" stroke="#ff9a4a" stroke-width="3" stroke-linejoin="round"/>' +
+            '<path d="M-150,-52 L-60,-104 L40,-108 L90,-60" fill="none" stroke="#cfe0ff" stroke-width="3" opacity="0.8"/>' +
+            '<path d="M-300,-10 L420,-14 L440,4 L-300,8 Z" fill="url(#s08_cStripe)"/>' +
+            '<path d="M-40,-96 L30,-98 L64,-62 L-60,-60 Z" fill="url(#s08_cGlass)"/>' +
+            '<rect x="-430" y="-30" width="820" height="6" fill="#fff" opacity="0.28" filter="url(#s08_cSoft)"/>' +
+            wheel(-300, 's08_wA') + wheel(320, 's08_wB') + '</g>',
+            '<linearGradient id="s08_cBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a98b8"/><stop offset="0.25" stop-color="#1b2c5e"/><stop offset="0.7" stop-color="#081028"/><stop offset="1" stop-color="#020408"/></linearGradient>' +
+            '<linearGradient id="s08_cStripe" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1238a0"/><stop offset="0.6" stop-color="#c8d0dc"/><stop offset="1" stop-color="#ffb347"/></linearGradient>' +
+            '<linearGradient id="s08_cGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cc2ff" stop-opacity="0.7"/><stop offset="1" stop-color="#0a1430"/></linearGradient>' +
+            '<radialGradient id="s08_cHub"><stop offset="0" stop-color="#3a4252"/><stop offset="1" stop-color="#0a0d14"/></radialGradient>' +
+            '<filter id="s08_cSoft" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="8"/></filter>'));
+
+          /* ---------- D: skydiver falling ---------- */
+          var fields = '';
+          for (var i = 0; i < 40; i++) fields += '<rect x="' + f(rnd() * 1300 - 100) + '" y="' + f(rnd() * 2000 - 40) + '" width="' + f(80 + rnd() * 200) + '" height="' + f(60 + rnd() * 160) + '" fill="' + ['#16243e', '#1d2a2a', '#2a2a3a', '#0e1830', '#3a2e2a'][i % 5] + '" transform="rotate(' + f(-20 + rnd() * 10) + ' 540 960)"/>';
+          var dEarth = layer('s08_D', svg('<rect width="1080" height="1920" fill="#0b1426"/>' + fields +
+            '<path d="M-100,600 C200,700 300,1100 600,1200 S900,1700 1200,1800" fill="none" stroke="rgba(170,200,255,0.45)" stroke-width="10"/>' +
+            '<circle cx="760" cy="520" r="420" fill="url(#s08_gSun)" opacity="0.6"/>', SUN), 's08_blur6');
+          var dc = '';
+          for (var i = 0; i < 18; i++) dc += '<ellipse cx="' + f(rnd() * 1080) + '" cy="' + f(rnd() * 3000) + '" rx="' + f(140 + rnd() * 260) + '" ry="' + f(70 + rnd() * 120) + '" fill="rgba(' + (rnd() < 0.6 ? '200,215,245' : '255,190,150') + ',' + (0.12 + rnd() * 0.2).toFixed(2) + ')"/>';
+          var dCloud = layer('s08_D', svg('<g>' + dc + '</g>'), 's08_blur6');
+          var dFig = layer('s08_D', svg(fig('sky', 540, 960, 2.6, -8)));
+          dFig.style.transformOrigin = '540px 960px';
+          var dw = '';
+          for (var i = 0; i < 46; i++) dw += '<rect x="' + f(rnd() * 1080) + '" y="' + f(rnd() * 3200) + '" width="2" height="' + f(80 + rnd() * 260) + '" fill="rgba(220,232,255,' + (0.15 + rnd() * 0.4).toFixed(2) + ')"/>';
+          var dWind = layer('s08_D', svg('<g>' + dw + '</g>'));
+
+          /* ---------- E: mountain landscape ---------- */
+          var eFar = layer('s08_E', svg('<rect x="-200" width="1480" height="1920" fill="url(#s08_eSky)"/><circle cx="540" cy="820" r="300" fill="url(#s08_gSun)"/>' +
+            '<path d="' + ridge(860, 380, 90, -300, 1400) + '" fill="url(#s08_eM1)" stroke="rgba(255,170,100,0.6)" stroke-width="2"/>',
+            SUN + '<linearGradient id="s08_eSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040c"/><stop offset="0.25" stop-color="#0c1c4a"/><stop offset="0.42" stop-color="#4a3a5a"/><stop offset="0.47" stop-color="#e08a50"/><stop offset="0.5" stop-color="#1a1a30"/></linearGradient>' +
+            '<linearGradient id="s08_eM1" x1="0" y1="0" x2="0" y2="1"><stop offset="0.2" stop-color="#4a6090"/><stop offset="0.35" stop-color="#16244e"/><stop offset="0.6" stop-color="#060b1a"/></linearGradient>'), 's08_blur2');
+          var eHaze = layer('s08_E', svg('<rect x="-200" y="900" width="1480" height="300" fill="url(#s08_eHz)"/>', '<linearGradient id="s08_eHz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb0ff" stop-opacity="0"/><stop offset="0.5" stop-color="#8fb0ff" stop-opacity="0.22"/><stop offset="1" stop-color="#8fb0ff" stop-opacity="0"/></linearGradient>'), 's08_blur6');
+          var eNear = layer('s08_E', svg('<path d="' + ridge(1260, 260, 120, -400, 1600) + '" fill="url(#s08_eM2)" stroke="rgba(150,185,255,0.55)" stroke-width="3"/>',
+            '<linearGradient id="s08_eM2" x1="0" y1="0" x2="0" y2="1"><stop offset="0.4" stop-color="#1a2446"/><stop offset="0.6" stop-color="#03050b"/></linearGradient>'));
+
+          /* ---------- F: slow-motion landing ---------- */
+          layer('s08_F', svg('<rect width="1080" height="1920" fill="url(#s08_fSky)"/><circle cx="540" cy="760" r="320" fill="url(#s08_gSun)"/>' +
+            '<path d="M-100,1060 L1200,1380 L1200,2000 L-100,2000 Z" fill="url(#s08_fSnow)" stroke="rgba(255,190,140,0.8)" stroke-width="3"/>',
+            SUN + '<linearGradient id="s08_fSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#030714"/><stop offset="0.35" stop-color="#1a2a5a"/><stop offset="0.5" stop-color="#b8704a"/><stop offset="0.6" stop-color="#1a1a30"/></linearGradient>' +
+            '<linearGradient id="s08_fSnow" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#a8bce0"/><stop offset="0.25" stop-color="#3a4a78"/><stop offset="1" stop-color="#070b18"/></linearGradient>'));
+          var fFig = layer('s08_F', svg(fig('land', 560, 1188, 2.2, 13.8)));
+          var fSprayL = $('s08_F').querySelector('.s08_cam'), sprays = [];
+          for (var i = 0; i < 44; i++) {
+            var p = document.createElement('div'), sz = 4 + rnd() * rnd() * 22;
+            p.className = 's08_d';
+            p.style.cssText = 'left:' + f(450 + rnd() * 280) + 'px;top:' + f(1180 + rnd() * 50) + 'px;width:' + f(sz) + 'px;height:' + f(sz) + 'px;opacity:' + (0.4 + rnd() * 0.5).toFixed(2) + (sz > 14 ? ';filter:blur(3px)' : '');
+            fSprayL.appendChild(p); sprays.push(p);
+          }
+
+          /* ---------- the final can ---------- */
+          $('s08_can').innerHTML = makeCan('s08_c');
+          $('s08_refl').innerHTML = makeCan('s08_r');
+          var dust = [];
+          for (var i = 0; i < 40; i++) {
+            var p = document.createElement('div'), sz = 2 + rnd() * rnd() * 9;
+            p.className = 's08_p';
+            p.style.cssText = 'left:' + f(330 + rnd() * 420) + 'px;top:' + f(200 + rnd() * 1300) + 'px;width:' + f(sz) + 'px;height:' + f(sz) + 'px;opacity:' + (0.15 + rnd() * 0.5).toFixed(2) + (sz > 7 ? ';filter:blur(2px)' : '');
+            $('s08_dust').appendChild(p); dust.push(p);
+          }
+
+          /* ============ TIMELINE (local seconds; 0 = 60.7 global) ============ */
+          var CUTS = [['s08_A', 0, 1.5], ['s08_B', 1.5, 2.2], ['s08_C', 2.2, 2.85], ['s08_D', 2.85, 3.45], ['s08_E', 3.45, 3.9], ['s08_F', 3.9, 4.3]];
+          var STOP = 4.3, CAN = 5.15;
+          CUTS.forEach(function (c, k) {
+            var el = $(c[0]), cm = cam(c[0]);
+            if (k > 0) tl.set(el, { opacity: 1 }, c[1]);
+            tl.set(el, { opacity: 0 }, c[2]);
+            // motion-blurred whip into every shot, alternating direction
+            var dir = k % 2 ? 1 : -1;
+            tl.fromTo(cm, { x: dir * 140, skewX: dir * 8, filter: 'blur(14px)' }, { x: 0, skewX: 0, filter: 'blur(0px)', duration: 0.2, ease: 'power3.out' }, c[1]);
+            tl.fromTo($('s08_flash'), { opacity: k ? 0.55 : 0.35 }, { opacity: 0, duration: 0.14, ease: 'power2.out', immediateRender: false }, c[1]);
+          });
+          // A: slow push on the athlete, wind streaks, crouch -> spring at the cut
+          tl.fromTo(cam('s08_A'), { scale: 1.0 }, { scale: 1.16, duration: 1.5, ease: 'power1.in' }, 0);
+          tl.fromTo(aWind.firstChild, { x: 0 }, { x: -900, duration: 1.5, ease: 'none' }, 0);
+          tl.fromTo(aCloud, { x: 0 }, { x: -60, duration: 1.5, ease: 'none' }, 0);
+          tl.fromTo(q('#s08_aSun'), { opacity: 0.8, scale: 1, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1.08, duration: 1.5, ease: 'sine.inOut' }, 0);
+          tl.fromTo(q('#s08_aFig'), { scaleY: 1.9, svgOrigin: '760 1294' }, { scaleY: 1.7, duration: 1.0, ease: 'sine.inOut' }, 0.1);
+          tl.to(q('#s08_aFig'), { scaleY: 2.05, x: 820, y: 1210, rotation: 12, duration: 0.35, ease: 'power3.in' }, 1.15);
+          // B: crowd jumping, beams sweeping, handheld shake
+          tl.fromTo(cam('s08_B'), { scale: 1.08, rotation: -1.5 }, { scale: 1.16, rotation: 1.5, duration: 0.7, ease: 'none' }, 1.5);
+          crowdRows.forEach(function (r, k) {
+            r.querySelectorAll('.s08_cr' + k).forEach(function (g, j) {
+              tl.fromTo(g, { y: 0 }, { y: -(30 + k * 25), duration: 0.17, yoyo: true, repeat: 3, ease: 'sine.inOut' }, 1.5 + ((j + k) % 3) * 0.06);
+            });
+          });
+          root.querySelectorAll('.s08_beam').forEach(function (b, k) {
+            tl.fromTo(b, { svgOrigin: b.getAttribute('data-o'), rotation: (k < 2 ? -18 : 18) + (k % 2 ? 6 : -6) }, { rotation: (k < 2 ? 4 : -4), duration: 0.7, ease: 'sine.inOut' }, 1.5);
+          });
+          tl.fromTo(q('#s08_bSun'), { scale: 0.9, transformOrigin: '50% 50%' }, { scale: 1.2, duration: 0.7, ease: 'power1.out' }, 1.5);
+          // C: car punches forward, wheels spin, world streaks past
+          tl.fromTo(cStreak.firstChild, { x: 0 }, { x: -2600, duration: 0.65, ease: 'power2.in' }, 2.2);
+          tl.fromTo(q('#s08_car'), { x: 540 - 160 }, { x: 540 + 120, duration: 0.65, ease: 'power2.in' }, 2.2);
+          tl.fromTo([q('#s08_wA'), q('#s08_wB')], { rotation: 0, transformOrigin: '50% 50%' }, { rotation: 1440, duration: 0.65, ease: 'power2.in' }, 2.2);
+          tl.fromTo(cam('s08_C'), { scale: 1.02 }, { scale: 1.14, duration: 0.65, ease: 'power2.in' }, 2.2);
+          // D: freefall — clouds rush up, earth rotates below, diver spins
+          tl.fromTo(dCloud.firstChild, { y: 0 }, { y: -1700, duration: 0.6, ease: 'none' }, 2.85);
+          tl.fromTo(dWind.firstChild, { y: 0 }, { y: -2400, duration: 0.6, ease: 'none' }, 2.85);
+          tl.fromTo(dEarth, { scale: 1.0, rotation: 0, transformOrigin: '540px 960px' }, { scale: 1.18, rotation: 14, duration: 0.6, ease: 'none' }, 2.85);
+          tl.fromTo(dFig, { scale: 0.9, rotation: 0 }, { scale: 1.08, rotation: 22, duration: 0.6, ease: 'none' }, 2.85);
+          // E: majestic pan with parallax
+          tl.fromTo(eFar, { x: 30 }, { x: -30, duration: 0.45, ease: 'none' }, 3.45);
+          tl.fromTo(eHaze, { x: 60 }, { x: -90, duration: 0.45, ease: 'none' }, 3.45);
+          tl.fromTo(eNear, { x: 120 }, { x: -160, duration: 0.45, ease: 'none' }, 3.45);
+          tl.fromTo(cam('s08_E'), { scale: 1.12 }, { scale: 1.02, duration: 0.45, ease: 'power1.out' }, 3.45);
+          // F: slow-motion landing, snow spray blooming
+          tl.fromTo(fFig, { y: -60 }, { y: 0, duration: 0.4, ease: 'power1.out' }, 3.9);
+          tl.fromTo(cam('s08_F'), { scale: 1.0 }, { scale: 1.05, duration: 0.4, ease: 'none' }, 3.9);
+          sprays.forEach(function (p) {
+            var a = Math.PI * (1.05 + rnd() * 0.9), r = 60 + rnd() * 260;
+            tl.fromTo(p, { x: 0, y: 0, scale: 0.4 }, { x: Math.cos(a) * r, y: Math.sin(a) * r * 0.8, scale: 1.4, duration: 0.4, ease: 'power2.out' }, 3.9);
+          });
+          // shared grade + light leak breathe through the montage, then EVERYTHING STOPS
+          tl.fromTo($('s08_leak'), { x: 0, opacity: 0.25 }, { x: 260, opacity: 0.5, duration: STOP, ease: 'sine.inOut' }, 0);
+          tl.set([$('s08_grade'), $('s08_leak')], { opacity: 0 }, STOP);
+
+          // the can alone in the centre (65.85 global)
+          tl.set($('s08_end'), { opacity: 1 }, CAN);
+          tl.fromTo($('s08_spot'), { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power2.out' }, CAN);
+          tl.fromTo($('s08_pool'), { opacity: 0 }, { opacity: 1, duration: 1.4, ease: 'power2.out' }, CAN + 0.15);
+          tl.fromTo($('s08_canwrap'), { filter: 'brightness(0)' }, { filter: 'brightness(1)', duration: 1.8, ease: 'power2.out' }, CAN + 0.1);
+          tl.fromTo($('s08_canwrap'), { scale: 0.6, y: 20 }, { scale: 0.66, y: 0, duration: D - CAN, ease: 'sine.out' }, CAN);
+          tl.fromTo($('s08_halo'), { opacity: 0, scale: 0.8 }, { opacity: 0.9, scale: 1.1, duration: D - CAN, ease: 'sine.inOut' }, CAN + 0.6);
+          tl.fromTo($('s08_endcam'), { scale: 1.0, rotation: -0.6 }, { scale: 1.06, rotation: 0.4, duration: D - CAN, ease: 'none' }, CAN);
+          tl.fromTo([q('#s08_clabel'), q('#s08_rlabel')], { x: 40 }, { x: -50, duration: D - CAN, ease: 'none' }, CAN);
+          tl.fromTo([q('#s08_cspec1'), q('#s08_rspec1')], { attr: { x: 40 } }, { attr: { x: 70 }, duration: D - CAN, ease: 'sine.inOut' }, CAN);
+          tl.fromTo($('s08_dust'), { opacity: 0 }, { opacity: 1, duration: 1.5 }, CAN + 0.4);
+          dust.forEach(function (p) {
+            tl.fromTo(p, { x: 0, y: 0 }, { x: (rnd() - 0.5) * 80, y: -(40 + rnd() * 160), duration: D - CAN, ease: 'none' }, CAN);
+          });
+
+          window.__timelines["s08"] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>
