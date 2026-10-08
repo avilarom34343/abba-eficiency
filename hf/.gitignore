@@ -4,3 +4,6 @@ snapshots/
 .agents/
 .claude/
 .hyperframes/
+snapshots/
+renders/
+vo/*.wav

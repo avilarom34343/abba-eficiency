@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <script type="importmap">
+      { "imports": { "three": "./assets/three/three.module.js", "three/addons/": "./assets/three/addons/" } }
+    </script>
+    <style>
+      @font-face { font-family: 'Inter'; font-weight: 300; src: url('assets/fonts/inter-300.ttf') format('truetype'); }
+      @font-face { font-family: 'Inter'; font-weight: 600; src: url('assets/fonts/inter-600.ttf') format('truetype'); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #world { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+      #type { position: absolute; inset: 0; pointer-events: none; font-family: 'Inter', sans-serif; color: #f2f4f8; }
+      .line { position: absolute; left: 90px; right: 90px; text-align: center; opacity: 0; }
+      #end1, #end2 { font-weight: 300; font-size: 76px; letter-spacing: -0.02em; line-height: 1.1; }
+      #end2 { font-weight: 600; }
+      #abba { font-weight: 600; font-size: 26px; letter-spacing: 0.5em; color: #9aa3b2; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="96" data-width="1080" data-height="1920">
+      <canvas id="world" width="1080" height="1920"></canvas>
+      <div id="type">
+        <div class="line" id="end1" style="top: 760px">Don't sell the product.</div>
+        <div class="line" id="end2" style="top: 860px">Build the world.</div>
+        <div class="line" id="abba" style="top: 1500px">ABBA</div>
+      </div>
+      <audio id="vo" src="assets/narration.wav" data-start="0" data-duration="96" data-track-index="10" data-volume="1"></audio>
+      <audio id="bed" src="assets/score.wav" data-start="0" data-duration="96" data-track-index="11" data-volume="1"></audio>
+    </div>
+
+    <script>
+      // Typography is the only HTML layer: the closing line and a barely-there ABBA mark.
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#end1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 89.9);
+      tl.fromTo("#end2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 90.7);
+      tl.to(["#end1", "#end2"], { opacity: 0, duration: 0.8, ease: "power1.in" }, 93.4);
+      tl.fromTo("#abba", { opacity: 0 }, { opacity: 0.35, duration: 1.0, ease: "power1.out" }, 94.2);
+      tl.to("#abba", { opacity: 0, duration: 0.5 }, 95.4);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+
+    <script type="module">
+      // One WebGL world, ten scenes. Each scene module exports create(renderer) -> { scene, camera, render(t, dur) }.
+      // The master picks the scene for HyperFrames time, renders it with bloom + grain, and handles the cuts.
+      import * as THREE from "three";
+      import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+      import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+      import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+      import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+      import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+      import * as s01 from "./scenes/s01.js"; import * as s02 from "./scenes/s02.js"; import * as s03 from "./scenes/s03.js";
+      import * as s04 from "./scenes/s04.js"; import * as s05 from "./scenes/s05.js"; import * as s06 from "./scenes/s06.js";
+      import * as s07 from "./scenes/s07.js"; import * as s08 from "./scenes/s08.js"; import * as s09 from "./scenes/s09.js";
+      import * as s10 from "./scenes/s10.js";
+
+      // [module, start, end, cut-in style]  — times match vo/cues.json
+      const PLAN = [[s01, 0, 10.3, "fade"], [s02, 10.3, 17.4, "dip"], [s03, 17.4, 27.1, "dip"], [s04, 27.1, 31.9, "dip"], [s05, 31.9, 43.2, "flash"],
+        [s06, 43.2, 53.0, "flash"], [s07, 53.0, 60.7, "dip"], [s08, 60.7, 69.8, "cut"], [s09, 69.8, 74.0, "flash"], [s10, 74.0, 96.0, "dip"]];
+
+      const canvas = document.getElementById("world");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1); renderer.setSize(1080, 1920, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const built = PLAN.map(([m, a, b, cut]) => {
+        try { return { ...m.create(renderer), a, b, cut }; }
+        catch (e) { console.error("scene failed", a, e); const scene = new THREE.Scene(); return { scene, camera: new THREE.PerspectiveCamera(35, 1080 / 1920, 0.1, 100), render() {}, a, b, cut }; }
+      });
+
+      const composer = new EffectComposer(renderer);
+      const rp = new RenderPass(built[0].scene, built[0].camera); composer.addPass(rp);
+      const bloom = new UnrealBloomPass(new THREE.Vector2(1080, 1920), 0.55, 0.6, 0.82); composer.addPass(bloom);
+      const grade = new ShaderPass({
+        uniforms: { tDiffuse: { value: null }, time: { value: 0 }, fade: { value: 0 }, flash: { value: 0 } },
+        vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }",
+        fragmentShader: `uniform sampler2D tDiffuse; uniform float time; uniform float fade; uniform float flash; varying vec2 vUv;
+          float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)) + time*37.0) * 43758.5453); }
+          void main(){ vec4 c = texture2D(tDiffuse, vUv);
+            vec2 d = vUv - 0.5; d.x *= 0.5625; float v = smoothstep(0.75, 0.25, length(d)*1.6);
+            c.rgb *= mix(0.55, 1.0, v);
+            c.rgb += (h(vUv*vec2(1080.,1920.)) - 0.5) * 0.045;
+            c.rgb = mix(c.rgb, vec3(1.0), flash); c.rgb *= 1.0 - fade;
+            gl_FragColor = c; }`,
+      });
+      composer.addPass(grade); composer.addPass(new OutputPass());
+
+      function renderAt(T) {
+        let i = built.findIndex((s) => T >= s.a && T < s.b); if (i < 0) i = T < 0 ? 0 : built.length - 1;
+        const s = built[i], t = T - s.a, d = s.b - s.a;
+        try { s.render(t, d); } catch (e) { console.error(e); }
+        rp.scene = s.scene; rp.camera = s.camera;
+        // cut treatments: dip to black around "dip" cuts, white pop on "flash" cuts, long fade at the head and tail
+        const next = built[i + 1];
+        let fade = 0, flash = 0;
+        if (s.cut === "fade") fade = Math.max(fade, 1 - Math.min(1, t / 1.2));
+        if (s.cut === "dip") fade = Math.max(fade, 1 - Math.min(1, t / 0.35));
+        if (s.cut === "flash") flash = Math.max(flash, 1 - Math.min(1, t / 0.18));
+        if (next && next.cut === "dip") fade = Math.max(fade, Math.min(1, (t - (d - 0.3)) / 0.3));
+        if (i === built.length - 1) fade = Math.max(fade, Math.min(1, (T - 93.2) / 1.0) * 0.92);
+        grade.uniforms.time.value = T; grade.uniforms.fade.value = Math.max(0, fade); grade.uniforms.flash.value = Math.max(0, flash) * 0.85;
+        composer.render();
+      }
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>
