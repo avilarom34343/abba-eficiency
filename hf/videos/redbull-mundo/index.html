@@ -77,6 +77,10 @@
 
       const composer = new EffectComposer(renderer);
       const rp = new RenderPass(built[0].scene, built[0].camera); composer.addPass(rp);
+      // scrub NaN/Inf and runaway HDR before bloom (a single bad pixel otherwise blooms into black/white blocks)
+      composer.addPass(new ShaderPass({ uniforms: { tDiffuse: { value: null } },
+        vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }",
+        fragmentShader: "uniform sampler2D tDiffuse; varying vec2 vUv; void main(){ vec4 c = texture2D(tDiffuse, vUv); if (c.r != c.r || c.g != c.g || c.b != c.b) c = vec4(0.,0.,0.,1.); gl_FragColor = vec4(clamp(c.rgb, 0.0, 24.0), 1.0); }" }));
       const bloom = new UnrealBloomPass(new THREE.Vector2(1080, 1920), 0.55, 0.6, 0.82); composer.addPass(bloom);
       const grade = new ShaderPass({
         uniforms: { tDiffuse: { value: null }, time: { value: 0 }, fade: { value: 0 }, flash: { value: 0 } },

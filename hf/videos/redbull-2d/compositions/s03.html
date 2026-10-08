@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>s03 — strategy: the wall of advertising</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Inter'; font-weight: 300; src: url('assets/fonts/inter-300.ttf') format('truetype'); }
+        @font-face { font-family: 'Inter'; font-weight: 600; src: url('assets/fonts/inter-600.ttf') format('truetype'); }
+        [data-composition-id="s03"] #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: #03050a; }
+        [data-composition-id="s03"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-composition-id="s03"] #stage .s03_abs { position: absolute; }
+        [data-composition-id="s03"] #stage #s03_cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 700px; }
+        [data-composition-id="s03"] #stage #s03_room { position: absolute; inset: 0;
+          background: radial-gradient(ellipse 900px 1100px at 50% 40%, #16202e 0%, #0a0f18 55%, #03050a 100%); }
+        [data-composition-id="s03"] #stage #s03_board { position: absolute; left: 20px; top: 170px; width: 1040px; height: 1170px; border-radius: 6px;
+          background: linear-gradient(180deg, #2a3240 0%, #1c2330 60%, #121822 100%);
+          box-shadow: inset 0 0 120px rgba(0,0,0,0.75), 0 40px 80px rgba(0,0,0,0.6); overflow: hidden; }
+        [data-composition-id="s03"] #stage #s03_boardtex { position: absolute; inset: 0; opacity: 0.5; mix-blend-mode: overlay; }
+        [data-composition-id="s03"] #stage .s03_ghost { position: absolute; background: rgba(255,255,255,0.045); border-radius: 2px; }
+        [data-composition-id="s03"] #stage #s03_wall { position: absolute; inset: 0; filter: blur(3px); }
+        [data-composition-id="s03"] #stage .s03_card { position: absolute; transform-origin: 50% 8%; box-shadow: 0 14px 26px rgba(0,0,0,0.65), 0 2px 4px rgba(0,0,0,0.5); }
+        [data-composition-id="s03"] #stage .s03_card svg { display: block; width: 100%; height: 100%; }
+        [data-composition-id="s03"] #stage .s03_pin { position: absolute; left: 50%; top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%;
+          background: radial-gradient(circle at 35% 30%, #ffffff 0%, #b9c2cf 35%, #4a5361 100%); box-shadow: 0 3px 4px rgba(0,0,0,0.6); }
+        [data-composition-id="s03"] #stage #s03_cold { position: absolute; inset: 0; mix-blend-mode: multiply; background: radial-gradient(ellipse at 50% 30%, #9fb6d6 0%, #4d6386 60%, #1a2232 100%); }
+        [data-composition-id="s03"] #stage #s03_warm { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: 0; background: radial-gradient(ellipse at 50% 42%, #ffd2a1 0%, #b8693a 55%, #2a140c 100%); }
+        [data-composition-id="s03"] #stage #s03_photo { position: absolute; left: 380px; top: 490px; width: 320px; height: 410px; opacity: 0;
+          transform-origin: 50% 50%; box-shadow: 0 30px 60px rgba(0,0,0,0.7); }
+        [data-composition-id="s03"] #stage #s03_photo svg { display: block; width: 100%; height: 100%; }
+        [data-composition-id="s03"] #stage #s03_photoglow { position: absolute; left: 240px; top: 330px; width: 600px; height: 740px; opacity: 0; border-radius: 50%;
+          background: radial-gradient(ellipse at 50% 50%, rgba(255,170,90,0.55) 0%, rgba(255,120,50,0.18) 40%, transparent 70%); mix-blend-mode: screen; }
+        [data-composition-id="s03"] #stage .s03_rays { position: absolute; left: -200px; top: -120px; width: 1480px; height: 1700px; mix-blend-mode: screen; filter: blur(18px);
+          clip-path: polygon(46% 0%, 54% 0%, 100% 100%, 0% 100%); }
+        [data-composition-id="s03"] #stage #s03_raysCold { background: linear-gradient(180deg, rgba(150,190,240,0.42) 0%, rgba(110,150,210,0.14) 55%, transparent 100%); }
+        [data-composition-id="s03"] #stage #s03_raysWarm { opacity: 0; background: linear-gradient(180deg, rgba(255,190,120,0.55) 0%, rgba(255,140,70,0.18) 55%, transparent 100%); }
+        [data-composition-id="s03"] #stage .s03_beam { position: absolute; top: -120px; width: 70px; height: 1600px; mix-blend-mode: screen; filter: blur(14px); transform-origin: 50% 0%;
+          background: linear-gradient(180deg, rgba(190,215,255,0.35), transparent 85%); }
+        [data-composition-id="s03"] #stage #s03_lamp { position: absolute; left: 470px; top: -30px; width: 140px; height: 60px; border-radius: 0 0 70px 70px;
+          background: linear-gradient(180deg, #2b3340, #0c1018); box-shadow: 0 18px 60px 20px rgba(170,205,255,0.45); }
+        [data-composition-id="s03"] #stage #s03_haze { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0.5;
+          background: radial-gradient(ellipse 700px 500px at 50% 18%, rgba(120,150,200,0.28), transparent 70%); }
+        [data-composition-id="s03"] #stage #s03_dust { position: absolute; inset: 0; }
+        [data-composition-id="s03"] #stage .s03_mote { position: absolute; border-radius: 50%; background: #dfe8f6; }
+        [data-composition-id="s03"] #stage #s03_fg { position: absolute; inset: 0; transform-origin: 300px 1700px; }
+        [data-composition-id="s03"] #stage #s03_man { position: absolute; left: -60px; top: 1010px; width: 700px; height: 1000px; overflow: visible; }
+        [data-composition-id="s03"] #stage #s03_desk { position: absolute; left: 600px; top: 1660px; width: 620px; height: 320px; filter: blur(7px); transform: rotate(-6deg);
+          background: linear-gradient(180deg, #3a2f28 0%, #15100d 18%, #07090d 100%); border-top: 3px solid rgba(190,210,240,0.5); }
+        [data-composition-id="s03"] #stage #s03_bokeh { position: absolute; inset: 0; mix-blend-mode: screen; }
+        [data-composition-id="s03"] #stage .s03_bk { position: absolute; border-radius: 50%; filter: blur(10px); }
+        [data-composition-id="s03"] #stage #s03_flash { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen;
+          background: radial-gradient(ellipse at 50% 45%, #ffdcae 0%, #ff9a4d 45%, #8a3c15 100%); }
+      </style>
+
+      <div id="stage" data-composition-id="s03" data-width="1080" data-height="1920" data-duration="9.7" style="width:1080px;height:1920px">
+        <div id="s03_cam">
+          <div id="s03_room"></div>
+          <div id="s03_board">
+            <svg id="s03_boardtex" width="1040" height="1170" viewBox="0 0 1040 1170">
+              <filter id="s03_noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" seed="7" /><feColorMatrix type="saturate" values="0" /></filter>
+              <rect width="1040" height="1170" filter="url(#s03_noise)" />
+            </svg>
+            <div id="s03_ghosts"></div>
+          </div>
+          <div id="s03_photoglow"></div>
+          <div id="s03_wall"></div>
+          <div id="s03_photo">
+            <svg viewBox="0 0 320 410">
+              <defs>
+                <linearGradient id="s03_psky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#1b2440" /><stop offset="0.45" stop-color="#7a3a2a" /><stop offset="0.75" stop-color="#ff8a3c" /><stop offset="1" stop-color="#ffd08a" />
+                </linearGradient>
+                <radialGradient id="s03_psun" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#fff4d6" /><stop offset="0.35" stop-color="#ffc06a" /><stop offset="1" stop-color="#ff7a2a" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="s03_pmtn" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#0a0d16" /><stop offset="1" stop-color="#1c1620" />
+                </linearGradient>
+              </defs>
+              <rect width="320" height="410" fill="#e9e4da" />
+              <rect x="14" y="14" width="292" height="320" fill="url(#s03_psky)" />
+              <circle cx="168" cy="190" r="120" fill="url(#s03_psun)" />
+              <circle cx="168" cy="190" r="46" fill="#ffe9bf" />
+              <path d="M14,334 L14,282 L70,240 L104,262 L150,222 L196,270 L240,236 L306,290 L306,334 Z" fill="url(#s03_pmtn)" />
+              <path d="M150,222 L162,234 L172,232 L184,246 L196,270 L180,252 L166,248 Z" fill="#ffd9a8" opacity="0.5" />
+              <!-- athlete mid-air: tucked snowboard grab, rim lit -->
+              <g transform="translate(166,180) rotate(-18)">
+                <rect x="-46" y="20" width="92" height="12" rx="6" fill="#07080c" />
+                <path d="M-14,22 L-20,2 L-8,-18 L4,-30 L16,-24 L18,-6 L12,8 L22,22 L12,22 L2,10 L-4,2 L-4,22 Z" fill="#07080c" />
+                <circle cx="8" cy="-40" r="10" fill="#07080c" />
+                <path d="M4,-30 L-22,-46 L-28,-40 L-4,-22 Z" fill="#07080c" />
+                <path d="M16,-22 L30,4 L24,8 L12,-12 Z" fill="#07080c" />
+                <path d="M16,-24 L18,-6 M8,-50 A10,10 0 0 1 18,-40" stroke="#ffcf8f" stroke-width="2" fill="none" opacity="0.8" />
+              </g>
+              <rect x="14" y="14" width="292" height="320" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="2" />
+            </svg>
+            <div class="s03_pin" style="top:-4px"></div>
+          </div>
+          <div id="s03_cold"></div>
+          <div id="s03_warm"></div>
+        </div>
+
+        <div id="s03_lamp"></div>
+        <div id="s03_raysCold" class="s03_rays"></div>
+        <div id="s03_raysWarm" class="s03_rays"></div>
+        <div id="s03_beams"></div>
+        <div id="s03_haze"></div>
+        <div id="s03_dust"></div>
+
+        <div id="s03_fg">
+          <div id="s03_desk"></div>
+          <svg id="s03_man" viewBox="0 0 700 1000">
+            <defs>
+              <linearGradient id="s03_suit" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#121925" /><stop offset="0.5" stop-color="#070a10" /><stop offset="1" stop-color="#020306" />
+              </linearGradient>
+              <linearGradient id="s03_rimC" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#b9d4ff" stop-opacity="1" /><stop offset="0.35" stop-color="#7fa3d8" stop-opacity="0.5" /><stop offset="0.7" stop-color="#7fa3d8" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="s03_rimW" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffd09a" stop-opacity="1" /><stop offset="0.35" stop-color="#ff9a52" stop-opacity="0.55" /><stop offset="0.7" stop-color="#ff9a52" stop-opacity="0" />
+              </linearGradient>
+              <filter id="s03_glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter>
+            </defs>
+            <g id="s03_body">
+              <path id="s03_torso" d="M40,1000 C50,700 60,460 110,360 C150,300 230,280 290,262 L370,262 C440,280 520,300 560,350 C610,430 630,700 650,1000 Z" fill="url(#s03_suit)" />
+              <path d="M300,262 L330,330 L360,262 Z" fill="#0d121b" />
+              <g id="s03_arm">
+                <path d="M515,330 C590,345 618,410 612,520 L604,760 C600,800 556,800 552,760 L538,520 C534,450 520,390 515,330 Z" fill="url(#s03_suit)" />
+                <ellipse cx="578" cy="790" rx="26" ry="34" fill="#0a0d13" />
+                <path id="s03_armRimC" d="M520,332 C590,345 618,410 612,520 L604,760" stroke="url(#s03_rimC)" stroke-width="5" fill="none" filter="url(#s03_glow)" />
+                <path id="s03_armRimW" d="M520,332 C590,345 618,410 612,520 L604,760" stroke="url(#s03_rimW)" stroke-width="5" fill="none" filter="url(#s03_glow)" opacity="0" />
+              </g>
+              <g id="s03_head">
+                <rect x="292" y="190" width="76" height="90" rx="20" fill="#06080d" />
+                <ellipse cx="330" cy="140" rx="80" ry="96" fill="#070a10" />
+                <ellipse cx="252" cy="150" rx="12" ry="22" fill="#06080d" />
+                <ellipse cx="408" cy="150" rx="12" ry="22" fill="#06080d" />
+                <path id="s03_headRimC" d="M262,90 C290,40 370,40 398,90" stroke="#cfe0ff" stroke-width="5" fill="none" filter="url(#s03_glow)" opacity="0.9" />
+                <path id="s03_headRimW" d="M262,90 C290,40 370,40 398,90" stroke="#ffcf96" stroke-width="5" fill="none" filter="url(#s03_glow)" opacity="0" />
+              </g>
+              <path id="s03_bodyRimC" d="M40,1000 C50,700 60,460 110,360 C150,300 230,280 290,262 L370,262 C440,280 520,300 560,350 C610,430 630,700 650,1000" stroke="url(#s03_rimC)" stroke-width="6" fill="none" filter="url(#s03_glow)" />
+              <path id="s03_bodyRimW" d="M40,1000 C50,700 60,460 110,360 C150,300 230,280 290,262 L370,262 C440,280 520,300 560,350 C610,430 630,700 650,1000" stroke="url(#s03_rimW)" stroke-width="6" fill="none" filter="url(#s03_glow)" opacity="0" />
+            </g>
+          </svg>
+          <div id="s03_bokeh"></div>
+        </div>
+        <div id="s03_flash"></div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="s03"]');
+          var $ = function (id) { return root.querySelector('#' + id); };
+          var tl = gsap.timeline({ paused: true });
+          var D = 9.7;
+          var seed = 3031;
+          function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+          function r(a, b) { return a + (b - a) * rnd(); }
+          function div(cls, css, parent) { var d = document.createElement('div'); d.className = cls; d.style.cssText = css; parent.appendChild(d); return d; }
+
+          // ---------- card art (archetypes only, no logos / wordmarks) ----------
+          function bars(x, y, w, n, h, col, gap) {
+            var s = '';
+            for (var i = 0; i < n; i++) s += '<rect x="' + x + '" y="' + (y + i * (h + gap)) + '" width="' + (w * r(0.55, 1)).toFixed(0) + '" height="' + h + '" fill="' + col + '"/>';
+            return s;
+          }
+          function cardSVG(type, w, h, k) {
+            var g = 's03_cg' + k, s = '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><defs>';
+            if (type === 0) { // billboard with product archetype
+              var sets = [['#c4262c', '#5c0d12'], ['#2a1712', '#0d0706'], ['#3f9a44', '#123a18'], ['#2b5cb8', '#0d1f48']];
+              var c = sets[k % 4];
+              s += '<linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset="1" stop-color="' + c[1] + '"/></linearGradient>';
+              s += '<linearGradient id="' + g + 'm" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/><stop offset="0.4" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="1" stop-color="#000" stop-opacity="0.3"/></linearGradient></defs>';
+              s += '<rect width="' + w + '" height="' + h + '" fill="url(#' + g + ')"/>';
+              var px = w * 0.68, pw = w * 0.16, ph = h * 0.62, py = h * 0.24;
+              if (k % 2) s += '<rect x="' + px + '" y="' + py + '" width="' + pw + '" height="' + ph + '" rx="6" fill="' + c[0] + '" stroke="#fff" stroke-opacity="0.4"/><rect x="' + px + '" y="' + py + '" width="' + pw + '" height="' + ph + '" rx="6" fill="url(#' + g + 'm)"/>';
+              else s += '<path d="M' + (px + pw * 0.35) + ',' + py + ' h' + pw * 0.3 + ' v' + ph * 0.2 + ' c' + pw * 0.4 + ',' + ph * 0.1 + ' ' + pw * 0.4 + ',' + ph * 0.3 + ' ' + pw * 0.35 + ',' + ph * 0.8 + ' h-' + pw * 1.0 + ' c-' + pw * 0.05 + ',-' + ph * 0.5 + ' -' + pw * 0.05 + ',-' + ph * 0.7 + ' ' + pw * 0.35 + ',-' + ph * 0.8 + 'z" fill="#1a0d08" stroke="#fff" stroke-opacity="0.35"/>';
+              s += '<circle cx="' + w * 0.2 + '" cy="' + h * 0.3 + '" r="' + h * 0.16 + '" fill="#ffd34a" opacity="0.9"/>';
+              s += bars(w * 0.08, h * 0.58, w * 0.5, 3, Math.max(5, h * 0.06), 'rgba(255,255,255,0.85)', h * 0.05);
+            } else if (type === 1) { // bar chart
+              s += '</defs><rect width="' + w + '" height="' + h + '" fill="#d6dbe2"/>';
+              s += bars(w * 0.08, h * 0.08, w * 0.6, 1, 7, '#2a3140', 0);
+              s += '<path d="M' + w * 0.1 + ',' + h * 0.25 + ' V' + h * 0.88 + ' H' + w * 0.92 + '" stroke="#3a4250" stroke-width="2" fill="none"/>';
+              for (var i = 0; i < 6; i++) { var bh = h * r(0.15, 0.55); s += '<rect x="' + (w * 0.15 + i * w * 0.12) + '" y="' + (h * 0.88 - bh) + '" width="' + w * 0.08 + '" height="' + bh + '" fill="' + (i === 4 ? '#c0392b' : '#5b6779') + '"/>'; }
+            } else if (type === 2) { // line chart
+              s += '</defs><rect width="' + w + '" height="' + h + '" fill="#e2e4e8"/>';
+              s += bars(w * 0.08, h * 0.08, w * 0.5, 2, 6, '#2a3140', 5);
+              var pts = '', y0 = h * 0.8;
+              for (var j = 0; j < 8; j++) { y0 -= h * r(-0.03, 0.08); pts += (w * 0.1 + j * w * 0.11).toFixed(0) + ',' + y0.toFixed(0) + ' '; }
+              s += '<polyline points="' + pts + '" stroke="#c0392b" stroke-width="3" fill="none"/>';
+              for (var q = 1; q < 4; q++) s += '<line x1="' + w * 0.1 + '" x2="' + w * 0.92 + '" y1="' + h * (0.3 + q * 0.15) + '" y2="' + h * (0.3 + q * 0.15) + '" stroke="#9aa2ae" stroke-width="1"/>';
+            } else if (type === 3) { // pie / share chart
+              var R = Math.min(w, h) * 0.28, C = 2 * Math.PI * R, a1 = r(0.3, 0.5), a2 = r(0.2, 0.3);
+              s += '</defs><rect width="' + w + '" height="' + h + '" fill="#dcd8cf"/>';
+              s += '<circle cx="' + w * 0.36 + '" cy="' + h * 0.55 + '" r="' + R + '" fill="none" stroke="#c0392b" stroke-width="' + R * 0.9 + '" stroke-dasharray="' + C * a1 + ' ' + C + '"/>';
+              s += '<circle cx="' + w * 0.36 + '" cy="' + h * 0.55 + '" r="' + R + '" fill="none" stroke="#2a4f8f" stroke-width="' + R * 0.9 + '" stroke-dasharray="0 ' + C * a1 + ' ' + C * a2 + ' ' + C + '"/>';
+              s += '<circle cx="' + w * 0.36 + '" cy="' + h * 0.55 + '" r="' + R + '" fill="none" stroke="#6f7782" stroke-width="' + R * 0.9 + '" stroke-dasharray="0 ' + C * (a1 + a2) + ' ' + C + '"/>';
+              s += bars(w * 0.68, h * 0.3, w * 0.24, 4, 6, '#3a4250', 8);
+            } else { // sports clipping (newsprint)
+              s += '<linearGradient id="' + g + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d96a3"/><stop offset="1" stop-color="#3b4350"/></linearGradient></defs>';
+              s += '<rect width="' + w + '" height="' + h + '" fill="#cfc9bb"/>';
+              s += bars(w * 0.07, h * 0.07, w * 0.85, 2, Math.max(6, h * 0.07), '#1c1f24', 5);
+              s += '<rect x="' + w * 0.07 + '" y="' + h * 0.32 + '" width="' + w * 0.5 + '" height="' + h * 0.58 + '" fill="url(#' + g + ')"/>';
+              var fx = w * 0.32, fy = h * 0.86, fs = h * 0.0045;
+              s += '<g transform="translate(' + fx + ',' + fy + ') scale(' + fs + ')"><circle cx="0" cy="-92" r="10" fill="#15181d"/><path d="M-8,-80 L10,-80 L24,-50 L6,-44 L14,0 L4,0 L-2,-36 L-16,-4 L-26,-10 L-12,-44 L-24,-62 Z" fill="#15181d"/><circle cx="30" cy="-6" r="7" fill="#e8e4da"/></g>';
+              s += bars(w * 0.62, h * 0.34, w * 0.3, 7, 4, '#3a3d42', 5);
+            }
+            return s + '</svg>';
+          }
+
+          // ---------- build wall ----------
+          var wall = $('s03_wall'), ghosts = $('s03_ghosts');
+          var cards = [];
+          var cols = 5, rows = 6, cw = 196, ch = 180, ox = 50, oy = 210, k = 0;
+          for (var row = 0; row < rows; row++) {
+            for (var col = 0; col < cols; col++) {
+              var type = Math.floor(rnd() * 5);
+              var w = Math.round(cw * r(0.72, 0.92)), h = Math.round(ch * r(0.66, 0.9));
+              if (type === 0) { w = Math.round(cw * 0.94); h = Math.round(ch * 0.7); }
+              var x = ox + col * cw + (cw - w) / 2 + r(-10, 10), y = oy + row * ch + (ch - h) / 2 + r(-8, 8);
+              var rot = r(-4, 4);
+              div('s03_ghost', 'left:' + (x - 20) + 'px;top:' + (y - 170) + 'px;width:' + w + 'px;height:' + h + 'px;transform:rotate(' + rot + 'deg)', ghosts);
+              var c = div('s03_card', 'left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px;transform:rotate(' + rot + 'deg)', wall);
+              c.innerHTML = cardSVG(type, w, h, k) + '<div class="s03_pin"></div>';
+              cards.push({ el: c, rot: rot, x: x, y: y });
+              k++;
+            }
+          }
+
+          // ---------- beams, dust, bokeh ----------
+          var beams = $('s03_beams'), beamEls = [];
+          for (var b = 0; b < 5; b++) {
+            var be = div('s03_beam', 'left:' + (440 + b * 50) + 'px;transform:rotate(' + (-26 + b * 13) + 'deg);opacity:' + r(0.4, 0.9).toFixed(2), beams);
+            beamEls.push(be);
+          }
+          var dust = $('s03_dust'), motes = [];
+          for (var m = 0; m < 70; m++) {
+            var sz = r(2, 6), near = sz > 5;
+            var mo = div('s03_mote', 'left:' + r(150, 930).toFixed(0) + 'px;top:' + r(80, 1500).toFixed(0) + 'px;width:' + sz + 'px;height:' + sz + 'px;opacity:' + r(0.25, 0.8).toFixed(2) + ';filter:blur(' + (near ? 2.5 : 0.6) + 'px)', dust);
+            motes.push(mo);
+          }
+          var bokeh = $('s03_bokeh');
+          for (var q = 0; q < 6; q++) {
+            var bs = r(60, 140);
+            div('s03_bk', 'left:' + r(600, 1040).toFixed(0) + 'px;top:' + r(1500, 1880).toFixed(0) + 'px;width:' + bs + 'px;height:' + bs + 'px;background:rgba(150,180,230,' + r(0.08, 0.18).toFixed(2) + ')', bokeh);
+          }
+
+          var cam = $('s03_cam'), fg = $('s03_fg'), man = $('s03_man'), wallEl = $('s03_wall');
+          var photo = $('s03_photo'), glow = $('s03_photoglow');
+
+          // ---------- camera: slow push the whole scene, gentle drift ----------
+          tl.fromTo(cam, { scale: 1.0, x: 0, y: 0, rotation: -0.6 }, { scale: 1.1, x: -10, y: 30, rotation: 0.4, duration: 8.6, ease: 'sine.inOut' }, 0);
+          tl.fromTo(fg, { x: 0, y: 0, scale: 1 }, { x: -40, y: 20, scale: 1.04, duration: 7.0, ease: 'sine.inOut' }, 0);
+          // lamp flicker at open
+          var flick = [$('s03_raysCold'), beams, $('s03_lamp')];
+          tl.fromTo(flick, { opacity: 0.15 }, { opacity: 1, duration: 0.12, ease: 'none' }, 0.1);
+          tl.set(flick, { opacity: 0.3 }, 0.27).set(flick, { opacity: 0.9 }, 0.33).set(flick, { opacity: 0.45 }, 0.43).set(flick, { opacity: 1 }, 0.5);
+          beamEls.forEach(function (be, i) {
+            tl.fromTo(be, { rotation: -26 + i * 13 }, { rotation: -26 + i * 13 + (i % 2 ? 4 : -4), duration: D, ease: 'sine.inOut' }, 0);
+          });
+          motes.forEach(function (mo, i) {
+            tl.fromTo(mo, { x: 0, y: 0 }, { x: r(-60, 60), y: r(-120, 40), duration: D, ease: 'none' }, 0);
+          });
+          // breathing + head turn
+          tl.fromTo($('s03_body'), { y: 0 }, { y: -6, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: 4 }, 0);
+          tl.fromTo($('s03_head'), { rotation: 0, transformOrigin: '330px 260px' }, { rotation: -3, duration: 1.4, ease: 'sine.inOut' }, 0.6);
+          tl.to($('s03_head'), { rotation: 2.5, duration: 1.6, ease: 'sine.inOut' }, 3.4);
+
+          // ---------- rack focus on "entendió algo" (man sharp -> wall sharp) ----------
+          tl.fromTo(wallEl, { filter: 'blur(3px)' }, { filter: 'blur(0px)', duration: 1.2, ease: 'power2.inOut' }, 0.9);
+          tl.fromTo(man, { filter: 'blur(0px)' }, { filter: 'blur(5px)', duration: 1.2, ease: 'power2.inOut' }, 0.9);
+
+          // ---------- the wall gets stripped, one by one (3.7 -> 7.2), accelerating ----------
+          var order = cards.map(function (c, i) { return i; });
+          for (var s = order.length - 1; s > 0; s--) { var j = Math.floor(rnd() * (s + 1)); var t = order[s]; order[s] = order[j]; order[j] = t; }
+          order.forEach(function (ci, n) {
+            var c = cards[ci], t0 = 3.7 + 3.5 * Math.pow(n / (order.length - 1), 0.78);
+            var side = c.x + 90 < 540 ? -1 : 1, yank = rnd() < 0.35;
+            tl.fromTo(c.el, { scale: 1, rotation: c.rot }, { scale: 1.07, rotation: c.rot + side * r(3, 8), duration: 0.12, ease: 'power2.out' }, t0);
+            if (yank) {
+              tl.fromTo(c.el, { x: 0, y: 0, opacity: 1, filter: 'blur(0px)', skewX: 0 },
+                { x: side * r(900, 1200), y: r(-80, 120), skewX: side * -14, rotation: c.rot + side * r(20, 40), filter: 'blur(10px)', opacity: 0.0, duration: 0.42, ease: 'power3.in', immediateRender: false }, t0 + 0.12);
+            } else {
+              tl.fromTo(c.el, { x: 0, y: 0, opacity: 1, filter: 'blur(0px)' },
+                { x: side * r(60, 220), y: 1500 - c.y + r(0, 300), rotation: c.rot + side * r(25, 70), filter: 'blur(7px)', opacity: 0.0, duration: r(0.7, 0.95), ease: 'power2.in', immediateRender: false }, t0 + 0.12);
+            }
+          });
+          // focus returns to the man's silhouette edge a bit as he moves
+          tl.to(man, { filter: 'blur(2px)', duration: 0.8, ease: 'sine.inOut' }, 6.4);
+
+          // ---------- cold -> warm across the second line ----------
+          tl.fromTo($('s03_cold'), { opacity: 1 }, { opacity: 0, duration: 4.2, ease: 'sine.inOut' }, 4.0);
+          tl.fromTo($('s03_warm'), { opacity: 0 }, { opacity: 1, duration: 4.2, ease: 'sine.inOut' }, 4.0);
+          tl.fromTo($('s03_raysCold'), { opacity: 1 }, { opacity: 0.15, duration: 4.0, ease: 'sine.inOut', immediateRender: false }, 4.2);
+          tl.fromTo($('s03_raysWarm'), { opacity: 0 }, { opacity: 1, duration: 4.0, ease: 'sine.inOut' }, 4.2);
+          tl.fromTo(beams, { filter: 'hue-rotate(0deg) saturate(1)' }, { filter: 'hue-rotate(-170deg) saturate(1.6)', duration: 4.0, ease: 'sine.inOut' }, 4.2);
+          tl.to($('s03_lamp'), { boxShadow: '0 18px 70px 26px rgba(255,170,100,0.55)', duration: 4.0, ease: 'sine.inOut' }, 4.2);
+          tl.fromTo(dust, { filter: 'sepia(0) saturate(1)' }, { filter: 'sepia(1) saturate(3) hue-rotate(-10deg)', duration: 4.0, ease: 'sine.inOut' }, 4.2);
+          ['s03_bodyRimC', 's03_armRimC', 's03_headRimC'].forEach(function (id) { tl.to($(id), { opacity: 0, duration: 3.6, ease: 'sine.inOut' }, 4.4); });
+          ['s03_bodyRimW', 's03_armRimW', 's03_headRimW'].forEach(function (id) { tl.fromTo($(id), { opacity: 0 }, { opacity: 1, duration: 3.6, ease: 'sine.inOut' }, 4.4); });
+
+          // ---------- he pins one image: athlete mid-air ----------
+          tl.fromTo($('s03_arm'), { rotation: 0, transformOrigin: '560px 350px' }, { rotation: -132, duration: 0.7, ease: 'power3.inOut' }, 6.95);
+          tl.fromTo(photo, { opacity: 0, x: 90, y: 560, scale: 0.55, rotation: -24, filter: 'blur(8px)' },
+            { opacity: 1, x: 0, y: 0, scale: 1.06, rotation: 2, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out' }, 7.15);
+          tl.to(photo, { scale: 1, rotation: -2, duration: 0.25, ease: 'back.out(3)' }, 7.85); // pinned: tap into the board
+          tl.fromTo(glow, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.15, duration: 1.0, ease: 'power2.out' }, 7.85);
+          tl.to(glow, { scale: 1.3, duration: 1.0, ease: 'sine.inOut' }, 8.85);
+          tl.to($('s03_arm'), { rotation: -40, duration: 0.8, ease: 'power2.inOut' }, 8.0);
+
+          // ---------- push into the photo (handoff to the mountain) ----------
+          tl.to(cam, { scale: 7.5, x: 0, y: 0, rotation: 3, duration: 1.15, ease: 'power3.in' }, 8.55);
+          tl.fromTo(cam, { filter: 'blur(0px)' }, { filter: 'blur(4px)', duration: 0.4, ease: 'power2.in' }, 9.3);
+          tl.to(fg, { x: -520, y: 700, scale: 1.7, duration: 1.0, ease: 'power3.in' }, 8.6);
+          tl.to(man, { filter: 'blur(18px)', duration: 0.8, ease: 'power2.in' }, 8.7);
+          tl.to([$('s03_raysWarm'), $('s03_raysCold'), beams, $('s03_lamp'), dust], { opacity: 0, duration: 0.6, ease: 'power2.in' }, 9.0);
+          tl.fromTo($('s03_flash'), { opacity: 0 }, { opacity: 0.85, duration: 0.45, ease: 'power2.in' }, 9.25);
+
+          window.__timelines['s03'] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>

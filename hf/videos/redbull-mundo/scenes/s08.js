@@ -76,8 +76,8 @@ export function create(renderer) {
 
   // D — skydiver, clouds rushing up past the lens
   const D = set();
-  const diver = K.figure({ pose: 'jump' }); diver.position.set(0, -0.9, -6); D.add(diver);
-  const clouds = Array.from({ length: 26 }, (_, i) => { const s = sprite(CLOUD, new THREE.Color(0x9a7f78), 6 + (i % 5) * 3, D, THREE.NormalBlending); s.material.opacity = 0.7;
+  const diver = new THREE.Group(); D.add(diver); const dfig = K.figure({ pose: 'jump' }); dfig.position.y = -0.95; diver.add(dfig); diver.position.set(0, 0, -9);
+  const clouds = Array.from({ length: 26 }, (_, i) => { const s = sprite(CLOUD, new THREE.Color(0x4a3a3a), 6 + (i % 5) * 3, D, THREE.NormalBlending); s.material.opacity = 0.7;
     s.userData = { x: (K.rng(i + 3)() - 0.5) * 30, z: -3 - (i * 7.3) % 40, ph: (i * 0.37) % 1 }; return s; });
   const strD = K.streaks(D, { count: 120, len: 4, area: [12, 12, 40], color: 0xffe6cc, seed: 6, opacity: 0.4 }); strD.rotation.x = -Math.PI / 2; strD.position.set(0, 0, -6);
 
@@ -89,28 +89,28 @@ export function create(renderer) {
 
   // F — slow-motion snowboard landing with a spray of snow
   const F = set();
-  const snow = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x8c90a0, roughness: 0.85, metalness: 0 })); snow.rotation.x = -Math.PI / 2; snow.position.y = -1.2; F.add(snow);
+  const snow = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x34363f, roughness: 0.85, metalness: 0 })); snow.rotation.x = -Math.PI / 2; snow.position.y = -1.2; F.add(snow);
   const rider = new THREE.Group(); F.add(rider); const rb = K.figure({ pose: 'board' }); rb.rotation.y = Math.PI / 2; rider.add(rb);
   const board = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.04, 1.55), SIL); board.position.y = 0.02; rider.add(board);
   const mF = K.mountains(F, { seed: 14, color: 0x1a1822, z: -240, width: 700, height: 50 }); mF.position.y = -40;
   const SN = 600, sr = K.rng(71), sv = new Float32Array(SN * 3), spos = new Float32Array(SN * 3);
-  for (let i = 0; i < SN; i++) { const a = sr() * Math.PI * 2, s = 1 + sr() * 4; sv.set([Math.cos(a) * s, 2 + sr() * 5, Math.sin(a) * s * 0.6], i * 3); }
+  for (let i = 0; i < SN; i++) { const a = sr() * Math.PI * 2, s = 3 + sr() * 6; sv.set([Math.cos(a) * s, 3 + sr() * 5, Math.sin(a) * s * 0.6], i * 3); }
   const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(spos, 3));
-  const spray = new THREE.Points(sg, new THREE.PointsMaterial({ color: hdr(0xffe6d0, 1.2), size: 0.05, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); F.add(spray);
+  const spray = new THREE.Points(sg, new THREE.PointsMaterial({ color: hdr(0xffe6d0, 0.8), size: 0.04, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); F.add(spray);
 
   for (const g of [B, C]) { const gr = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshStandardMaterial({ color: 0x0b0a0c, roughness: 0.6, metalness: 0.2 })); gr.rotation.x = -Math.PI / 2; gr.position.y = -0.01; gr.position.z = -250; g.add(gr); }
 
   // G — the can alone in the centre
   const G = set();
   const can = K.makeCan({ droplets: 500, seed: 23 }); G.add(can); can.userData.body.material.envMapIntensity = 0.6;
-  const gfloor = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshStandardMaterial({ color: 0x050506, roughness: 0.35, metalness: 0, envMapIntensity: 0 })); gfloor.rotation.x = -Math.PI / 2; G.add(gfloor);
-  const spot = new THREE.SpotLight(0xfff0dd, 0, 12, 0.32, 0.7, 1.5); spot.position.set(0, 5, 0.6); spot.target.position.set(0, 0.5, 0); G.add(spot, spot.target);
-  const canGlow = sprite(GLOW, hdr(0xff9a4a, 0.5), 3, G); canGlow.position.set(0, 0.7, -2.5);
+  const gfloor = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshLambertMaterial({ color: 0x050506 })); gfloor.rotation.x = -Math.PI / 2; G.add(gfloor);
+  const spot = new THREE.SpotLight(0xfff0dd, 0, 12, 0.2, 0.9, 1.5); spot.position.set(0, 5, 0.6); spot.target.position.set(0, 0.5, 0); G.add(spot, spot.target);
+  const canGlow = sprite(GLOW, hdr(0xff9a4a, 0.5), 2.4, G); canGlow.position.set(0, 1.2, -3);
   const motes = K.dust(G, { count: 260, area: [3, 2.5, 3], color: 0xffd9a8, size: 0.007, speed: 0.05, seed: 4, opacity: 0.5 }); motes.position.y = 1;
 
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), s3 = new THREE.Vector3(1, 1, 1);
-  const SKY = [[0x05060e, 0x6a2a14], [0x08050a, 0x5a1c10], [0x05060c, 0x5a2814], [0x0e1426, 0x7a4a3a], [0x06081a, 0x5a2416], [0x0a0c18, 0x7a5040]];
-  const FOG = [0x1a0e0a, 0x1a0a06, 0x160c08, 0x3a2824, 0x1a100e, 0x2e2424];
+  const SKY = [[0x05060e, 0x6a2a14], [0x08050a, 0x5a1c10], [0x05060c, 0x5a2814], [0x080c1a, 0x5a3024], [0x06081a, 0x5a2416], [0x0a0c18, 0x5a3424]];
+  const FOG = [0x1a0e0a, 0x1a0a06, 0x160c08, 0x1e1416, 0x1a100e, 0x1e1618];
 
   function pose(x, y, z, yaw = 0, roll = 0, fov = 35) { cam.position.set(x, y, z); cam.rotation.set(PITCH, yaw, roll, 'YXZ'); cam.fov = fov; cam.updateProjectionMatrix(); }
 
@@ -155,7 +155,7 @@ export function create(renderer) {
       strC.userData.update(t, vel); strC.material.opacity = 0.2 + 0.3 * p;
     } else if (shot === 3) { // D: free fall — diver tumbles slowly, clouds tear upward
       pose(shake(7, 0.03), shake(8, 0.03), 0, 0, Math.sin(t * 1.5) * 0.06, 36 * punch);
-      diver.rotation.set(0.3, Math.sin(t * 2) * 0.3, 0.25 + p * 0.3); diver.position.y = -0.9 + Math.sin(t * 3) * 0.05;
+      diver.rotation.set(0.3, Math.sin(t * 2) * 0.3, 0.25 + p * 0.3); diver.position.y = Math.sin(t * 3) * 0.05;
       clouds.forEach((s) => { const d = s.userData; const yy = ((d.ph * 60 + t * 55) % 60) - 30; s.position.set(d.x, yy, d.z); });
       strD.userData.update(t, 50);
     } else if (shot === 4) { // E: slow crane up the ridge, a lone figure on the near crest
@@ -163,7 +163,7 @@ export function create(renderer) {
       hazeE.userData.update(t, [1, 0.1, 0]);
     } else if (shot === 5) { // F: slow-motion landing — touchdown at u=0.25, body compresses, snow sprays
       const td = 0.25, air = K.cl(1 - u / td), sm = Math.max(0, u - td) * 0.35;
-      rider.position.set(0.1, -1.2 + 1.6 * air * air, -6.5 - u * 0.6); rider.rotation.set(-0.15 * air, 0, 0.12 * air);
+      rider.position.set(0.1, -1.2 + 1.6 * air * air, -10 - u * 0.6); rider.rotation.set(-0.15 * air, 0, 0.12 * air);
       rb.scale.set(1, u > td ? 1 - 0.18 * Math.exp(-sm * 8) * Math.sin(Math.min(1, sm * 6) * Math.PI) - 0.06 : 1, 1);
       for (let i = 0; i < SN; i++) { const vx = sv[i * 3], vy = sv[i * 3 + 1], vz = sv[i * 3 + 2];
         spos.set(u > td ? [rider.position.x + vx * sm, -1.2 + Math.max(0, vy * sm - 4.9 * sm * sm), rider.position.z + vz * sm] : [0, -50, 0], i * 3); }

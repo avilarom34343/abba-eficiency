@@ -106,13 +106,25 @@ export function dust(scene, { count = 600, area = [20, 30, 20], color = 0xffffff
 
 /** Stylised athlete silhouette from capsules (reads as a person in rim light). pose: 'stand'|'ride'|'board'|'climb'|'jump'. */
 export function figure({ color = 0x0d0f14, pose = 'stand' } = {}) {
-  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.1 }); const g = new THREE.Group();
-  const cap = (r, l, x, y, z, rx = 0, rz = 0) => { const m = new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 6, 12), mat); m.position.set(x, y, z); m.rotation.set(rx, 0, rz); g.add(m); return m; };
-  const P = { stand: [0, 0, 0.15, -0.15, 0.05], ride: [0.5, -0.9, 0.9, -0.8, 0.6], board: [0.35, 0.6, -0.6, 0.4, -0.3], climb: [-0.2, 1.2, -1.4, 0.3, 0], jump: [0.4, -1.4, 1.4, -0.5, 0.5] }[pose] ?? [0, 0, 0, 0, 0];
-  cap(0.16, 0.5, 0, 1.25, 0, P[0] * 0.3); // torso
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), mat); head.position.set(0, 1.72, 0); g.add(head);
-  cap(0.055, 0.45, -0.28, 1.25, 0, 0, P[1] * 0.6 + 0.2); cap(0.055, 0.45, 0.28, 1.25, 0, 0, P[2] * 0.6 - 0.2); // arms
-  cap(0.075, 0.55, -0.11, 0.5, 0, P[3] * 0.4, 0.05); cap(0.075, 0.55, 0.11, 0.5, 0, P[4] * 0.4, -0.05); // legs
+  // Human silhouette, ~1.8 units tall: tapered torso (lathe), neck, oval head, two-segment limbs with
+  // elbows/knees, hands and feet. Poses bend the joints; reads as a real body in rim light, not a robot.
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.55, metalness: 0.05 }); const g = new THREE.Group();
+  const limb = (r0, r1, len) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r0, len, 14, 1), mat); m.geometry.translate(0, -len / 2, 0); return m; };
+  const joint = (r) => new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), mat);
+  const torso = new THREE.Mesh(new THREE.LatheGeometry([[0, 0], [0.13, 0.02], [0.15, 0.12], [0.135, 0.3], [0.16, 0.46], [0.2, 0.56], [0.19, 0.62], [0.09, 0.66], [0, 0.67]].map(([x, y]) => new THREE.Vector2(x, y)), 20), mat);
+  torso.scale.set(1, 1, 0.62); torso.position.y = 0.92; g.add(torso);
+  const neck = limb(0.05, 0.045, 0.1); neck.position.y = 1.66; g.add(neck);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.1, 20, 14), mat); head.scale.set(0.9, 1.15, 1); head.position.y = 1.72; g.add(head);
+  const P = { stand: [0.1, 0.25, 0.1, 0.25, 0.05, 0.05, 0.02, 0.02], ride: [-1.0, 1.4, -1.0, 1.4, -1.3, 1.6, -1.3, 1.6], board: [0.9, 0.3, -0.9, 0.3, -0.5, 0.9, -0.3, 0.7], climb: [-2.6, 0.6, -0.4, 1.2, -0.9, 1.3, 0.1, 0.3], jump: [-2.4, 0.3, -2.4, 0.3, -1.1, 1.8, -0.4, 0.6] }[pose] ?? [0, 0, 0, 0, 0, 0, 0, 0];
+  const arm = (side, sh, el) => { const s = new THREE.Group(); s.position.set(side * 0.2, 1.5, 0); s.rotation.set(sh, 0, side * 0.12); g.add(s);
+    const up = limb(0.05, 0.042, 0.3); s.add(up); s.add(joint(0.048));
+    const e = new THREE.Group(); e.position.y = -0.3; e.rotation.x = -el; s.add(e); e.add(joint(0.042)); const lo = limb(0.04, 0.032, 0.27); e.add(lo);
+    const hand = joint(0.042); hand.scale.set(0.8, 1.2, 0.6); hand.position.y = -0.3; e.add(hand); };
+  const leg = (side, hip, knee) => { const s = new THREE.Group(); s.position.set(side * 0.09, 0.95, 0); s.rotation.x = hip; g.add(s);
+    const th = limb(0.075, 0.058, 0.44); s.add(th); s.add(joint(0.075));
+    const k = new THREE.Group(); k.position.y = -0.44; k.rotation.x = knee; s.add(k); k.add(joint(0.058)); const sh = limb(0.055, 0.04, 0.42); k.add(sh);
+    const foot = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.06, 0.24), mat); foot.position.set(0, -0.44, 0.06); k.add(foot); };
+  arm(-1, P[0], P[1]); arm(1, P[2], P[3]); leg(-1, P[4], P[5]); leg(1, P[6], P[7]);
   return g;
 }
 

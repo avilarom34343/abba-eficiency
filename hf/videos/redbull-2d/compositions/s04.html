@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>s04 — discovery: lone athlete on a ridge</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        [data-composition-id="s04"] #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: #04060d; }
+        [data-composition-id="s04"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-composition-id="s04"] #stage #s04_cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 1150px; }
+        [data-composition-id="s04"] #stage #s04_sky { position: absolute; left: -300px; top: -200px; width: 1680px; height: 1700px;
+          background: linear-gradient(180deg, #03050c 0%, #0b1328 25%, #23253f 40%, #5a2f3a 47%, #c2552a 52%, #ffa257 55%, #ffd79a 57%, #3a2a3a 66%, #0b1020 80%); }
+        [data-composition-id="s04"] #stage .s04_layer { position: absolute; left: -200px; top: 0; width: 1480px; height: 1920px; overflow: visible; }
+        [data-composition-id="s04"] #stage #s04_sunglow { position: absolute; left: 360px; top: 460px; width: 800px; height: 800px; border-radius: 50%; mix-blend-mode: screen;
+          background: radial-gradient(circle, rgba(255,236,190,0.95) 0%, rgba(255,170,90,0.55) 9%, rgba(255,120,60,0.22) 25%, transparent 60%); }
+        [data-composition-id="s04"] #stage #s04_godrays { position: absolute; left: -140px; top: -40px; width: 1800px; height: 1800px; mix-blend-mode: screen; filter: blur(6px);
+          background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,190,120,0.16) 0deg 3deg, transparent 3deg 11deg);
+          -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.6) 25%, transparent 60%); mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.6) 25%, transparent 60%); }
+        [data-composition-id="s04"] #stage .s04_haze { position: absolute; left: -400px; width: 1900px; mix-blend-mode: screen; filter: blur(30px); }
+        [data-composition-id="s04"] #stage #s04_haze1 { top: 900px; height: 180px; background: linear-gradient(180deg, transparent, rgba(190,140,150,0.35), transparent); }
+        [data-composition-id="s04"] #stage #s04_haze2 { top: 1160px; height: 220px; background: linear-gradient(180deg, transparent, rgba(120,140,190,0.28), transparent); }
+        [data-composition-id="s04"] #stage #s04_far { filter: blur(3px); }
+        [data-composition-id="s04"] #stage #s04_mid { filter: blur(2px); }
+        [data-composition-id="s04"] #stage #s04_fgl { filter: blur(6px); }
+        [data-composition-id="s04"] #stage #s04_snowA, [data-composition-id="s04"] #stage #s04_snowB { position: absolute; inset: 0; }
+        [data-composition-id="s04"] #stage .s04_flake { position: absolute; border-radius: 50%; background: #eef3ff; }
+        [data-composition-id="s04"] #stage #s04_flares { position: absolute; inset: 0; mix-blend-mode: screen; }
+        [data-composition-id="s04"] #stage .s04_fl { position: absolute; border-radius: 50%; }
+        [data-composition-id="s04"] #stage #s04_streak { position: absolute; left: -200px; top: 940px; width: 1480px; height: 6px; mix-blend-mode: screen; filter: blur(3px);
+          background: linear-gradient(90deg, transparent, rgba(255,190,130,0.0) 20%, rgba(255,210,160,0.7) 62%, rgba(255,190,130,0) 90%); }
+        [data-composition-id="s04"] #stage #s04_open { position: absolute; inset: 0; opacity: 0.85; mix-blend-mode: screen;
+          background: radial-gradient(ellipse at 50% 45%, #ffdcae 0%, #ff9a4d 45%, #8a3c15 100%); }
+        [data-composition-id="s04"] #stage #s04_grade { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(180deg, rgba(2,4,10,0.55) 0%, transparent 22%, transparent 75%, rgba(2,4,10,0.6) 100%); }
+      </style>
+
+      <div id="stage" data-composition-id="s04" data-width="1080" data-height="1920" data-duration="4.8" style="width:1080px;height:1920px">
+        <div id="s04_cam">
+          <div id="s04_sky"></div>
+          <div id="s04_godrays"></div>
+          <div id="s04_sunglow"></div>
+
+          <!-- paraglider lives in the sky layer -->
+          <svg id="s04_skyl" class="s04_layer" viewBox="-200 0 1480 1920">
+            <g id="s04_glider" opacity="0" transform="translate(250,600)">
+              <path d="M-60,0 Q0,-34 60,0 Q0,-20 -60,0 Z" fill="#0b0e18" stroke="#ffb46a" stroke-width="1.5" />
+              <path d="M-58,0 L0,46 M-30,-10 L0,46 M30,-10 L0,46 M58,0 L0,46" stroke="#0b0e18" stroke-width="1" opacity="0.8" />
+              <circle cx="0" cy="50" r="4" fill="#0b0e18" />
+              <path d="M-3,52 L3,52 L2,62 L-2,62 Z" fill="#0b0e18" />
+            </g>
+          </svg>
+
+          <svg id="s04_far" class="s04_layer" viewBox="-200 0 1480 1920">
+            <defs>
+              <linearGradient id="s04_farG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4766" /><stop offset="1" stop-color="#1b2038" /></linearGradient>
+            </defs>
+            <circle cx="760" cy="880" r="54" fill="#fff1cf" />
+            <path d="M-200,1000 L-120,900 L-40,940 L60,820 L160,900 L240,860 L330,780 L420,880 L520,840 L600,905 L680,850 L740,896 L800,870 L880,820 L980,900 L1080,840 L1180,900 L1280,860 L1280,1320 L-200,1320 Z" fill="url(#s04_farG)" />
+            <path d="M60,820 L100,856 M330,780 L372,830 M880,820 L920,856 M1080,840 L1120,868" stroke="#ffc48a" stroke-width="4" opacity="0.55" />
+            <path d="M-120,900 L-40,940 L60,820 L160,900 L240,860 L330,780 L420,880 L520,840 L600,905 L680,850 L740,896 L800,870 L880,820 L980,900 L1080,840 L1180,900 L1280,860" stroke="#ffb27a" stroke-width="2" fill="none" opacity="0.5" />
+          </svg>
+          <div id="s04_haze1" class="s04_haze"></div>
+
+          <svg id="s04_mid" class="s04_layer" viewBox="-200 0 1480 1920">
+            <defs>
+              <linearGradient id="s04_midG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2238" /><stop offset="1" stop-color="#080c18" /></linearGradient>
+              <linearGradient id="s04_litG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffcf9a" stop-opacity="0.75" /><stop offset="1" stop-color="#c06a40" stop-opacity="0.05" /></linearGradient>
+              <linearGradient id="s04_snowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8eefc" /><stop offset="1" stop-color="#7d8db0" stop-opacity="0" /></linearGradient>
+            </defs>
+            <path d="M-200,1150 L-60,1020 L60,1060 L200,940 L330,1040 L420,1000 L520,1080 L640,980 L760,1060 L880,1000 L1000,1080 L1120,1020 L1280,1100 L1280,1560 L-200,1560 Z" fill="url(#s04_midG)" />
+            <path d="M200,940 L330,1040 L250,1080 Z M640,980 L760,1060 L680,1090 Z M880,1000 L1000,1080 L920,1100 Z M-60,1020 L60,1060 L0,1090 Z" fill="url(#s04_litG)" />
+            <path d="M200,940 L232,966 L214,972 L198,990 L186,968 L168,968 Z M640,980 L670,1004 L650,1010 L636,1022 L626,1004 L612,1002 Z" fill="url(#s04_snowG)" />
+            <!-- snowboarder carving down the left slope -->
+            <g id="s04_carve" opacity="0" transform="translate(150,985)">
+              <g id="s04_carveSpray">
+                <ellipse cx="34" cy="-4" rx="34" ry="12" fill="#f4f7ff" opacity="0.55" />
+                <circle cx="56" cy="-14" r="6" fill="#f4f7ff" opacity="0.5" /><circle cx="70" cy="-6" r="4" fill="#f4f7ff" opacity="0.4" />
+              </g>
+              <g filter="url(#s04_rim)" transform="scale(0.55) rotate(-18)">
+                <rect x="-34" y="-4" width="68" height="8" rx="4" fill="#06080e" />
+                <path d="M-14,-4 L-18,-26 L-6,-48 L8,-56 L14,-42 L6,-26 L14,-4 L6,-4 L0,-22 L-6,-4 Z" fill="#06080e" />
+                <circle cx="10" cy="-66" r="9" fill="#06080e" />
+                <path d="M6,-50 L32,-58 L32,-52 L8,-42 Z M-6,-46 L-30,-30 L-26,-26 L-2,-40 Z" fill="#06080e" />
+              </g>
+            </g>
+          </svg>
+          <div id="s04_haze2" class="s04_haze"></div>
+
+          <svg id="s04_near" class="s04_layer" viewBox="-200 0 1480 1920">
+            <defs>
+              <linearGradient id="s04_nearG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121a2e" /><stop offset="0.5" stop-color="#070b15" /><stop offset="1" stop-color="#020308" /></linearGradient>
+              <linearGradient id="s04_snowFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9d4ec" stop-opacity="0.55" /><stop offset="1" stop-color="#4a5878" stop-opacity="0" /></linearGradient>
+              <linearGradient id="s04_cliffG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a0f1b" /><stop offset="1" stop-color="#6a3a28" /></linearGradient>
+              <filter id="s04_rim" x="-30%" y="-30%" width="160%" height="160%">
+                <feOffset in="SourceAlpha" dx="-2.5" dy="1.5" result="o" />
+                <feComposite in="SourceAlpha" in2="o" operator="out" result="edge" />
+                <feFlood flood-color="#ffb870" />
+                <feComposite in2="edge" operator="in" result="rim" />
+                <feGaussianBlur in="rim" stdDeviation="0.7" result="rb" />
+                <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rb" /></feMerge>
+              </filter>
+              <filter id="s04_soft"><feGaussianBlur stdDeviation="4" /></filter>
+            </defs>
+            <path d="M-200,1520 L60,1380 L240,1290 L400,1210 L540,1150 L640,1190 L760,1240 L790,1300 L800,1420 L830,1560 L1000,1600 L1280,1640 L1280,1920 L-200,1920 Z" fill="url(#s04_nearG)" />
+            <path d="M-200,1520 L60,1380 L240,1290 L400,1210 L540,1150 L640,1190 L760,1240 L700,1300 L560,1260 L420,1300 L240,1380 L60,1460 L-200,1600 Z" fill="url(#s04_snowFace)" />
+            <path d="M760,1240 L790,1300 L800,1420 L830,1560 L1000,1600 L960,1640 L820,1620 L780,1480 L770,1340 Z" fill="url(#s04_cliffG)" opacity="0.8" />
+            <path d="M-200,1520 L60,1380 L240,1290 L400,1210 L540,1150 L640,1190 L760,1240 L790,1300 L800,1420 L830,1560 L1000,1600 L1280,1640" stroke="#ffd2a0" stroke-width="7" fill="none" filter="url(#s04_soft)" opacity="0.8" />
+            <path d="M-200,1520 L60,1380 L240,1290 L400,1210 L540,1150 L640,1190 L760,1240 L790,1300 L800,1420 L830,1560 L1000,1600 L1280,1640" stroke="#fff0dc" stroke-width="1.6" fill="none" opacity="0.9" />
+
+            <!-- climber on the sunlit cliff -->
+            <g id="s04_climber" opacity="0" transform="translate(812,1500)">
+              <path d="M-2,-60 L-2,-200" stroke="#d9c7b0" stroke-width="0.8" opacity="0.6" />
+              <g filter="url(#s04_rim)" transform="scale(0.5)">
+                <path d="M-6,0 L-10,-30 L-4,-56 L8,-56 L10,-30 L14,-4 L8,-2 L4,-28 L2,-36 L-2,-28 L0,0 Z" fill="#06080e" />
+                <circle cx="2" cy="-68" r="8" fill="#06080e" />
+                <path id="s04_climbArmL" d="M-4,-54 L-14,-90 L-8,-92 L2,-56 Z" fill="#06080e" />
+                <path id="s04_climbArmR" d="M8,-54 L14,-78 L20,-76 L12,-52 Z" fill="#06080e" />
+                <rect x="-12" y="-52" width="10" height="16" rx="2" fill="#0b0f18" />
+              </g>
+            </g>
+
+            <!-- the lone athlete on the summit -->
+            <g id="s04_hero" transform="translate(540,1152)">
+              <ellipse cx="0" cy="2" rx="40" ry="5" fill="#000" opacity="0.5" />
+              <g filter="url(#s04_rim)">
+                <path id="s04_flap" d="M-12,-82 L-36,-78 L-30,-70 L-38,-64 L-13,-62 Z" fill="#090c14" />
+                <path id="s04_scarf" d="M-6,-88 L-40,-92 L-34,-86 L-46,-84 L-8,-80 Z" fill="#0d1018" />
+                <path d="M-10,0 L-7,-46 L7,-46 L10,0 L3,0 L0,-34 L-3,0 Z" fill="#06080e" />
+                <path d="M-13,-46 L-15,-82 Q0,-93 15,-82 L13,-46 Z" fill="#070a12" />
+                <path d="M-14,-80 L-20,-54 L-15,-52 L-9,-72 Z" fill="#06080e" />
+                <path d="M13,-80 L22,-60 L19,-55 L10,-70 Z" fill="#06080e" />
+                <rect x="20" y="-100" width="11" height="100" rx="5" fill="#05070c" />
+                <circle cx="0" cy="-99" r="10" fill="#06080e" />
+                <rect x="1" y="-102" width="10" height="4" rx="2" fill="#ffb36a" opacity="0.9" />
+              </g>
+            </g>
+          </svg>
+
+          <svg id="s04_fgl" class="s04_layer" viewBox="-200 0 1480 1920">
+            <defs>
+              <linearGradient id="s04_waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a40" /><stop offset="1" stop-color="#05070e" /></linearGradient>
+              <linearGradient id="s04_sunStreak" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb46a" stop-opacity="0" /><stop offset="0.6" stop-color="#ffc98a" stop-opacity="0.7" /><stop offset="1" stop-color="#ffb46a" stop-opacity="0" /></linearGradient>
+              <linearGradient id="s04_rockG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1418" /><stop offset="1" stop-color="#030305" /></linearGradient>
+            </defs>
+            <rect x="200" y="1790" width="1080" height="130" fill="url(#s04_waterG)" />
+            <rect x="420" y="1800" width="700" height="8" fill="url(#s04_sunStreak)" />
+            <rect x="480" y="1830" width="560" height="5" fill="url(#s04_sunStreak)" />
+            <g id="s04_wave">
+              <path d="M420,1840 Q680,1838 790,1784 Q858,1752 890,1790 Q850,1786 836,1834 L1280,1846 L1280,1920 L420,1920 Z" fill="#0d1a2e" />
+              <path d="M600,1832 Q720,1820 790,1784 Q858,1752 890,1790" stroke="#f4f0e6" stroke-width="4" fill="none" opacity="0.8" />
+            </g>
+            <g id="s04_surfer" opacity="0" transform="translate(770,1800)">
+              <g filter="url(#s04_rim)" transform="scale(0.6) rotate(-14)">
+                <rect x="-36" y="-4" width="72" height="8" rx="4" fill="#06080e" />
+                <path d="M-12,-4 L-14,-26 L-4,-50 L8,-50 L12,-26 L16,-4 L8,-4 L4,-24 L0,-24 L-4,-4 Z" fill="#06080e" />
+                <circle cx="4" cy="-60" r="8" fill="#06080e" />
+                <path d="M-4,-46 L-30,-40 L-30,-36 L-2,-40 Z M8,-46 L32,-56 L32,-52 L8,-40 Z" fill="#06080e" />
+              </g>
+            </g>
+            <path d="M-200,1760 L20,1720 L130,1668 L170,1676 L196,1740 L240,1920 L-200,1920 Z" fill="url(#s04_rockG)" />
+            <path d="M20,1720 L130,1668 L170,1676" stroke="#ffbf86" stroke-width="3" fill="none" opacity="0.7" />
+            <g id="s04_moto" opacity="0" transform="translate(150,1660)">
+              <g filter="url(#s04_rim)" transform="scale(0.75)">
+                <circle cx="-22" cy="0" r="12" fill="none" stroke="#06080e" stroke-width="5" />
+                <circle cx="22" cy="0" r="12" fill="none" stroke="#06080e" stroke-width="5" />
+                <path d="M-22,0 L-6,-16 L14,-18 L22,0 L16,-10 L0,-8 Z" fill="#06080e" />
+                <path d="M-10,-18 L18,-22 L20,-16 L-8,-12 Z" fill="#0b0f18" />
+                <path d="M-6,-18 L-2,-36 L6,-46 L12,-42 L8,-30 L12,-22 Z" fill="#06080e" />
+                <circle cx="8" cy="-52" r="8" fill="#06080e" />
+                <path d="M6,-40 L20,-26 L24,-28 L10,-42 Z" fill="#06080e" />
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <div id="s04_snowA"></div>
+        <div id="s04_streak"></div>
+        <div id="s04_flares"></div>
+        <div id="s04_snowB"></div>
+        <div id="s04_grade"></div>
+        <div id="s04_open"></div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="s04"]');
+          var $ = function (id) { return root.querySelector('#' + id); };
+          var tl = gsap.timeline({ paused: true });
+          var D = 4.8;
+          var seed = 4044;
+          function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+          function r(a, b) { return a + (b - a) * rnd(); }
+          function div(cls, css, parent) { var d = document.createElement('div'); d.className = cls; d.style.cssText = css; parent.appendChild(d); return d; }
+
+          // ---------- wind-blown spindrift: far fine snow (A) + big out-of-focus flakes near lens (B) ----------
+          function snow(parent, n, smin, smax, blurK, dmin, dmax) {
+            for (var i = 0; i < n; i++) {
+              var s = r(smin, smax);
+              var f = div('s04_flake', 'left:' + r(0, 2700).toFixed(0) + 'px;top:' + r(0, 1920).toFixed(0) + 'px;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) + 'px;opacity:' + r(0.35, 0.9).toFixed(2) + ';filter:blur(' + (s * blurK).toFixed(1) + 'px)', parent);
+              tl.fromTo(f, { x: 0, y: 0 }, { x: -r(dmin, dmax), y: r(-60, 160), duration: D, ease: 'none' }, 0);
+            }
+          }
+          snow($('s04_snowA'), 140, 1.5, 4, 0.25, 1500, 1900);
+          snow($('s04_snowB'), 18, 10, 26, 0.45, 1700, 2300);
+
+          // ---------- lens flare chain (sun upper right -> lower left) ----------
+          var fl = $('s04_flares'), flares = [];
+          [[820, 820, 220, 'rgba(255,200,140,0.10)'], [600, 1060, 70, 'rgba(255,160,90,0.18)'], [430, 1260, 130, 'rgba(140,170,255,0.10)'], [300, 1420, 40, 'rgba(255,210,170,0.25)'], [160, 1600, 180, 'rgba(255,140,80,0.07)']].forEach(function (a) {
+            flares.push(div('s04_fl', 'left:' + (a[0] - a[2] / 2) + 'px;top:' + (a[1] - a[2] / 2) + 'px;width:' + a[2] + 'px;height:' + a[2] + 'px;background:radial-gradient(circle, ' + a[3] + ' 0%, ' + a[3] + ' 60%, transparent 72%)', fl));
+          });
+
+          var cam = $('s04_cam');
+          // ---------- opening: warm bloom from the pinned photo resolves into the sunset ----------
+          tl.fromTo($('s04_open'), { opacity: 0.85 }, { opacity: 0, duration: 0.6, ease: 'power2.out' }, 0);
+
+          // ---------- camera: tight orbit on the lone athlete, then the world opens ----------
+          tl.fromTo(cam, { scale: 2.7, y: -190, x: 0, rotation: -2.5 }, { scale: 2.35, y: -160, x: 0, rotation: 0.5, duration: 2.1, ease: 'sine.inOut' }, 0);
+          tl.to(cam, { scale: 1.04, y: 0, x: 0, rotation: 0, duration: 2.75, ease: 'power2.inOut' }, 2.05);
+          // orbit parallax (layers slide past each other at different speeds)
+          tl.fromTo($('s04_far'), { x: 30 }, { x: -40, duration: D, ease: 'sine.inOut' }, 0);
+          tl.fromTo($('s04_skyl'), { x: 20 }, { x: -25, duration: D, ease: 'sine.inOut' }, 0);
+          tl.fromTo($('s04_haze1'), { x: 0 }, { x: -160, duration: D, ease: 'none' }, 0);
+          tl.fromTo($('s04_mid'), { x: 70 }, { x: -90, duration: D, ease: 'sine.inOut' }, 0);
+          tl.fromTo($('s04_haze2'), { x: 0 }, { x: -260, duration: D, ease: 'none' }, 0);
+          tl.fromTo($('s04_fgl'), { x: -180, y: 60 }, { x: 160, y: 0, duration: D, ease: 'sine.inOut' }, 0);
+          tl.fromTo($('s04_godrays'), { rotation: 0 }, { rotation: 9, duration: D, ease: 'none' }, 0);
+          tl.fromTo($('s04_sunglow'), { scale: 0.95, opacity: 0.85 }, { scale: 1.1, opacity: 1, duration: D, ease: 'sine.inOut' }, 0);
+          tl.fromTo($('s04_streak'), { x: 0, opacity: 0.5 }, { x: -120, opacity: 0.9, duration: D, ease: 'sine.inOut' }, 0);
+          flares.forEach(function (f, i) { tl.fromTo(f, { x: 0, y: 0 }, { x: (i - 2) * 40, y: (i - 2) * -50, duration: D, ease: 'sine.inOut' }, 0); });
+          // depth of field: far layers blurred on the tight shot, sharpen as the world reveals
+          tl.fromTo($('s04_far'), { filter: 'blur(3px)' }, { filter: 'blur(0.5px)', duration: 2.0, ease: 'sine.inOut' }, 2.2);
+          tl.fromTo($('s04_mid'), { filter: 'blur(2px)' }, { filter: 'blur(0px)', duration: 2.0, ease: 'sine.inOut' }, 2.2);
+          tl.fromTo($('s04_fgl'), { filter: 'blur(6px)' }, { filter: 'blur(1px)', duration: 2.0, ease: 'sine.inOut' }, 2.2);
+
+          // ---------- wind in the clothes ----------
+          tl.fromTo($('s04_flap'), { scaleX: 1, transformOrigin: '100% 50%' }, { scaleX: 0.55, duration: 0.11, ease: 'sine.inOut', yoyo: true, repeat: Math.max(0, Math.floor(D / 0.11) - 1) }, 0);
+          tl.fromTo($('s04_scarf'), { scaleX: 1, skewY: 0, transformOrigin: '100% 50%' }, { scaleX: 0.7, skewY: 8, duration: 0.15, ease: 'sine.inOut', yoyo: true, repeat: Math.max(0, Math.floor(D / 0.15) - 1) }, 0);
+
+          // ---------- the world fills with athletes ----------
+          function appear(id, t) { tl.fromTo($(id), { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power2.out' }, t); }
+          // snowboarder carving down the mid slope
+          appear('s04_carve', 2.35);
+          tl.fromTo($('s04_carve'), { x: 0, y: 0 }, { x: -200, y: 70, duration: 2.45, ease: 'none' }, 2.35);
+          tl.fromTo($('s04_carveSpray'), { scale: 0.6, opacity: 0.4, transformOrigin: '0% 50%' }, { scale: 1.3, opacity: 1, duration: 0.3, ease: 'sine.inOut', yoyo: true, repeat: 7 }, 2.35);
+          // paraglider drifting across the sky
+          appear('s04_glider', 2.6);
+          tl.fromTo($('s04_glider'), { x: 0, y: 0, rotation: -4 }, { x: 150, y: -30, rotation: 3, duration: 2.2, ease: 'none' }, 2.6);
+          // climber pulling up the sunlit cliff
+          appear('s04_climber', 2.85);
+          tl.fromTo($('s04_climber'), { y: 0 }, { y: -40, duration: 1.95, ease: 'power1.inOut' }, 2.85);
+          tl.fromTo($('s04_climbArmR'), { rotation: 0, transformOrigin: '0% 100%' }, { rotation: -40, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: 3 }, 2.85);
+          // motocross launching off the kicker
+          appear('s04_moto', 3.05);
+          tl.fromTo($('s04_moto'), { x: 0 }, { x: 330, duration: 1.75, ease: 'none' }, 3.05);
+          tl.fromTo($('s04_moto'), { y: 0 }, { y: -170, duration: 0.95, ease: 'power2.out' }, 3.05);
+          tl.to($('s04_moto'), { y: -110, duration: 0.8, ease: 'power2.in' }, 4.0);
+          tl.fromTo($('s04_moto'), { rotation: -18 }, { rotation: 8, duration: 1.75, ease: 'sine.inOut' }, 3.05);
+          // surfer riding the wave
+          appear('s04_surfer', 3.25);
+          tl.fromTo($('s04_surfer'), { x: 0, y: 0 }, { x: -110, y: 18, duration: 1.55, ease: 'sine.inOut' }, 3.25);
+          tl.fromTo($('s04_wave'), { x: 0 }, { x: -60, duration: D, ease: 'none' }, 0);
+
+          window.__timelines['s04'] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>

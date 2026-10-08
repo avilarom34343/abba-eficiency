@@ -96,23 +96,24 @@ export function create(renderer) {
   const geo = new THREE.PlaneGeometry(SW, SH), dummy = new THREE.Object3D();
   const tunnel = new THREE.Group(); tunnel.position.set(0, CY, 0); scene.add(tunnel);
   const inst = feeds.map((f) => ({ list: [], mat: f.material }));
-  const RINGS = 36, PER = 12;
+  const RINGS = 41, PER = 12;
   for (let i = 0; i < RINGS; i++) for (let j = 0; j < PER; j++) { const a = (j / PER) * PI * 2 + (i % 2) * (PI / PER), z = WALL_Z - 1.5 - i * 2.2;
     inst[(i * 5 + j * 3) % 8].list.push({ p: [Math.cos(a) * 3.1, Math.sin(a) * 4.8, z], z, wall: false }); }
-  const VW = 30, VH = 40, VZ = -150;
+  const VW = 36, VH = 58, VZ = -168;
   for (let c = 0; c < VW; c++) for (let r = 0; r < VH; r++) { const x = (c - VW / 2 + 0.5) * 1.75, y = (r - VH / 2 + 0.5) * 1.0;
     inst[(c * 3 + r * 7) % 8].list.push({ p: [x, y, VZ], z: VZ, wall: true, d: Math.hypot(x, y) }); }
-  const meshes = inst.map(({ list, mat }) => { const im = new THREE.InstancedMesh(geo, mat, list.length);
+  const vast = new THREE.Group(); vast.position.y = CY; scene.add(vast);
+  const meshes = inst.flatMap(({ list: all, mat }) => [false, true].map((isWall) => { const list = all.filter((q) => q.wall === isWall), im = new THREE.InstancedMesh(geo, mat, list.length);
     list.forEach((s, k) => { dummy.position.set(...s.p); if (s.wall) dummy.rotation.set(0, 0, 0); else dummy.lookAt(0, 0, s.z); dummy.updateMatrix(); im.setMatrixAt(k, dummy.matrix); im.setColorAt(k, new THREE.Color(1, 1, 1)); });
-    tunnel.add(im); return { im, list }; });
-  const ribs = new THREE.Group(); tunnel.add(ribs); const ribMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0x9fc4ff).multiplyScalar(1.4), transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false });
+    (isWall ? vast : tunnel).add(im); return { im, list }; }));
+  const ribs = new THREE.Group(); tunnel.add(ribs); const ribMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0x9fc4ff).multiplyScalar(1.4), transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false });
   for (let i = 0; i < RINGS; i += 3) { const r = new THREE.Mesh(new THREE.TorusGeometry(1, 0.012, 4, 64), ribMat); r.scale.set(3.9, 5.7, 1); r.position.z = WALL_Z - 1.5 - i * 2.2 - 1.1; ribs.add(r); }
   const speed = K.streaks(scene, { count: 160, len: 5, area: [7, 10, 60], color: 0xbcd7ff, seed: 6, opacity: 0.4 }); scene.remove(speed); cam.add(speed);
   const col = new THREE.Color();
 
   function render(t) {
     for (const f of feeds) f.userData.paint(t);
-    const inRoom = t < 3.75;
+    const inRoom = t < 3.62;
     // camera: slow push over the operators, accelerating dive into the centre screen, then down the tunnel
     const x = K.seg(t, 0, 3.6), s = K.seg(t, 3.6, 9.8);
     const z = t < 3.6 ? 9 - 22.5 * (0.35 * x + 0.65 * x * x * x) : WALL_Z + 0.5 - 92 * (1 - Math.pow(1 - s, 2.2));
@@ -120,7 +121,7 @@ export function create(renderer) {
     const y = t < 3.6 ? K.lerp(2.3, CY, K.eio(x)) : CY;
     cam.position.set(K.lerp(0.7, 0, K.eio(x)) + hx, y + hy, z);
     cam.lookAt(K.lerp(0.3, 0, x) + hx * 0.5, K.lerp(4.2, CY, x) + hy, z - 20);
-    cam.fov = K.lerp(42, 54, K.eio(K.seg(t, 2.6, 4.4))) - 10 * K.eio(K.seg(t, 7.8, 9.8)); cam.updateProjectionMatrix();
+    cam.fov = K.lerp(42, 54, K.eio(K.seg(t, 2.6, 4.4))) - 4 * K.eio(K.seg(t, 7.8, 9.8)); cam.updateProjectionMatrix();
     cam.rotateZ(t > 3.6 ? Math.sin(s * PI) * 0.06 : 0);
 
     room.visible = inRoom; motes.visible = inRoom; motes.userData.update(t, [0.05, 0.2, 0]);
@@ -132,10 +133,10 @@ export function create(renderer) {
 
     // tunnel + vast wall: brightness waves on the beat words, the wall goes live from its centre at "contenido"
     tunnel.rotation.z = K.eio(s) * 0.3; ribs.visible = t > 3.3;
-    scene.fog.near = K.lerp(12, 30, K.seg(t, 7.2, 9)); scene.fog.far = K.lerp(80, 240, K.seg(t, 6.8, 8.8));
+    scene.fog.near = K.lerp(12, 30, K.seg(t, 7.2, 9)); scene.fog.far = K.lerp(80, 240, K.seg(t, 6.0, 8.0));
     for (const { im, list } of meshes) { list.forEach((q, k) => {
       let b;
-      if (q.wall) b = 0.18 + 0.8 * K.eo(K.seg(t - BEATS[2], q.d * 0.025, q.d * 0.025 + 0.35));
+      if (q.wall) b = 0.35 + 0.65 * K.eo(K.seg(t - BEATS[2], q.d * 0.018, q.d * 0.018 + 0.35));
       else { b = 0.72; for (const bt of BEATS) if (t > bt) { const front = cam.position.z - (t - bt) * 40; b += 0.9 * Math.exp(-Math.pow((q.z - front) / 3, 2)); } }
       im.setColorAt(k, col.setScalar(b)); }); im.instanceColor.needsUpdate = true; }
     speed.visible = t > 3.6; speed.material.opacity = 0.4 * K.seg(t, 3.6, 4.2) * (1 - K.seg(t, 7.6, 8.6)); speed.userData.update(t, 50);

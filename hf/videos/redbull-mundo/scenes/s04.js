@@ -63,7 +63,7 @@ export function create(renderer) {
 
   // ---------- hero: lone athlete on the summit ----------
   const hero = K.figure({ color: 0x0b0d12 }); const HERO_Y = H(0, 0); hero.position.set(0, HERO_Y - 0.05, 0); scene.add(hero);
-  const pack = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.45, 0.2), hero.children[0].material); pack.position.set(0, 1.3, 0.2); hero.add(pack);
+  const pack = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.45, 0.2), hero.children[0].material); pack.position.set(0, 1.3, 0.2); pack.visible = false; hero.add(pack);
   const board = new THREE.Mesh(new THREE.BoxGeometry(0.24, 1.35, 0.03), new THREE.MeshStandardMaterial({ color: 0x101830, metalness: 0.4, roughness: 0.35 })); board.position.set(0.05, 1.1, 0.32); board.rotation.z = 0.12; hero.add(board);
   const scarfGeo = new THREE.PlaneGeometry(0.9, 0.11, 18, 1).translate(0.45, 0, 0), sBase = scarfGeo.attributes.position.array.slice();
   const scarf = new THREE.Mesh(scarfGeo, new THREE.MeshStandardMaterial({ color: 0xc23a1e, roughness: 0.7, side: THREE.DoubleSide })); scarf.position.set(0.05, 1.56, 0.05); hero.add(scarf);
@@ -99,7 +99,7 @@ export function create(renderer) {
 
   const tmp = new THREE.Vector3(), look = new THREE.Vector3(), q = new THREE.Vector3();
 
-  function render(t) {
+  function render(t) { board.visible = t < 1.9;
     const hand = (k) => Math.sin(t * 1.2 + k) * 0.6 + Math.sin(t * 2.7 + k * 2.1) * 0.3 + Math.sin(t * 5.1 + k * 3.7) * 0.1;
     // ---- camera: slow close orbit around the hero, then a big crane up/back that opens the valley
     const crane = K.eio(K.seg(t, 1.9, 4.8));
@@ -128,7 +128,7 @@ export function create(renderer) {
     foam.userData.update(t, [1.2, 0.3, 0]);
     pg.position.set(K.lerp(-7, 1, K.seg(t, 0, 4.8)), HERO_Y + 7 + Math.sin(t * 0.7) * 0.5, -50); pg.rotation.set(0, 0.4, Math.sin(t * 0.9) * 0.08);
     cast.forEach(({ o, at, g }) => { o.visible = t > at - 0.25; if (o === climbers[0]) climbers[1].visible = o.visible; const k = K.seg(t, at, at + 0.35), f = 1 - K.seg(t, at + 0.35, at + 1.2);
-      g.position.copy(o.position).add(q.set(0, 1.8, 0)); g.visible = t > at; g.material.opacity = k * K.lerp(0.25, 0.9, f); g.scale.setScalar(K.lerp(1.5, 3.5, k)); });
+      g.position.copy(o.position).add(q.set(0, 1.8, 0)); g.visible = false; g.material.opacity = k * K.lerp(0.25, 0.9, f); g.scale.setScalar(K.lerp(1.5, 3.5, k)); });
 
     sunHalo.material.opacity = 0.9;
     haze.userData.update(t, [1.2, 0.05, 0.2]);
