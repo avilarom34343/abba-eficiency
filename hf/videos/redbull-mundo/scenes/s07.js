@@ -179,7 +179,7 @@ export function create(renderer) {
     cam.fov = K.lerp(30, 44, pb); cam.updateProjectionMatrix(); cam.lookAt(look); cam.rotation.z += hand(2) * 0.004;
 
     // ---- can + room light
-    can.rotation.y = 0.6 + Math.PI * 0.5 + t * 0.25;
+    can.rotation.y = -1.2 + t * 0.12; // keeps the blue half + seam toward camera
     pendant.position.set(0, 2.8 + K.ei(K.seg(t, 1.0, 2.6)) * 40, 0); shade.position.set(0, pendant.position.y + 0.12, 0); bulb.position.copy(pendant.position);
     pendant.intensity = 1.4 * (1 - K.seg(t, 1.6, 2.6)) + 1;
     shade.visible = bulb.visible = t < 2.6;
