@@ -1,0 +1,678 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>s05 — extreme world: door of light + match-cut montage</title>
+  </head>
+  <body>
+    <template>
+      <style>
+        [data-composition-id="s05"] #stage { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: #02040a; }
+        [data-composition-id="s05"] #stage * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-composition-id="s05"] #stage .s05_full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+        [data-composition-id="s05"] #stage #s05_cam { transform-origin: 540px 960px; }
+        [data-composition-id="s05"] #stage .s05_shot { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; opacity: 0; }
+        [data-composition-id="s05"] #stage #s05_A { opacity: 1; }
+        [data-composition-id="s05"] #stage .s05_sub { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; }
+        [data-composition-id="s05"] #stage .s05_dot { position: absolute; border-radius: 50%; }
+        [data-composition-id="s05"] #stage .s05_streak { position: absolute; height: 3px; border-radius: 2px; }
+
+        /* ---- A: the door of light ---- */
+        [data-composition-id="s05"] #stage #s05_Acam { transform-origin: 540px 960px; }
+        [data-composition-id="s05"] #stage #s05_door { position: absolute; left: 410px; top: 640px; width: 260px; height: 640px; overflow: hidden; clip-path: inset(0 50% 0 50%); }
+        [data-composition-id="s05"] #stage #s05_doorGlow { position: absolute; left: 140px; top: 360px; width: 800px; height: 1200px; mix-blend-mode: screen; opacity: 0;
+          background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,236,200,0.95) 0%, rgba(255,170,90,0.45) 22%, rgba(255,120,60,0.12) 45%, transparent 70%); }
+        [data-composition-id="s05"] #stage #s05_rays { position: absolute; left: -460px; top: -40px; width: 2000px; height: 2000px; mix-blend-mode: screen; opacity: 0; filter: blur(8px); transform-origin: 1000px 1000px;
+          background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,200,140,0.22) 0deg 2.5deg, transparent 2.5deg 9deg);
+          -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.5) 30%, transparent 62%); mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.5) 30%, transparent 62%); }
+        [data-composition-id="s05"] #stage #s05_spill { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; transform-origin: 540px 1280px; transform: scaleX(0.02); mix-blend-mode: screen; filter: blur(14px); }
+        [data-composition-id="s05"] #stage #s05_crack { position: absolute; left: 538px; top: 640px; width: 4px; height: 640px; background: #fff3dc; box-shadow: 0 0 24px 8px rgba(255,200,140,0.8); opacity: 0; }
+        [data-composition-id="s05"] #stage .s05_haze { position: absolute; left: -300px; width: 1700px; mix-blend-mode: screen; filter: blur(40px); }
+        [data-composition-id="s05"] #stage #s05_Ahaze1 { top: 1050px; height: 260px; background: linear-gradient(180deg, transparent, rgba(150,170,220,0.16), transparent); }
+        [data-composition-id="s05"] #stage #s05_Ahaze2 { top: 700px; height: 300px; background: linear-gradient(180deg, transparent, rgba(255,170,110,0.10), transparent); }
+        [data-composition-id="s05"] #stage #s05_walker { position: absolute; left: 340px; top: 1180px; width: 400px; height: 700px; transform-origin: 200px 700px; }
+
+        /* ---- B: motocross ---- */
+        [data-composition-id="s05"] #stage #s05_Bsky { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2200px;
+          background: linear-gradient(180deg, #05061a 0%, #1a1336 26%, #4a213c 44%, #a23c2c 56%, #f0782e 63%, #ffc070 67%, #6a2a24 74%, #120a10 84%); }
+        [data-composition-id="s05"] #stage #s05_Bsun { position: absolute; left: 420px; top: 760px; width: 700px; height: 700px; border-radius: 50%; mix-blend-mode: screen;
+          background: radial-gradient(circle, rgba(255,246,220,1) 0%, rgba(255,200,120,0.85) 8%, rgba(255,130,60,0.35) 22%, transparent 55%); }
+        [data-composition-id="s05"] #stage #s05_Brays { position: absolute; left: -230px; top: 110px; width: 2000px; height: 2000px; mix-blend-mode: screen; filter: blur(6px); transform-origin: 1000px 1000px;
+          background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,180,110,0.16) 0deg 3deg, transparent 3deg 10deg);
+          -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.5) 25%, transparent 55%); mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,0.5) 25%, transparent 55%); }
+        [data-composition-id="s05"] #stage #s05_Bfar { filter: blur(3px); }
+        [data-composition-id="s05"] #stage #s05_Bcrowd { filter: blur(1.5px); }
+        [data-composition-id="s05"] #stage #s05_Bramp { filter: blur(1px); }
+        [data-composition-id="s05"] #stage #s05_rider { position: absolute; left: 0; top: 0; width: 600px; height: 500px; transform-origin: 300px 280px; }
+        [data-composition-id="s05"] #stage #s05_turb { position: absolute; left: -160px; top: 260px; width: 1400px; height: 1400px; opacity: 0; transform-origin: 700px 700px; }
+
+        /* ---- C: snowboard ---- */
+        [data-composition-id="s05"] #stage #s05_Csky { position: absolute; left: -300px; top: -300px; width: 1680px; height: 2520px;
+          background: linear-gradient(180deg, #010209 0%, #050c22 30%, #0f2148 52%, #2b4a80 62%, #0b1530 72%, #03060f 90%); }
+        [data-composition-id="s05"] #stage #s05_Cmoon { position: absolute; left: 60px; top: 220px; width: 600px; height: 600px; border-radius: 50%; mix-blend-mode: screen;
+          background: radial-gradient(circle, rgba(235,244,255,0.95) 0%, rgba(200,220,255,0.5) 7%, rgba(120,160,230,0.18) 22%, transparent 55%); }
+        [data-composition-id="s05"] #stage #s05_Cfar { filter: blur(2.5px); }
+        [data-composition-id="s05"] #stage #s05_Cnear { filter: blur(5px); }
+        [data-composition-id="s05"] #stage #s05_board { position: absolute; left: 0; top: 0; width: 500px; height: 500px; transform-origin: 250px 250px; }
+
+        /* ---- D: aircraft through a canyon ---- */
+        [data-composition-id="s05"] #stage #s05_Dsky { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px;
+          background: linear-gradient(180deg, #060a1c 0%, #1c1b38 22%, #6a3442 38%, #d4703a 46%, #ffc882 50%, #b0563a 56%, #2a1620 70%, #07060a 90%); }
+        [data-composition-id="s05"] #stage #s05_Dsun { position: absolute; left: 240px; top: 420px; width: 600px; height: 600px; border-radius: 50%; mix-blend-mode: screen;
+          background: radial-gradient(circle, rgba(255,240,210,1) 0%, rgba(255,190,120,0.7) 10%, rgba(255,120,60,0.25) 28%, transparent 60%); }
+        [data-composition-id="s05"] #stage #s05_Dfar { filter: blur(3px); transform-origin: 540px 760px; }
+        [data-composition-id="s05"] #stage #s05_Dmid { filter: blur(1px); transform-origin: 540px 760px; }
+        [data-composition-id="s05"] #stage #s05_Dnear { filter: blur(6px); transform-origin: 540px 760px; }
+        [data-composition-id="s05"] #stage #s05_plane { position: absolute; left: 90px; top: 820px; width: 900px; height: 500px; transform-origin: 450px 250px; overflow: visible; }
+
+        /* ---- E: formula car ---- */
+        [data-composition-id="s05"] #stage #s05_Esky { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px;
+          background: linear-gradient(180deg, #010208 0%, #060c20 35%, #10203e 50%, #050914 60%, #020306 100%); }
+        [data-composition-id="s05"] #stage #s05_Efar { filter: blur(3px); }
+        [data-composition-id="s05"] #stage #s05_car { position: absolute; left: 40px; top: 1080px; width: 1000px; height: 300px; transform-origin: 500px 250px; }
+        [data-composition-id="s05"] #stage #s05_Estreaks { position: absolute; inset: 0; mix-blend-mode: screen; filter: blur(2px); }
+        [data-composition-id="s05"] #stage #s05_sparks { position: absolute; inset: 0; mix-blend-mode: screen; }
+
+        /* ---- global overlays ---- */
+        [data-composition-id="s05"] #stage #s05_motes { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none; }
+        [data-composition-id="s05"] #stage #s05_speed { position: absolute; left: -460px; top: -40px; width: 2000px; height: 2000px; opacity: 0; transform-origin: 1000px 1000px; mix-blend-mode: screen; filter: blur(1.5px); }
+        [data-composition-id="s05"] #stage #s05_flare { position: absolute; left: -540px; top: 940px; width: 2160px; height: 40px; opacity: 0; mix-blend-mode: screen; filter: blur(6px);
+          background: linear-gradient(90deg, transparent, rgba(140,180,255,0.5) 30%, rgba(240,248,255,1) 50%, rgba(140,180,255,0.5) 70%, transparent); }
+        [data-composition-id="s05"] #stage #s05_flash { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse at 50% 50%, #fff8ec 0%, #ffd7a8 50%, #ff9a50 100%); }
+        [data-composition-id="s05"] #stage #s05_grade { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(180deg, rgba(1,2,6,0.6) 0%, transparent 20%, transparent 78%, rgba(1,2,6,0.7) 100%); }
+      </style>
+
+      <div id="stage" data-composition-id="s05" data-width="1080" data-height="1920" data-duration="11.3" style="width:1080px;height:1920px">
+        <div id="s05_cam" class="s05_full">
+
+          <!-- ================= A: a door of light opens onto the extreme world ================= -->
+          <div id="s05_A" class="s05_shot">
+            <div id="s05_Acam" class="s05_sub">
+              <svg class="s05_full" viewBox="0 0 1080 1920">
+                <defs>
+                  <radialGradient id="s05_wallG" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#0c1428" /><stop offset="0.5" stop-color="#050916" /><stop offset="1" stop-color="#010207" /></radialGradient>
+                  <linearGradient id="s05_floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070b18" /><stop offset="1" stop-color="#010103" /></linearGradient>
+                  <linearGradient id="s05_frameG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1b2232" /><stop offset="0.5" stop-color="#5d6a80" /><stop offset="1" stop-color="#1b2232" /></linearGradient>
+                </defs>
+                <rect width="1080" height="1280" fill="url(#s05_wallG)" />
+                <!-- wall panels catching a cool steel key -->
+                <g opacity="0.35" stroke="#4a5a7a" stroke-width="1.5">
+                  <line x1="120" y1="0" x2="120" y2="1280" /><line x1="300" y1="0" x2="300" y2="1280" /><line x1="780" y1="0" x2="780" y2="1280" /><line x1="960" y1="0" x2="960" y2="1280" />
+                </g>
+                <rect y="1280" width="1080" height="640" fill="url(#s05_floorG)" />
+                <line x1="0" y1="1280" x2="1080" y2="1280" stroke="#2a3654" stroke-width="2" />
+                <!-- floor seams converging on the door -->
+                <g stroke="#1a2440" stroke-width="2" opacity="0.7">
+                  <line x1="540" y1="1280" x2="-600" y2="1920" /><line x1="540" y1="1280" x2="0" y2="1920" /><line x1="540" y1="1280" x2="540" y2="1920" /><line x1="540" y1="1280" x2="1080" y2="1920" /><line x1="540" y1="1280" x2="1680" y2="1920" />
+                </g>
+                <!-- door frame -->
+                <rect x="396" y="626" width="288" height="658" fill="none" stroke="url(#s05_frameG)" stroke-width="10" />
+                <rect x="410" y="640" width="260" height="640" fill="#000" />
+              </svg>
+              <div id="s05_Ahaze2" class="s05_haze"></div>
+              <div id="s05_rays"></div>
+              <div id="s05_doorGlow"></div>
+              <!-- the world seen through the door -->
+              <div id="s05_door">
+                <svg width="260" height="640" viewBox="0 0 260 640">
+                  <defs>
+                    <linearGradient id="s05_dSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a3c" /><stop offset="0.45" stop-color="#c0502e" /><stop offset="0.6" stop-color="#ffd59a" /><stop offset="0.72" stop-color="#7a2e24" /><stop offset="1" stop-color="#1a0c0c" /></linearGradient>
+                    <radialGradient id="s05_dSun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff8e6" /><stop offset="0.3" stop-color="#ffd08a" stop-opacity="0.9" /><stop offset="1" stop-color="#ff9050" stop-opacity="0" /></radialGradient>
+                  </defs>
+                  <rect width="260" height="640" fill="url(#s05_dSky)" />
+                  <circle cx="160" cy="380" r="120" fill="url(#s05_dSun)" />
+                  <path d="M0,420 L40,370 L80,400 L130,330 L170,380 L210,350 L260,400 L260,640 L0,640 Z" fill="#3a1c24" opacity="0.8" />
+                  <path d="M0,520 Q90,500 150,440 L170,450 L170,640 L0,640 Z" fill="#100708" />
+                  <g transform="translate(150,380) rotate(-14) scale(0.18)">
+                    <circle cx="-150" cy="60" r="70" fill="none" stroke="#0a0606" stroke-width="20" />
+                    <circle cx="150" cy="60" r="70" fill="none" stroke="#0a0606" stroke-width="20" />
+                    <path d="M-150,60 L-20,10 L80,-60 L150,60 L60,-10 L-40,30 Z M-20,-60 L40,-150 L90,-120 L40,-40 Z" fill="#0a0606" />
+                    <circle cx="70" cy="-170" r="34" fill="#0a0606" />
+                  </g>
+                </svg>
+              </div>
+              <div id="s05_crack"></div>
+              <svg id="s05_spill" viewBox="0 0 1080 1920">
+                <defs><linearGradient id="s05_spillG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf98" stop-opacity="0.8" /><stop offset="0.6" stop-color="#ff9a5a" stop-opacity="0.18" /><stop offset="1" stop-color="#ff8040" stop-opacity="0" /></linearGradient></defs>
+                <path d="M410,1280 L670,1280 L1300,1920 L-220,1920 Z" fill="url(#s05_spillG)" />
+              </svg>
+              <div id="s05_Ahaze1" class="s05_haze"></div>
+              <div id="s05_dust" class="s05_full"></div>
+              <!-- a rim-lit figure walks toward the light -->
+              <svg id="s05_walker" viewBox="0 0 400 700">
+                <defs>
+                  <linearGradient id="s05_wBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#05070d" /><stop offset="0.5" stop-color="#0c1220" /><stop offset="1" stop-color="#05070d" /></linearGradient>
+                  <filter id="s05_backlit" x="-20%" y="-20%" width="140%" height="140%">
+                    <feMorphology in="SourceAlpha" operator="erode" radius="3" result="er" />
+                    <feComposite in="SourceAlpha" in2="er" operator="out" result="edge" />
+                    <feFlood flood-color="#ffc48a" />
+                    <feComposite in2="edge" operator="in" result="rim" />
+                    <feGaussianBlur in="rim" stdDeviation="1.6" result="rb" />
+                    <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+                  </filter>
+                </defs>
+                <ellipse cx="200" cy="692" rx="120" ry="10" fill="#000" opacity="0.6" />
+                <g filter="url(#s05_backlit)">
+                  <path id="s05_legL" d="M170,400 L150,560 L140,690 L178,690 L186,560 L200,420 Z" fill="url(#s05_wBody)" />
+                  <path id="s05_legR" d="M230,400 L250,560 L262,690 L224,690 L216,560 L200,420 Z" fill="url(#s05_wBody)" />
+                  <path d="M140,190 Q200,160 260,190 L272,330 L262,420 L138,420 L128,330 Z" fill="url(#s05_wBody)" />
+                  <path d="M140,200 L104,320 L112,420 L134,418 L132,330 L154,240 Z" fill="url(#s05_wBody)" />
+                  <path d="M260,200 L296,320 L290,420 L268,418 L266,330 L246,240 Z" fill="url(#s05_wBody)" />
+                  <!-- helmet held at the side -->
+                  <ellipse cx="300" cy="440" rx="40" ry="36" fill="#080c16" />
+                  <rect x="186" y="150" width="28" height="36" fill="#070a12" />
+                  <ellipse cx="200" cy="120" rx="44" ry="50" fill="#070a12" />
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- ================= B: motocross launch ================= -->
+          <div id="s05_B" class="s05_shot">
+            <div id="s05_Bcam" class="s05_sub">
+              <div id="s05_Bsky"></div>
+              <div id="s05_Brays"></div>
+              <div id="s05_Bsun"></div>
+              <svg id="s05_Bfar" class="s05_full" viewBox="0 0 1080 1920">
+                <defs><linearGradient id="s05_BfarG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2232" /><stop offset="1" stop-color="#140a12" /></linearGradient></defs>
+                <path d="M-100,1260 L60,1150 L180,1200 L320,1080 L460,1180 L600,1110 L760,1210 L900,1120 L1180,1240 L1180,1500 L-100,1500 Z" fill="url(#s05_BfarG)" />
+                <path d="M-100,1260 L60,1150 L180,1200 L320,1080 L460,1180 L600,1110 L760,1210 L900,1120 L1180,1240" stroke="#ffb070" stroke-width="3" fill="none" opacity="0.6" />
+              </svg>
+              <svg id="s05_Bcrowd" class="s05_full" viewBox="0 0 1080 1920">
+                <defs><linearGradient id="s05_BcrG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0d10" /><stop offset="1" stop-color="#060304" /></linearGradient></defs>
+                <path id="s05_crowdPath" d="" fill="url(#s05_BcrG)" />
+                <rect x="-100" y="1440" width="1300" height="10" fill="#2a1612" />
+                <path d="M-100,1440 L1200,1440" stroke="#ff9a5a" stroke-width="2" opacity="0.5" />
+              </svg>
+              <div id="s05_Bflashes" class="s05_full"></div>
+              <svg id="s05_Bramp" class="s05_full" viewBox="0 0 1080 1920">
+                <defs>
+                  <linearGradient id="s05_dirtG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a140c" /><stop offset="0.5" stop-color="#120806" /><stop offset="1" stop-color="#040202" /></linearGradient>
+                  <linearGradient id="s05_land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1a10" /><stop offset="1" stop-color="#080404" /></linearGradient>
+                </defs>
+                <path d="M640,1920 L760,1560 Q900,1500 1200,1520 L1200,1920 Z" fill="url(#s05_land)" />
+                <path d="M760,1560 Q900,1500 1200,1520" stroke="#ffb478" stroke-width="4" fill="none" opacity="0.7" />
+                <path d="M-120,1920 L-120,1560 Q160,1500 330,1330 L380,1350 L420,1920 Z" fill="url(#s05_dirtG)" />
+                <path d="M-120,1560 Q160,1500 330,1330 L380,1350" stroke="#ffc08a" stroke-width="5" fill="none" opacity="0.85" />
+              </svg>
+              <div id="s05_Bdust" class="s05_full"></div>
+              <svg id="s05_rider" viewBox="0 0 600 500" overflow="visible">
+                <defs>
+                  <linearGradient id="s05_plastic" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a4a8e" /><stop offset="0.45" stop-color="#0e1c40" /><stop offset="1" stop-color="#050912" /></linearGradient>
+                  <linearGradient id="s05_suit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#141a2a" /><stop offset="1" stop-color="#05070c" /></linearGradient>
+                  <linearGradient id="s05_chrome" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8eef8" /><stop offset="0.5" stop-color="#6a7488" /><stop offset="1" stop-color="#d8dee8" /></linearGradient>
+                  <filter id="s05_rimW" x="-20%" y="-20%" width="140%" height="140%">
+                    <feOffset in="SourceAlpha" dx="4" dy="2" result="o" />
+                    <feComposite in="SourceAlpha" in2="o" operator="out" result="edge" />
+                    <feFlood flood-color="#ffc07a" />
+                    <feComposite in2="edge" operator="in" result="rim" />
+                    <feGaussianBlur in="rim" stdDeviation="1" result="rb" />
+                    <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+                  </filter>
+                </defs>
+                <g filter="url(#s05_rimW)">
+                  <g id="s05_wheelR"></g>
+                  <g id="s05_wheelF"></g>
+                  <path d="M150,340 L290,300 L300,318 L160,356 Z" fill="#0a0d14" />
+                  <rect x="250" y="250" width="100" height="80" rx="14" fill="#0b0f18" />
+                  <path d="M455,340 L392,170 L404,164 L470,334 Z" fill="url(#s05_chrome)" />
+                  <path d="M100,196 Q170,186 236,224 L248,248 Q170,226 106,212 Z" fill="url(#s05_plastic)" />
+                  <path d="M190,228 L310,212 L318,226 L196,244 Z" fill="#06080e" />
+                  <path d="M290,214 Q340,190 396,196 L404,232 Q350,244 300,252 Z" fill="url(#s05_plastic)" />
+                  <path d="M424,252 Q470,240 516,262 L506,270 Q470,256 428,264 Z" fill="url(#s05_plastic)" />
+                  <path d="M374,166 L412,170" stroke="#0a0d14" stroke-width="8" stroke-linecap="round" />
+                  <!-- rider attacking the face, legs extended -->
+                  <path d="M286,316 L322,262 L276,206 L292,192 L344,258 L304,326 Z" fill="url(#s05_suit)" />
+                  <path d="M266,206 Q300,140 352,124 L370,150 Q328,170 300,226 Z" fill="url(#s05_suit)" />
+                  <path d="M340,138 L392,158 L394,172 L338,156 Z" fill="url(#s05_suit)" />
+                  <circle cx="368" cy="108" r="34" fill="url(#s05_plastic)" />
+                  <path d="M352,82 L412,92 L404,102 L350,96 Z" fill="#0a0e18" />
+                  <path d="M378,104 Q398,104 402,120 L384,124 Z" fill="#ffb87a" opacity="0.85" />
+                  <path d="M360,80 Q380,76 394,88" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.6" />
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- ================= C: snowboard trick under the moon ================= -->
+          <div id="s05_C" class="s05_shot">
+            <div id="s05_Ccam" class="s05_sub">
+              <div id="s05_Csky"></div>
+              <div id="s05_Cmoon"></div>
+              <svg id="s05_Cfar" class="s05_full" viewBox="0 0 1080 1920">
+                <defs>
+                  <linearGradient id="s05_peakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe8ff" /><stop offset="0.25" stop-color="#7d93c4" /><stop offset="0.6" stop-color="#1c2a50" /><stop offset="1" stop-color="#060a18" /></linearGradient>
+                </defs>
+                <path d="M-200,1500 L80,1040 L220,1180 L420,880 L600,1120 L780,960 L980,1200 L1280,1060 L1280,1920 L-200,1920 Z" fill="url(#s05_peakG)" />
+                <path d="M420,880 L470,1000 L440,1100 L520,1040 L600,1120" fill="#0d1838" opacity="0.6" />
+                <path d="M80,1040 L120,1140 L60,1260 L160,1160 L220,1180" fill="#0d1838" opacity="0.6" />
+              </svg>
+              <div id="s05_Csnow" class="s05_full"></div>
+              <div id="s05_Cspray" class="s05_full"></div>
+              <svg id="s05_board" viewBox="0 0 500 500">
+                <defs>
+                  <linearGradient id="s05_boardG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a2c5c" /><stop offset="0.5" stop-color="#c8d2e4" /><stop offset="1" stop-color="#1a2c5c" /></linearGradient>
+                  <linearGradient id="s05_jacket" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22345e" /><stop offset="1" stop-color="#060a16" /></linearGradient>
+                  <linearGradient id="s05_goggle" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff9a4a" /><stop offset="0.5" stop-color="#ffe0a0" /><stop offset="1" stop-color="#4a7ad8" /></linearGradient>
+                  <filter id="s05_rimC" x="-20%" y="-20%" width="140%" height="140%">
+                    <feOffset in="SourceAlpha" dx="-4" dy="3" result="o" />
+                    <feComposite in="SourceAlpha" in2="o" operator="out" result="edge" />
+                    <feFlood flood-color="#cfe0ff" />
+                    <feComposite in2="edge" operator="in" result="rim" />
+                    <feGaussianBlur in="rim" stdDeviation="1" result="rb" />
+                    <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+                  </filter>
+                </defs>
+                <g filter="url(#s05_rimC)">
+                  <rect x="80" y="318" width="340" height="28" rx="14" fill="url(#s05_boardG)" />
+                  <path d="M196,318 L214,256 L250,236 L270,262 L232,276 L224,318 Z" fill="url(#s05_jacket)" />
+                  <path d="M300,318 L294,262 L260,244 L250,272 L274,278 L278,318 Z" fill="url(#s05_jacket)" />
+                  <path d="M206,250 Q232,170 276,168 Q304,196 290,256 Z" fill="url(#s05_jacket)" />
+                  <path d="M282,206 L332,268 L338,318 L320,320 L314,276 L270,232 Z" fill="url(#s05_jacket)" />
+                  <path d="M226,196 L150,150 L120,118 L134,108 L166,138 L240,176 Z" fill="url(#s05_jacket)" />
+                  <circle cx="268" cy="150" r="28" fill="#0c1428" />
+                  <rect x="262" y="140" width="34" height="14" rx="6" fill="url(#s05_goggle)" />
+                </g>
+              </svg>
+              <svg id="s05_Cnear" class="s05_full" viewBox="0 0 1080 1920">
+                <defs><linearGradient id="s05_slopeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbd8f4" /><stop offset="0.3" stop-color="#43588a" /><stop offset="1" stop-color="#050916" /></linearGradient></defs>
+                <path d="M520,1920 L1280,1420 L1280,1920 Z" fill="url(#s05_slopeG)" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- ================= D: aircraft through mountain canyons ================= -->
+          <div id="s05_D" class="s05_shot">
+            <div id="s05_Dcam" class="s05_sub">
+              <div id="s05_Dsky"></div>
+              <div id="s05_Dsun"></div>
+              <svg id="s05_Dfar" class="s05_full" viewBox="0 0 1080 1920"></svg>
+              <svg id="s05_Dmid" class="s05_full" viewBox="0 0 1080 1920"></svg>
+              <div id="s05_Dhaze" class="s05_full"></div>
+              <svg id="s05_plane" viewBox="0 0 900 500" overflow="visible">
+                <defs>
+                  <linearGradient id="s05_smoke" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.9" /><stop offset="1" stop-color="#ffe2c0" stop-opacity="0" /></linearGradient>
+                  <linearGradient id="s05_wing" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8d2e2" /><stop offset="0.4" stop-color="#3a5288" /><stop offset="1" stop-color="#0a1022" /></linearGradient>
+                  <radialGradient id="s05_fus" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#e6ecf6" /><stop offset="0.35" stop-color="#2c4680" /><stop offset="1" stop-color="#060a18" /></radialGradient>
+                  <radialGradient id="s05_glass" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="#ffe4b8" /><stop offset="0.4" stop-color="#405a8a" /><stop offset="1" stop-color="#0a1020" /></radialGradient>
+                  <radialGradient id="s05_prop" cx="0.5" cy="0.5" r="0.5"><stop offset="0.6" stop-color="#c8d4ea" stop-opacity="0" /><stop offset="0.9" stop-color="#e8eefa" stop-opacity="0.35" /><stop offset="1" stop-color="#e8eefa" stop-opacity="0" /></radialGradient>
+                  <filter id="s05_blurS"><feGaussianBlur stdDeviation="10" /></filter>
+                </defs>
+                <path d="M54,254 L70,256 L-180,1300 L-520,1300 Z" fill="url(#s05_smoke)" filter="url(#s05_blurS)" opacity="0.55" />
+                <path d="M846,254 L830,256 L1080,1300 L1420,1300 Z" fill="url(#s05_smoke)" filter="url(#s05_blurS)" opacity="0.55" />
+                <g id="s05_propDisc"><circle cx="450" cy="250" r="130" fill="url(#s05_prop)" /></g>
+                <path d="M450,232 L60,244 Q46,252 60,260 L450,276 L840,260 Q854,252 840,244 Z" fill="url(#s05_wing)" />
+                <path d="M450,234 L60,246 L840,246 Z" fill="#fff4e0" opacity="0.5" />
+                <rect x="56" y="242" width="8" height="20" rx="3" fill="#ff8a4a" />
+                <rect x="836" y="242" width="8" height="20" rx="3" fill="#7ab0ff" />
+                <path d="M300,204 L600,204 L590,214 L310,214 Z" fill="url(#s05_wing)" />
+                <rect x="443" y="110" width="14" height="104" rx="6" fill="url(#s05_wing)" />
+                <ellipse cx="450" cy="250" rx="50" ry="54" fill="url(#s05_fus)" />
+                <ellipse cx="450" cy="206" rx="30" ry="24" fill="url(#s05_glass)" />
+                <path d="M432,198 Q446,188 462,192" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8" />
+                <circle cx="450" cy="250" r="12" fill="#ff9a50" opacity="0.6" />
+              </svg>
+              <svg id="s05_Dnear" class="s05_full" viewBox="0 0 1080 1920"></svg>
+              <div id="s05_Dspeed" class="s05_full"></div>
+            </div>
+          </div>
+
+          <!-- ================= E: formula car into the corner ================= -->
+          <div id="s05_E" class="s05_shot">
+            <div id="s05_Ecam" class="s05_sub">
+              <div id="s05_Esky"></div>
+              <svg id="s05_Efar" class="s05_full" viewBox="0 0 1080 1920">
+                <defs>
+                  <radialGradient id="s05_lamp" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff" /><stop offset="0.25" stop-color="#cfe0ff" stop-opacity="0.8" /><stop offset="1" stop-color="#6a8ad8" stop-opacity="0" /></radialGradient>
+                  <linearGradient id="s05_standG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1630" /><stop offset="1" stop-color="#03050c" /></linearGradient>
+                </defs>
+                <g id="s05_towers"></g>
+                <path d="M-200,1000 L1280,960 L1280,1120 L-200,1140 Z" fill="url(#s05_standG)" />
+                <g id="s05_standLights"></g>
+              </svg>
+              <div id="s05_Estreaks"></div>
+              <svg id="s05_track" class="s05_full" viewBox="0 0 1080 1920">
+                <defs>
+                  <linearGradient id="s05_asph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121828" /><stop offset="0.4" stop-color="#080b14" /><stop offset="1" stop-color="#020306" /></linearGradient>
+                  <radialGradient id="s05_sheen" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#8fb0ff" stop-opacity="0.35" /><stop offset="1" stop-color="#8fb0ff" stop-opacity="0" /></radialGradient>
+                </defs>
+                <path d="M-200,1130 Q500,1110 1280,1020 L1280,1920 L-200,1920 Z" fill="url(#s05_asph)" />
+                <ellipse cx="560" cy="1460" rx="700" ry="120" fill="url(#s05_sheen)" />
+                <path d="M-200,1130 Q500,1110 1280,1020" stroke="#f2f4f8" stroke-width="5" fill="none" opacity="0.5" />
+                <path id="s05_kerbW" d="M-200,1560 Q560,1520 1300,1300" stroke="#e8ecf2" stroke-width="44" fill="none" />
+                <path id="s05_kerbR" d="M-200,1560 Q560,1520 1300,1300" stroke="#b8222a" stroke-width="44" fill="none" stroke-dasharray="60 60" />
+                <path d="M-200,1538 Q560,1498 1300,1278" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.6" />
+              </svg>
+              <div id="s05_sparks"></div>
+              <svg id="s05_car" viewBox="0 0 1000 300" overflow="visible">
+                <defs>
+                  <linearGradient id="s05_body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8e0ee" /><stop offset="0.18" stop-color="#3a5490" /><stop offset="0.6" stop-color="#0e1a3c" /><stop offset="1" stop-color="#03060e" /></linearGradient>
+                  <radialGradient id="s05_disk" cx="0.4" cy="0.4" r="0.6"><stop offset="0" stop-color="#fff2c8" /><stop offset="0.5" stop-color="#ffaa4a" /><stop offset="1" stop-color="#c04a1a" /></radialGradient>
+                  <filter id="s05_rimE" x="-10%" y="-30%" width="120%" height="160%">
+                    <feOffset in="SourceAlpha" dx="0" dy="4" result="o" />
+                    <feComposite in="SourceAlpha" in2="o" operator="out" result="edge" />
+                    <feFlood flood-color="#cfe0ff" />
+                    <feComposite in2="edge" operator="in" result="rim" />
+                    <feGaussianBlur in="rim" stdDeviation="1.2" result="rb" />
+                    <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="rb" /><feMergeNode in="rim" /></feMerge>
+                  </filter>
+                </defs>
+                <ellipse cx="500" cy="282" rx="470" ry="14" fill="#000" opacity="0.7" />
+                <g filter="url(#s05_rimE)">
+                  <path d="M60,252 L940,252 L930,264 L70,264 Z" fill="#05070c" />
+                  <path d="M70,242 L110,182 L300,170 L420,152 L520,142 L560,122 L604,118 L644,142 L760,172 L900,202 L966,228 L966,246 L70,252 Z" fill="url(#s05_body)" />
+                  <path d="M880,242 L994,232 L998,252 L880,254 Z" fill="url(#s05_body)" />
+                  <rect x="40" y="88" width="80" height="20" rx="3" fill="url(#s05_body)" />
+                  <rect x="36" y="84" width="18" height="150" rx="3" fill="#0a0f1e" />
+                  <rect x="96" y="104" width="10" height="80" fill="#0a0f1e" />
+                  <path d="M520,132 Q600,88 690,138" stroke="#0a0f1e" stroke-width="9" fill="none" />
+                  <circle cx="592" cy="118" r="22" fill="#e6ecf6" />
+                  <rect x="576" y="110" width="32" height="8" rx="3" fill="#0a1020" />
+                  <circle cx="380" cy="186" r="16" fill="url(#s05_disk)" />
+                  <g id="s05_cwR"></g>
+                  <g id="s05_cwF"></g>
+                </g>
+                <path d="M110,180 L300,168 L420,150 L520,140" stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.65" />
+                <path d="M644,142 L760,172 L900,202" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <svg id="s05_turb" viewBox="-700 -700 1400 1400">
+          <defs>
+            <radialGradient id="s05_tIn" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#1a2440" /><stop offset="1" stop-color="#020308" /></radialGradient>
+            <linearGradient id="s05_blade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a4660" /><stop offset="0.6" stop-color="#c8d2e4" /><stop offset="1" stop-color="#4a5670" /></linearGradient>
+            <radialGradient id="s05_spin" cx="0.38" cy="0.35" r="0.7"><stop offset="0" stop-color="#ffffff" /><stop offset="0.4" stop-color="#8a96b0" /><stop offset="1" stop-color="#121828" /></radialGradient>
+            <linearGradient id="s05_lip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0f4fa" /><stop offset="0.5" stop-color="#3a4458" /><stop offset="1" stop-color="#ffb070" /></linearGradient>
+          </defs>
+          <circle r="690" fill="url(#s05_tIn)" />
+          <g id="s05_blades"></g>
+          <circle r="130" fill="url(#s05_spin)" />
+          <path d="M0,0 Q60,-40 30,-110" stroke="#ffffff" stroke-width="6" fill="none" opacity="0.7" />
+          <circle r="665" fill="none" stroke="url(#s05_lip)" stroke-width="50" />
+          <path d="M-560,-380 A680,680 0 0 1 -200,-650" stroke="#ffffff" stroke-width="10" fill="none" opacity="0.6" />
+        </svg>
+        <svg id="s05_speed" viewBox="0 0 2000 2000"></svg>
+        <div id="s05_motes"></div>
+        <div id="s05_flare"></div>
+        <div id="s05_grade"></div>
+        <div id="s05_flash"></div>
+      </div>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-composition-id="s05"]');
+          var $ = function (id) { return root.querySelector('#' + id); };
+          var tl = gsap.timeline({ paused: true });
+          var D = 11.3;
+          var seed = 5055;
+          function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+          function r(a, b) { return a + (b - a) * rnd(); }
+          function div(cls, css, parent) { var d = document.createElement('div'); d.className = cls; d.style.cssText = css; parent.appendChild(d); return d; }
+          // fromTo that turns off immediateRender for any later tween on a property already animated on that element
+          var seen = [];
+          function F(el, from, to, t) {
+            var rec = null;
+            for (var i = 0; i < seen.length; i++) if (seen[i].el === el) rec = seen[i];
+            if (!rec) { rec = { el: el, p: {} }; seen.push(rec); }
+            var rep = false;
+            Object.keys(from).forEach(function (k) { if (k === 'transformOrigin' || k === 'svgOrigin') return; if (rec.p[k]) rep = true; rec.p[k] = 1; });
+            if (rep) to.immediateRender = false;
+            tl.fromTo(el, from, to, t);
+          }
+          function cut(off, on, t) { tl.set(off, { opacity: 0 }, t); tl.set(on, { opacity: 1 }, t); }
+          function loops(dur, cyc) { return Math.max(0, Math.floor(dur / cyc) - 1); }
+
+          // cut points (local) — narration: 37.7 Motocross / 39.0 Snowboard / 40.3 Aviones / 41.6 Fórmula Uno
+          var TB = 5.8, TC = 7.1, TD = 8.4, TE = 9.7;
+          cut($('s05_A'), $('s05_B'), TB);
+          cut($('s05_B'), $('s05_C'), TC);
+          cut($('s05_C'), $('s05_D'), TD);
+          cut($('s05_D'), $('s05_E'), TE);
+
+          // ---------- reusable wheel (tire, knobs, spokes) ----------
+          function wheel(cx, cy, R, spokes, id, knobs) {
+            var s = '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="#06080d" stroke-width="' + (R * 0.3).toFixed(0) + '" />';
+            if (knobs) s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * 1.13).toFixed(0) + '" fill="none" stroke="#06080d" stroke-width="6" stroke-dasharray="6 10" />';
+            s += '<g id="' + id + '">';
+            for (var i = 0; i < spokes; i++) {
+              var a = i / spokes * Math.PI * 2;
+              s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + Math.cos(a) * R * 0.78).toFixed(1) + '" y2="' + (cy + Math.sin(a) * R * 0.78).toFixed(1) + '" stroke="#5a6478" stroke-width="2.5" />';
+            }
+            s += '</g><circle cx="' + cx + '" cy="' + cy + '" r="' + (R * 0.8).toFixed(0) + '" fill="none" stroke="#b8c2d6" stroke-width="4" opacity="0.8" />';
+            s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * 0.16).toFixed(0) + '" fill="#a8b2c6" />';
+            return s;
+          }
+
+          // ================= A: door of light (0 – 5.8) =================
+          var Acam = $('s05_Acam');
+          F(Acam, { scale: 1, y: 0 }, { scale: 1.45, y: 20, duration: 4.6, ease: 'sine.inOut' }, 0);
+          F(Acam, { scale: 1.45, y: 20 }, { scale: 7.5, y: 0, duration: 1.2, ease: 'power3.in' }, 4.6);
+          F(Acam, { filter: 'blur(0px)' }, { filter: 'blur(5px)', duration: 0.5, ease: 'power2.in' }, 5.3);
+          F($('s05_crack'), { opacity: 0, scaleY: 0.2 }, { opacity: 1, scaleY: 1, duration: 0.6, ease: 'power2.out' }, 0.2);
+          F($('s05_crack'), { opacity: 1 }, { opacity: 0, duration: 0.5 }, 1.1);
+          F($('s05_door'), { clipPath: 'inset(0% 50% 0% 50%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.8, ease: 'power2.inOut' }, 0.8);
+          F($('s05_spill'), { scaleX: 0.02, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 1.8, ease: 'power2.inOut' }, 0.8);
+          F($('s05_doorGlow'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.1, duration: 2.2, ease: 'power2.out' }, 0.6);
+          F($('s05_rays'), { opacity: 0, rotation: -6 }, { opacity: 1, rotation: 6, duration: 5.2, ease: 'sine.inOut' }, 0.7);
+          F($('s05_Ahaze1'), { x: -100 }, { x: 160, duration: TB, ease: 'none' }, 0);
+          F($('s05_Ahaze2'), { x: 120 }, { x: -140, duration: TB, ease: 'none' }, 0);
+          // walker: steps toward the light, shrinking into depth
+          F($('s05_walker'), { scale: 1.15, y: 220, opacity: 0.0 }, { scale: 0.62, y: -40, opacity: 1, duration: 4.4, ease: 'sine.inOut' }, 0);
+          F($('s05_legL'), { rotation: -5, svgOrigin: '200 420' }, { rotation: 5, duration: 0.45, ease: 'sine.inOut', yoyo: true, repeat: loops(4.4, 0.45) }, 0);
+          F($('s05_legR'), { rotation: 5, svgOrigin: '200 420' }, { rotation: -5, duration: 0.45, ease: 'sine.inOut', yoyo: true, repeat: loops(4.4, 0.45) }, 0);
+          F($('s05_walker'), { opacity: 1 }, { opacity: 0, duration: 0.6 }, 4.5);
+          // dust motes floating in the light shaft, sucked toward the door during the dive
+          (function () {
+            var p = $('s05_dust');
+            for (var i = 0; i < 70; i++) {
+              var s = r(2, 7), x = r(260, 820), y = r(500, 1700);
+              var d = div('s05_dot', 'left:' + x.toFixed(0) + 'px;top:' + y.toFixed(0) + 'px;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) + 'px;background:#ffe2bc;opacity:' + r(0.3, 0.9).toFixed(2) + ';filter:blur(' + (s > 5 ? 2 : 0.5) + 'px)', p);
+              F(d, { x: 0, y: 0 }, { x: r(-60, 60), y: r(-160, -40), duration: 4.6, ease: 'none' }, 0);
+              F(d, { x: 0, y: 0, scale: 1 }, { x: (540 - x) * 0.9, y: (960 - y) * 0.9, scale: 0.2, duration: 1.2, ease: 'power3.in', immediateRender: false }, 4.6);
+            }
+          })();
+          // radial speed lines for the dive
+          (function () {
+            var s = '<defs><linearGradient id="s05_spdG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity="0" /><stop offset="1" stop-color="#fff0dc" stop-opacity="0.9" /></linearGradient></defs>';
+            for (var i = 0; i < 90; i++) {
+              var a = r(0, 360), r0 = r(260, 520), len = r(200, 600);
+              s += '<rect x="' + r0.toFixed(0) + '" y="-1.5" width="' + len.toFixed(0) + '" height="' + r(1.5, 4).toFixed(1) + '" fill="url(#s05_spdG)" transform="translate(1000,1000) rotate(' + a.toFixed(1) + ')" />';
+            }
+            $('s05_speed').innerHTML = s;
+          })();
+          var spd = $('s05_speed');
+          F(spd, { opacity: 0, scale: 0.6, rotation: 0 }, { opacity: 1, scale: 1.3, rotation: 8, duration: 0.9, ease: 'power2.in' }, 4.9);
+          F(spd, { opacity: 1 }, { opacity: 0, duration: 0.35 }, 5.85);
+          var flash = $('s05_flash');
+          F(flash, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.in' }, 5.55);
+          F(flash, { opacity: 1 }, { opacity: 0, duration: 0.4, ease: 'power2.out' }, 5.8);
+
+          // ================= B: motocross (5.8 – 7.1) =================
+          $('s05_wheelR').innerHTML = wheel(150, 340, 80, 14, 's05_spR', true);
+          $('s05_wheelF').innerHTML = wheel(455, 340, 80, 14, 's05_spF', true);
+          // crowd skyline + camera flashes
+          (function () {
+            var d = 'M-100,1460 L-100,1400 ';
+            for (var x = -100; x < 1200; x += r(16, 26)) { var h = r(1370, 1395); d += 'L' + x.toFixed(0) + ',' + (h + 10).toFixed(0) + ' Q' + (x + 8).toFixed(0) + ',' + h.toFixed(0) + ' ' + (x + 16).toFixed(0) + ',' + (h + 10).toFixed(0) + ' '; }
+            d += 'L1200,1460 Z';
+            $('s05_crowdPath').setAttribute('d', d);
+            var p = $('s05_Bflashes');
+            for (var i = 0; i < 26; i++) {
+              var f = div('s05_dot', 'left:' + r(0, 1080).toFixed(0) + 'px;top:' + r(1380, 1430).toFixed(0) + 'px;width:14px;height:14px;opacity:0;background:radial-gradient(circle,#fff 0%,rgba(220,235,255,0.6) 40%,transparent 70%)', p);
+              var t = TB + r(0, 1.1);
+              F(f, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 2.2, duration: 0.06, ease: 'none', yoyo: true, repeat: 1 }, t);
+            }
+          })();
+          F($('s05_Bcam'), { y: -60, scale: 1.12, x: 30 }, { y: 140, scale: 1.0, x: -20, duration: 1.3, ease: 'sine.out' }, TB);
+          F($('s05_Bfar'), { x: 0 }, { x: -40, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_Bcrowd'), { x: 0 }, { x: -90, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_Bflashes'), { x: 0 }, { x: -90, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_Bramp'), { x: 0 }, { x: -160, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_Brays'), { rotation: 0 }, { rotation: 8, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_Bsun'), { scale: 0.9 }, { scale: 1.08, duration: 1.3, ease: 'sine.inOut' }, TB);
+          var rider = $('s05_rider');
+          F(rider, { x: -230, y: 1060, rotation: -24, scale: 1.1 }, { x: 420, y: 420, rotation: 6, scale: 1.1, duration: 1.3, ease: 'power1.out' }, TB);
+          F($('s05_spR'), { rotation: 0, svgOrigin: '150 340' }, { rotation: 1440, duration: 1.3, ease: 'none' }, TB);
+          F($('s05_spF'), { rotation: 0, svgOrigin: '455 340' }, { rotation: 900, duration: 1.3, ease: 'none' }, TB);
+          // roost of dirt off the lip
+          (function () {
+            var p = $('s05_Bdust');
+            for (var i = 0; i < 40; i++) {
+              var s = r(4, 16);
+              var d = div('s05_dot', 'left:' + r(300, 380).toFixed(0) + 'px;top:' + r(1300, 1350).toFixed(0) + 'px;width:' + s.toFixed(0) + 'px;height:' + s.toFixed(0) + 'px;opacity:0;background:radial-gradient(circle,#c07848 0%,#5a2e1a 60%,transparent 72%);filter:blur(' + (s > 11 ? 2 : 0) + 'px)', p);
+              var t = TB + r(0, 0.35);
+              F(d, { x: 0, y: 0, opacity: 0.95 }, { x: r(-380, -60), y: r(-260, 80), opacity: 0, duration: r(0.6, 1.0), ease: 'power2.out' }, t);
+            }
+          })();
+
+          // ---------- match cut: rear wheel spin -> turbine ----------
+          (function () {
+            var s = '';
+            for (var i = 0; i < 22; i++) s += '<path d="M120,-14 Q380,-70 640,-40 L640,30 Q380,10 120,14 Z" fill="url(#s05_blade)" stroke="#0a0e18" stroke-width="2" transform="rotate(' + (i * 360 / 22).toFixed(2) + ')" />';
+            $('s05_blades').innerHTML = s;
+          })();
+          var turb = $('s05_turb');
+          // the rear wheel ends at ~(600,790) on screen; the turbine grows out of it
+          F(turb, { x: 60, y: -170, scale: 0.12, opacity: 0 }, { x: 0, y: 0, scale: 1.25, opacity: 1, duration: 0.42, ease: 'power3.in' }, 6.78);
+          F(turb, { opacity: 1, scale: 1.25 }, { opacity: 0, scale: 2.0, duration: 0.32, ease: 'power2.in' }, 7.2);
+          F($('s05_blades'), { rotation: 0, svgOrigin: '0 0' }, { rotation: 900, duration: 0.75, ease: 'none' }, 6.78);
+          F(turb, { rotation: 0 }, { rotation: -60, duration: 0.75, ease: 'power1.in' }, 6.78);
+
+          // ================= C: snowboard (7.1 – 8.4) =================
+          F($('s05_Ccam'), { scale: 1.15, rotation: 6, y: 0 }, { scale: 1.0, rotation: -4, y: -40, duration: 1.3, ease: 'sine.out' }, TC);
+          F($('s05_Cfar'), { x: 40 }, { x: -50, duration: 1.3, ease: 'none' }, TC);
+          F($('s05_Cnear'), { x: 160, y: 60 }, { x: -200, y: 120, duration: 1.3, ease: 'none' }, TC);
+          F($('s05_Cmoon'), { scale: 0.95 }, { scale: 1.08, duration: 1.3, ease: 'sine.inOut' }, TC);
+          var board = $('s05_board');
+          F(board, { x: 60, y: 1080, rotation: 40, scale: 1.25 }, { x: 380, y: 560, rotation: -380, scale: 1.25, duration: 1.3, ease: 'power1.out' }, TC);
+          (function () {
+            var p = $('s05_Csnow');
+            for (var i = 0; i < 90; i++) {
+              var s = r(2, i < 12 ? 22 : 6);
+              var d = div('s05_dot', 'left:' + r(0, 1600).toFixed(0) + 'px;top:' + r(-200, 1920).toFixed(0) + 'px;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) + 'px;background:#eaf2ff;opacity:' + r(0.35, 0.9).toFixed(2) + ';filter:blur(' + (s * 0.35).toFixed(1) + 'px)', p);
+              F(d, { x: 0, y: 0 }, { x: -r(400, 700), y: r(150, 400), duration: 1.3, ease: 'none' }, TC);
+            }
+            var q = $('s05_Cspray');
+            for (var j = 0; j < 46; j++) {
+              var s2 = r(5, 20);
+              var d2 = div('s05_dot', 'left:' + r(300, 420).toFixed(0) + 'px;top:' + r(1300, 1380).toFixed(0) + 'px;width:' + s2.toFixed(0) + 'px;height:' + s2.toFixed(0) + 'px;opacity:0;background:radial-gradient(circle,#ffffff 0%,#b8cdf0 50%,transparent 72%)', q);
+              F(d2, { x: 0, y: 0, opacity: 0.9, scale: 0.5 }, { x: r(-300, 60), y: r(-420, -60), opacity: 0, scale: 1.8, duration: r(0.6, 1.1), ease: 'power2.out' }, TC + r(0, 0.3));
+            }
+          })();
+
+          // ---------- rotation match: the spin keeps going into the aircraft's roll ----------
+          var cam = $('s05_cam');
+          F(cam, { rotation: 0, filter: 'blur(0px)' }, { rotation: -32, filter: 'blur(9px)', duration: 0.24, ease: 'power2.in' }, TD - 0.24);
+          F(cam, { rotation: 30, filter: 'blur(9px)' }, { rotation: 0, filter: 'blur(0px)', duration: 0.45, ease: 'power2.out' }, TD);
+
+          // ================= D: aircraft through canyons (8.4 – 9.7) =================
+          function canyon(svgId, inner, edgeL, edgeR, gid, c0, c1, rim) {
+            var L = 'M-200,-200 L' + edgeL.map(function (p) { return p[0] + ',' + p[1]; }).join(' L') + ' L-200,2200 Z';
+            var R = 'M1280,-200 L' + edgeR.map(function (p) { return p[0] + ',' + p[1]; }).join(' L') + ' L1280,2200 Z';
+            var eL = 'M' + edgeL.map(function (p) { return p[0] + ',' + p[1]; }).join(' L');
+            var eR = 'M' + edgeR.map(function (p) { return p[0] + ',' + p[1]; }).join(' L');
+            $(svgId).innerHTML = '<defs><linearGradient id="' + gid + 'L" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="' + c1 + '" /><stop offset="1" stop-color="' + c0 + '" /></linearGradient>' +
+              '<linearGradient id="' + gid + 'R" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="' + c1 + '" /><stop offset="1" stop-color="' + c0 + '" /></linearGradient></defs>' +
+              '<path d="' + L + '" fill="url(#' + gid + 'L)" /><path d="' + R + '" fill="url(#' + gid + 'R)" />' +
+              '<path d="' + eL + '" stroke="' + rim + '" stroke-width="' + inner + '" fill="none" opacity="0.75" />' +
+              '<path d="' + eR + '" stroke="' + rim + '" stroke-width="' + inner + '" fill="none" opacity="0.75" />';
+          }
+          function jag(x0, side, n, y0, y1, amp) {
+            var pts = [];
+            for (var i = 0; i <= n; i++) { var y = y0 + (y1 - y0) * i / n; pts.push([(x0 + side * (i % 2 ? amp : 0) + side * r(-amp, amp) * 0.5 + side * (y - y0) * -0.08).toFixed(0), y.toFixed(0)]); }
+            return pts;
+          }
+          canyon('s05_Dfar', 3, jag(400, 1, 12, -200, 2200, 30), jag(690, -1, 12, -200, 2200, 30), 's05_cf', '#5a2e2c', '#1a0e14', '#ffc890');
+          canyon('s05_Dmid', 4, jag(250, 1, 10, -200, 2200, 60), jag(840, -1, 10, -200, 2200, 60), 's05_cm', '#6a3426', '#0c0608', '#ffb070');
+          canyon('s05_Dnear', 6, jag(60, 1, 8, -200, 2200, 90), jag(1020, -1, 8, -200, 2200, 90), 's05_cn', '#2a1410', '#040203', '#ff9a5a');
+          F($('s05_Dfar'), { scale: 1 }, { scale: 1.3, duration: 1.3, ease: 'none' }, TD);
+          F($('s05_Dmid'), { scale: 1 }, { scale: 1.75, duration: 1.3, ease: 'none' }, TD);
+          F($('s05_Dnear'), { scale: 1, x: 0 }, { scale: 2.8, x: 0, duration: 1.3, ease: 'power1.in' }, TD);
+          F($('s05_Dsun'), { scale: 0.9, opacity: 0.85 }, { scale: 1.15, opacity: 1, duration: 1.3, ease: 'sine.inOut' }, TD);
+          var plane = $('s05_plane');
+          F(plane, { rotation: 38, x: -60, y: 40, scale: 0.85 }, { rotation: -6, x: 30, y: -30, scale: 0.95, duration: 0.9, ease: 'sine.out' }, TD);
+          F(plane, { rotation: -6, x: 30, y: -30, scale: 0.95 }, { rotation: 4, x: -10, y: -10, scale: 1.0, duration: 0.4, ease: 'sine.inOut' }, TD + 0.9);
+          F($('s05_propDisc'), { rotation: 0, svgOrigin: '450 250' }, { rotation: 1800, duration: 1.3, ease: 'none' }, TD);
+          (function () {
+            var p = $('s05_Dhaze'), q = $('s05_Dspeed');
+            for (var i = 0; i < 40; i++) {
+              var a = r(0, Math.PI * 2), d0 = r(60, 260), s = r(2, 5);
+              var d = div('s05_dot', 'left:540px;top:760px;width:' + s.toFixed(1) + 'px;height:' + (s * 6).toFixed(1) + 'px;border-radius:3px;background:#ffe6c8;opacity:0.7;transform-origin:50% 50%', i < 20 ? p : q);
+              var rot = a * 180 / Math.PI + 90;
+              F(d, { x: Math.cos(a) * d0, y: Math.sin(a) * d0, rotation: rot, opacity: 0 }, { x: Math.cos(a) * 1300, y: Math.sin(a) * 1300, rotation: rot, opacity: 0.9, duration: r(0.5, 0.9), ease: 'power2.in' }, TD + r(0, 0.5));
+            }
+          })();
+
+          // ---------- whip pan into the race ----------
+          F(cam, { x: 0, skewX: 0 }, { x: -260, skewX: 16, duration: 0.18, ease: 'power2.in' }, TE - 0.18);
+          F(cam, { filter: 'blur(0px)' }, { filter: 'blur(12px)', duration: 0.18, ease: 'power2.in' }, TE - 0.18);
+          F(cam, { x: 260, skewX: 16, filter: 'blur(12px)' }, { x: 0, skewX: 0, filter: 'blur(0px)', duration: 0.3, ease: 'power2.out' }, TE);
+
+          // ================= E: formula car into the corner (9.7 – 11.3) =================
+          $('s05_cwR').innerHTML = wheel(190, 214, 62, 10, 's05_cspR', false) + '<circle cx="190" cy="214" r="20" fill="url(#s05_disk)" opacity="0.0" id="s05_brakeR" />';
+          $('s05_cwF').innerHTML = wheel(820, 222, 56, 10, 's05_cspF', false) + '<circle cx="820" cy="222" r="18" fill="url(#s05_disk)" opacity="0.0" id="s05_brakeF" />';
+          (function () {
+            var t = '';
+            [[90, 360], [380, 300], [700, 330], [980, 380]].forEach(function (p) {
+              t += '<rect x="' + (p[0] - 6) + '" y="' + p[1] + '" width="12" height="' + (1000 - p[1]) + '" fill="#070b18" />';
+              t += '<rect x="' + (p[0] - 50) + '" y="' + (p[1] - 30) + '" width="100" height="40" rx="4" fill="#0e1424" />';
+              t += '<ellipse cx="' + p[0] + '" cy="' + (p[1] - 10) + '" rx="190" ry="120" fill="url(#s05_lamp)" />';
+            });
+            $('s05_towers').innerHTML = t;
+            var l = '';
+            for (var i = 0; i < 120; i++) l += '<circle cx="' + r(-200, 1280).toFixed(0) + '" cy="' + r(1000, 1120).toFixed(0) + '" r="' + r(1, 3).toFixed(1) + '" fill="' + (rnd() > 0.7 ? '#ffd0a0' : '#cfe0ff') + '" opacity="' + r(0.4, 1).toFixed(2) + '" />';
+            $('s05_standLights').innerHTML = l;
+            var p = $('s05_Estreaks');
+            for (var j = 0; j < 34; j++) {
+              var y = r(700, 1160), w = r(200, 700);
+              var col = rnd() > 0.6 ? '255,200,150' : '190,210,255';
+              var d = div('s05_streak', 'left:1100px;top:' + y.toFixed(0) + 'px;width:' + w.toFixed(0) + 'px;background:linear-gradient(90deg,transparent,rgba(' + col + ',0.9),transparent);opacity:' + r(0.3, 0.9).toFixed(2), p);
+              var st = TE + r(-0.2, 1.2);
+              F(d, { x: 0 }, { x: -2600, duration: r(0.35, 0.6), ease: 'none' }, st);
+            }
+          })();
+          F($('s05_Ecam'), { x: 120, scale: 1.12, rotation: -2 }, { x: -60, scale: 1.0, rotation: 1, duration: 1.6, ease: 'sine.inOut' }, TE);
+          F($('s05_Efar'), { x: 0 }, { x: -220, duration: 1.6, ease: 'power1.in' }, TE);
+          F($('s05_kerbR'), { strokeDashoffset: 0 }, { strokeDashoffset: 1800, duration: 1.6, ease: 'power1.in' }, TE);
+          var car = $('s05_car');
+          F(car, { x: -1300, rotation: 0, skewX: -14 }, { x: -20, rotation: 1.6, skewX: 0, duration: 0.6, ease: 'power3.out' }, TE);
+          F(car, { x: -20, rotation: 1.6 }, { x: 60, rotation: -0.8, duration: 0.55, ease: 'sine.inOut' }, TE + 0.6);
+          F(car, { x: 60, skewX: 0, filter: 'blur(0px)' }, { x: 1500, skewX: -16, filter: 'blur(6px)', duration: 0.42, ease: 'power3.in' }, TE + 1.15);
+          F($('s05_cspR'), { rotation: 0, svgOrigin: '190 214' }, { rotation: 2600, duration: 1.6, ease: 'none' }, TE);
+          F($('s05_cspF'), { rotation: 0, svgOrigin: '820 222' }, { rotation: 2900, duration: 1.6, ease: 'none' }, TE);
+          F($('s05_brakeR'), { opacity: 0 }, { opacity: 0.9, duration: 0.25, yoyo: true, repeat: 1, ease: 'sine.inOut' }, TE + 0.4);
+          F($('s05_brakeF'), { opacity: 0 }, { opacity: 1, duration: 0.25, yoyo: true, repeat: 1, ease: 'sine.inOut' }, TE + 0.4);
+          // sparks from the plank, trailing behind the car
+          (function () {
+            var p = $('s05_sparks');
+            for (var i = 0; i < 46; i++) {
+              var t0 = TE + 0.35 + r(0, 0.75);
+              var d = div('s05_streak', 'left:' + r(380, 640).toFixed(0) + 'px;top:' + r(1335, 1350).toFixed(0) + 'px;width:' + r(18, 60).toFixed(0) + 'px;height:2px;background:linear-gradient(90deg,transparent,#ffd890,#fff8e0);opacity:0', p);
+              F(d, { x: 0, y: 0, opacity: 1, rotation: r(-12, 4) }, { x: r(-520, -160), y: r(-60, 50), opacity: 0, duration: r(0.25, 0.5), ease: 'power1.out' }, t0);
+            }
+          })();
+          // anamorphic flare as the car tears out of frame
+          var flare = $('s05_flare');
+          F(flare, { opacity: 0, scaleX: 0.4 }, { opacity: 1, scaleX: 1.2, duration: 0.3, ease: 'power2.in' }, D - 0.4);
+          F(flash, { opacity: 0 }, { opacity: 0.55, duration: 0.25, ease: 'power2.in' }, D - 0.25);
+
+          // ---------- embers drifting through every shot (never a still frame) ----------
+          (function () {
+            var p = $('s05_motes');
+            for (var i = 0; i < 46; i++) {
+              var s = r(2, i < 6 ? 16 : 5);
+              var d = div('s05_dot', 'left:' + r(0, 1080).toFixed(0) + 'px;top:' + r(200, 2000).toFixed(0) + 'px;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) + 'px;background:#ffd2a8;opacity:' + r(0.15, 0.55).toFixed(2) + ';filter:blur(' + (s * 0.3).toFixed(1) + 'px)', p);
+              F(d, { x: 0, y: 0 }, { x: r(-120, 120), y: -r(300, 700), duration: D, ease: 'none' }, 0);
+            }
+          })();
+
+          window.__timelines['s05'] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </template>
+  </body>
+</html>

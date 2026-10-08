@@ -54,7 +54,7 @@
           background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.6) 100%); }
       </style>
 
-      <div id="stage" data-composition-id="s09" data-duration="4.2" style="width:1080px;height:1920px">
+      <div id="stage" data-composition-id="s09" data-duration="4.2" data-width="1080" data-height="1920" style="width:1080px;height:1920px">
         <div id="s09_cam">
           <div id="s09_punch">
             <div id="s09_world" class="s09_layer">
@@ -196,7 +196,7 @@
             for (var i = 0; i < n; i++) {
               var x = -40 + (i + rnd() * 0.6) * (1160 / n), s = sc * (0.85 + rnd() * 0.3), ax = rnd() < 0.5 ? -1 : 1;
               aud += '<g transform="translate(' + f(x) + ',' + by + ') scale(' + s.toFixed(2) + ')">' +
-                '<circle cx="0" cy="-92" r="30" fill="#020308" stroke="rgba(255,160,90,0.6)" stroke-width="2"/>' +
+                '<circle cx="0" cy="-92" r="30" fill="#020308" stroke="rgba(255,160,90,0.22)" stroke-width="1.5"/>' +
                 '<path d="M-70,0 Q-66,-58 -30,-62 L30,-62 Q66,-58 70,0 L70,300 L-70,300 Z" fill="#020308" stroke="rgba(150,180,255,0.45)" stroke-width="2"/>' +
                 '<path d="M' + (ax * 40) + ',-50 L' + (ax * 66) + ',-170 L' + (ax * 70) + ',-232" fill="none" stroke="#020308" stroke-width="22" stroke-linecap="round"/>' +
                 (rnd() < 0.6 ? '<circle class="s09_ph" cx="' + (ax * 70) + '" cy="-248" r="16" fill="url(#s09_gPh)"/>' : '') + '</g>';
@@ -259,9 +259,9 @@
           tl.fromTo($('s09_punch'), { y: 0 }, { y: -24, duration: 0.5, ease: hump }, 2.72);
           // can: label turns, it heats up and dissolves into light
           tl.fromTo(label, { x: 0 }, { x: -220, duration: D, ease: 'none' }, 0);
-          tl.fromTo($('s09_canwrap'), { filter: 'brightness(1) blur(0px)', opacity: 1 }, { filter: 'brightness(2.6) blur(3px)', opacity: 0.35, duration: 1.3, ease: 'power2.in' }, 0.2);
+          tl.fromTo($('s09_canwrap'), { filter: 'brightness(1) blur(0px)', opacity: 1 }, { filter: 'brightness(2.6) blur(4px)', opacity: 0.18, duration: 1.3, ease: 'power2.in' }, 0.2);
           tl.fromTo($('s09_canwrap'), { scale: 0.6 }, { scale: 0.52, duration: D, ease: 'sine.inOut' }, 0);
-          tl.fromTo($('s09_core'), { opacity: 0.15, scale: 0.3 }, { opacity: 1, scale: 1.5, duration: 1.0, ease: 'power2.in' }, 0);
+          tl.fromTo($('s09_core'), { opacity: 0.15, scale: 0.3 }, { opacity: 1, scale: 1.2, duration: 1.0, ease: 'power2.in' }, 0);
           tl.fromTo($('s09_core2'), { opacity: 0, scale: 0.4 }, { opacity: 0.9, scale: 1.1, duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: 7 }, 0.6);
           tl.fromTo($('s09_rays'), { opacity: 0, rotation: 0 }, { opacity: 0.9, rotation: 24, duration: D - 0.5, ease: 'power1.in' }, 0.5);
           tl.fromTo($('s09_flare'), { opacity: 0, scaleX: 0.3 }, { opacity: 1, scaleX: 1.2, duration: 0.9, ease: spike }, 0.68);
