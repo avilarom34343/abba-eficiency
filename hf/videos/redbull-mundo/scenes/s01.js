@@ -49,14 +49,14 @@ export function create(renderer) {
   scene.environment = K.envMap(renderer);
   const fogCol = new THREE.Color(0x15121d); scene.fog = new THREE.Fog(fogCol.clone(), 60, 720);
   const cam = K.camera(28); scene.add(cam);
-  const rig = K.lightRig(scene, { keyI: 2.6, rimI: 6 });
+  const rig = K.lightRig(scene, { keyI: 1.3, rimI: 5, fill: 0.08 });
 
   // ---------- hero: the can on a black stone pillar ----------
   const can = K.makeCan({ droplets: 700, seed: 11 }); scene.add(can);
-  can.userData.body.material.envMapIntensity = 0.7;
-  const stone = new THREE.MeshPhysicalMaterial({ color: 0x07080b, roughness: 0.18, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05 });
-  const pillar = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 3.4, -FLOOR, 72), stone); pillar.position.y = FLOOR / 2; scene.add(pillar);
-  const rimLine = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.012, 6, 160), new THREE.MeshBasicMaterial({ color: hdr(0xbcd7ff, 2.2), fog: false }));
+  can.userData.body.material.envMapIntensity = 0.4;
+  const stone = new THREE.MeshPhysicalMaterial({ color: 0x07080b, roughness: 0.18, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 0.12 });
+  const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 1.6, -FLOOR, 72), stone); pillar.position.y = FLOOR / 2; scene.add(pillar);
+  const rimLine = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.008, 6, 160), new THREE.MeshBasicMaterial({ color: hdr(0xbcd7ff, 2.2), fog: false }));
   rimLine.rotation.x = Math.PI / 2; scene.add(rimLine);
   const backLight = new THREE.PointLight(0xffb070, 0, 0, 2); backLight.position.set(0, 0.9, -1.4); scene.add(backLight);
   const sweep = new THREE.SpotLight(0xdfe8ff, 0, 8, 0.25, 0.8, 2); scene.add(sweep); scene.add(sweep.target); sweep.target.position.set(0, 0.6, 0);
@@ -128,8 +128,8 @@ export function create(renderer) {
   const haze = K.dust(world, { count: 1400, area: [90, 40, 120], color: 0xbcd7ff, size: 0.16, speed: 0.6, seed: 31, opacity: 0.35 }); haze.position.set(0, -10, -60);
 
   // ---------- the "identidad" burst ----------
-  const halo = sprite(hdr(0xffe2b0, 3), 1, scene); halo.position.set(0, 0.75, -1.6);
-  const rays = sprite(hdr(0xffd08a, 2.2), 1, scene, RAYS); rays.position.set(0, 0.75, -1.7);
+  const halo = sprite(hdr(0xffe2b0, 1.6), 1, scene); halo.position.set(0, 0.75, -1.6);
+  const rays = sprite(hdr(0xffd08a, 1.4), 1, scene, RAYS); rays.position.set(0, 0.75, -1.7);
   const ringV = new THREE.Mesh(new THREE.RingGeometry(0.94, 1, 128), additive({ color: hdr(0xfff0d8, 2.5), side: THREE.DoubleSide })); scene.add(ringV);
   const ringF = new THREE.Mesh(new THREE.RingGeometry(0.97, 1, 256), additive({ color: hdr(0xffc27a, 3), side: THREE.DoubleSide })); ringF.rotation.x = -Math.PI / 2; ringF.position.set(0, FLOOR + 0.3, -20); scene.add(ringF);
   const orbits = [[16, 0.035, 0.35, 0.3, 0x9fc4ff], [28, 0.05, -0.25, -0.45, 0xffb46a], [46, 0.08, 0.15, 0.18, 0xbcd7ff]].map(([R, r, tx, tz, c], i) => {
@@ -148,8 +148,8 @@ export function create(renderer) {
     // ---- camera: macro creep -> violent dolly-out -> slow crane/orbit -> impact shake
     const mp = K.eio(K.seg(t, 0, T_WORLD)), po = K.eo(K.seg(t, T_WORLD, T_WORLD + 1.4)), drift = K.seg(t, T_WORLD + 1.4, 10.3);
     const theta = K.lerp(-0.42, 0.06, mp) + K.lerp(0, -0.16, drift);
-    let r = K.lerp(1.5, 0.92, mp), y = K.lerp(0.98, 0.8, mp);
-    r = K.lerp(r, 7.2, po) + drift * 2.2; y = K.lerp(y, 1.7, po) + drift * 0.6;
+    let r = K.lerp(2.9, 2.15, mp), y = K.lerp(1.05, 0.82, mp);
+    r = K.lerp(r, 6.4, po) + drift * 2.4; y = K.lerp(y, 1.5, po) + drift * 0.7;
     camTarget.set(0, 0.72, 0).lerp(tmp.set(0, -3.5, -45), po);
     const shake = idOn ? Math.exp(-(t - T_ID) * 5) * Math.sin((t - T_ID) * 46) : 0;
     const hAmp = K.lerp(0.004, 0.03, po);
@@ -158,9 +158,9 @@ export function create(renderer) {
 
     // ---- can + macro light
     can.rotation.y = 0.5 + t * 0.32;
-    sweep.position.set(Math.sin(t * 0.5 - 1.2) * 2.4, 2.4, Math.cos(t * 0.5 - 1.2) * 2.4); sweep.intensity = 14 * (1 - po * 0.6);
-    rig.children[1].intensity = 6 + (idOn ? 6 * (1 - id) : 0);
-    backLight.intensity = (wOn ? 6 : 1.5) + (idOn ? 60 * Math.exp(-(t - T_ID) * 3) + 8 : 0);
+    sweep.position.set(Math.sin(t * 0.5 - 1.2) * 2.4, 2.4, Math.cos(t * 0.5 - 1.2) * 2.4); sweep.intensity = 5 * (1 - po * 0.5);
+    rig.children[1].intensity = 5 + (idOn ? 3 * (1 - id) : 0);
+    backLight.intensity = (wOn ? 4 : 1.2) + (idOn ? 22 * Math.exp(-(t - T_ID) * 3) + 3 : 0);
     motes.userData.update(t, [0.05, 0.4, 0]);
 
     // ---- world
@@ -185,8 +185,8 @@ export function create(renderer) {
     // ---- burst at "identidad"
     const b = K.eo(K.seg(t, T_ID, T_ID + 0.9));
     halo.visible = rays.visible = ringV.visible = ringF.visible = idOn;
-    halo.scale.setScalar(K.lerp(0.5, 9, b)); halo.material.opacity = idOn ? K.lerp(1, 0.32, K.seg(t, T_ID + 0.2, 10.3)) : 0;
-    rays.scale.setScalar(K.lerp(1, 13, b)); rays.material.rotation = t * 0.08; rays.material.opacity = idOn ? K.lerp(0.9, 0.28, K.seg(t, T_ID + 0.3, 10.3)) : 0;
+    halo.scale.setScalar(K.lerp(0.5, 6, b)); halo.material.opacity = idOn ? K.lerp(0.9, 0.18, K.seg(t, T_ID + 0.2, 10.3)) : 0;
+    rays.scale.setScalar(K.lerp(1, 13, b)); rays.material.rotation = t * 0.08; rays.material.opacity = idOn ? K.lerp(0.6, 0.14, K.seg(t, T_ID + 0.3, 10.3)) : 0;
     const rv = K.eo(K.seg(t, T_ID, T_ID + 0.8)); ringV.position.set(0, 0.7, 0); ringV.lookAt(cam.position); ringV.scale.setScalar(0.3 + rv * 22); ringV.material.opacity = 1 - rv;
     const rf = K.eo(K.seg(t, T_ID + 0.05, T_ID + 1.5)); ringF.scale.setScalar(2 + rf * 300); ringF.material.opacity = 1 - rf;
     orbits.forEach(({ g, m, i }) => { const p = K.eio(K.seg(t, T_ID + 0.1 + i * 0.18, T_ID + 0.9 + i * 0.18)); drawTube(m, p); m.material.opacity = 0.85;
